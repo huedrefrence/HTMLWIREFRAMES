@@ -1,0 +1,105 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+.pg{background:#F5F0E8;font-family:'DM Sans',sans-serif;}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:18px 48px;border-bottom:0.5px solid #E8E0D5;background:#F5F0E8;}
+.logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#2C1810;}
+.nav-links{display:flex;gap:28px;}
+.nl{font-size:13px;color:#8C7B6E;cursor:pointer;}
+.nl:hover{color:#2C1810;}
+.nav-cta{font-size:12px;font-weight:500;color:#C85C3A;border:1px solid #C85C3A;padding:7px 18px;border-radius:100px;cursor:pointer;transition:all 0.2s;}
+.nav-cta:hover{background:#C85C3A;color:#F5F0E8;}
+.hero{padding:80px 48px 64px;text-align:center;border-bottom:0.5px solid #E8E0D5;}
+.eye{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#B09880;font-weight:500;margin-bottom:20px;}
+.h1{font-family:'Playfair Display',serif;font-size:56px;font-weight:700;color:#2C1810;line-height:1.1;margin-bottom:8px;letter-spacing:-0.02em;}
+.h1i{font-family:'Playfair Display',serif;font-size:56px;font-weight:400;color:#C85C3A;line-height:1.1;font-style:italic;margin-bottom:20px;}
+.sub{font-size:16px;color:#7A6A5E;line-height:1.75;max-width:440px;margin:0 auto 36px;font-weight:300;}
+.btns{display:flex;gap:12px;justify-content:center;}
+.btn-p{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:12px 28px;border-radius:100px;background:#C85C3A;color:#F5F0E8;border:none;cursor:pointer;transition:all 0.2s;}
+.btn-p:hover{background:#A8492C;}
+.btn-g{font-family:'DM Sans',sans-serif;font-size:13px;padding:12px 24px;border-radius:100px;background:transparent;color:#8C7B6E;border:1px solid #D4C8B8;cursor:pointer;}
+.pillars{padding:64px 48px;}
+.pil-eye{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#B09880;font-weight:500;text-align:center;margin-bottom:40px;}
+.pil-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:0.5px solid #E8E0D5;border-radius:16px;overflow:hidden;}
+.pil{padding:36px 28px;cursor:pointer;transition:all 0.25s;border-right:0.5px solid #E8E0D5;background:#FAF7F2;}
+.pil:last-child{border-right:none;}
+.pil:hover{background:#F0E8DC;}
+.pil.active{background:#2C1810;}
+.pil-num{font-size:11px;color:#B09880;letter-spacing:0.08em;margin-bottom:16px;font-weight:500;}
+.pil.active .pil-num{color:#8C7B6E;}
+.pil-icon{font-size:28px;color:#C85C3A;margin-bottom:14px;transition:transform 0.2s;}
+.pil.active .pil-icon{color:#E8A882;}
+.pil-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:500;color:#2C1810;margin-bottom:8px;}
+.pil.active .pil-title{color:#F5F0E8;}
+.pil-desc{font-size:13px;color:#8C7B6E;line-height:1.6;font-weight:300;}
+.pil.active .pil-desc{color:#8C7B6E;}
+.pil-arrow{font-size:12px;color:#C85C3A;margin-top:18px;display:flex;align-items:center;gap:4px;font-weight:500;}
+.pil.active .pil-arrow{color:#E8A882;}
+.reveal{overflow:hidden;max-height:0;transition:max-height 0.4s ease;}
+.reveal.open{max-height:300px;}
+.rev-inner{padding:36px 48px;background:#2C1810;border-top:0.5px solid #3D2418;}
+.rev-tag{font-size:10px;color:#7A5840;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;font-weight:500;}
+.rev-h{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;color:#F5F0E8;font-style:italic;margin-bottom:10px;line-height:1.3;}
+.rev-body{font-size:13px;color:#8C7B6E;line-height:1.75;max-width:520px;font-weight:300;}
+.rev-pills{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;}
+.rev-pill{font-size:11px;padding:5px 14px;border-radius:100px;border:0.5px solid #3D2418;color:#8C7B6E;letter-spacing:0.04em;}
+.belt{background:#C85C3A;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;}
+.belt-text{font-family:'Playfair Display',serif;font-size:18px;font-weight:400;color:#F5F0E8;font-style:italic;}
+.belt-cta{font-size:12px;font-weight:500;color:#C85C3A;background:#F5F0E8;padding:8px 20px;border-radius:100px;cursor:pointer;}
+.footer{padding:32px 48px;border-top:0.5px solid #E8E0D5;display:flex;align-items:center;justify-content:space-between;}
+.ft{font-size:11px;color:#B09880;letter-spacing:0.04em;}
+</style>
+<div class="pg">
+  <div class="nav">
+    <span class="logo">Hued</span>
+    <div class="nav-links"><span class="nl">Knowledge hub</span><span class="nl">Brand threads</span><span class="nl">How it works</span><span class="nl">About</span></div>
+    <span class="nav-cta">Sign in</span>
+  </div>
+  <div class="hero">
+    <div class="eye">Fashion knowledge ecosystem</div>
+    <div class="h1">A platform where</div>
+    <div class="h1i">knowledge meets fashion.</div>
+    <div class="sub">Not by telling you to buy less — but by giving you the specific knowledge to buy better.</div>
+    <div class="btns"><button class="btn-p">Enter Hued</button><button class="btn-g">Learn how it works</button></div>
+  </div>
+  <div class="pillars">
+    <div class="pil-eye">What's inside</div>
+    <div class="pil-grid">
+      <div class="pil" id="p1" onclick="tog(1)">
+        <div class="pil-num">01</div>
+        <i class="ti ti-book-2 pil-icon" aria-hidden="true"></i>
+        <div class="pil-title">Knowledge hub</div>
+        <div class="pil-desc">Fashion content shared by real people. Curated, categorized, and brand-free.</div>
+        <div class="pil-arrow">Explore <i class="ti ti-arrow-right" style="font-size:11px;" aria-hidden="true"></i></div>
+      </div>
+      <div class="pil" id="p2" onclick="tog(2)">
+        <div class="pil-num">02</div>
+        <i class="ti ti-message-2 pil-icon" aria-hidden="true"></i>
+        <div class="pil-title">Brand threads</div>
+        <div class="pil-desc">Verified purchase conversations tied to specific products and brands.</div>
+        <div class="pil-arrow">Explore <i class="ti ti-arrow-right" style="font-size:11px;" aria-hidden="true"></i></div>
+      </div>
+      <div class="pil" id="p3" onclick="tog(3)">
+        <div class="pil-num">03</div>
+        <i class="ti ti-trending-up pil-icon" aria-hidden="true"></i>
+        <div class="pil-title">Trend ticker</div>
+        <div class="pil-desc">Live fashion signals from real conversations and search behavior.</div>
+        <div class="pil-arrow">Explore <i class="ti ti-arrow-right" style="font-size:11px;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="reveal" id="r1"><div class="rev-inner"><div class="rev-tag">Knowledge hub</div><div class="rev-h">Submit content. Get cited. Know exactly how you helped.</div><div class="rev-body">Upload articles or videos, or import from Instagram, TikTok, Substack, or YouTube Shorts. Every submission reviewed for helpfulness — not brand deals.</div><div class="rev-pills"><span class="rev-pill">insightful</span><span class="rev-pill">actionable</span><span class="rev-pill">inspiring</span></div></div></div>
+    <div class="reveal" id="r2"><div class="rev-inner"><div class="rev-tag">Brand threads</div><div class="rev-h">Upload your receipt. The thread writes itself.</div><div class="rev-body">Snap your purchase confirmation. Our AI reads the brand, product, and size automatically. Verified buyers talk, anyone can read. No stars. No ratings. Just experience.</div></div></div>
+    <div class="reveal" id="r3"><div class="rev-inner"><div class="rev-tag">Trend ticker</div><div class="rev-h">What fashion is actually talking about right now.</div><div class="rev-body">Live signals from Google Trends and real platform conversations — not brand press releases. The only fashion trend layer built on what people are saying.</div></div></div>
+  </div>
+  <div class="belt"><div class="belt-text">Fashion knowledge that actually helps.</div><div class="belt-cta">Join Hued →</div></div>
+  <div class="footer"><span class="ft">Hued · 2026</span><div style="display:flex;gap:20px;"><span class="ft">How it works</span><span class="ft">Submission guidelines</span><span class="ft">About</span></div></div>
+</div>
+<script>
+let active=0;
+function tog(n){
+  if(active===n){document.getElementById('p'+n).classList.remove('active');document.getElementById('r'+n).classList.remove('open');active=0;return;}
+  [1,2,3].forEach(i=>{document.getElementById('p'+i).classList.remove('active');document.getElementById('r'+i).classList.remove('open');});
+  document.getElementById('p'+n).classList.add('active');document.getElementById('r'+n).classList.add('open');active=n;
+}
+</script>
