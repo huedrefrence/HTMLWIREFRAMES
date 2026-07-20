@@ -1,0 +1,187 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:#F5F0E8;}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:16px 40px;border-bottom:0.5px solid #E8E0D5;background:#F5F0E8;}
+.logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#2C1810;}
+.nl{font-size:12px;color:#8C7B6E;margin-left:24px;}
+.nl.active{color:#C85C3A;font-weight:500;}
+.nav-cta{font-size:12px;font-weight:500;color:#C85C3A;border:1px solid #C85C3A;padding:6px 16px;border-radius:100px;background:transparent;}
+.page{max-width:560px;margin:0 auto;padding:48px 20px;}
+.step-row{display:flex;align-items:center;gap:0;margin-bottom:40px;}
+.step-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;transition:all 0.3s;}
+.step-dot.done{background:#C85C3A;color:#FFF;}
+.step-dot.active{background:#2C1810;color:#F5F0E8;}
+.step-dot.idle{background:#EDE8E0;color:#B09880;}
+.step-line{flex:1;height:1px;background:#E8E0D5;}
+.step-line.done{background:#C85C3A;}
+.panel{background:#FAF7F2;border-radius:16px;border:0.5px solid #E8E0D5;overflow:hidden;}
+.panel-head{padding:22px 28px;border-bottom:0.5px solid #E8E0D5;}
+.ph{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#2C1810;margin-bottom:4px;}
+.ps{font-size:12px;color:#8C7B6E;font-weight:300;}
+.panel-body{padding:24px 28px;}
+.upload-zone{border:1px dashed #D4C8B8;border-radius:12px;padding:40px;text-align:center;background:#FFF;cursor:pointer;margin-bottom:16px;transition:border-color 0.2s;}
+.upload-zone:hover{border-color:#C85C3A;}
+.uz-icon{font-size:32px;color:#C85C3A;margin-bottom:10px;}
+.uz-t{font-size:14px;color:#2C1810;font-weight:500;margin-bottom:4px;}
+.uz-s{font-size:12px;color:#B09880;margin-bottom:14px;font-weight:300;}
+.uz-btn{font-size:12px;font-weight:500;color:#C85C3A;border:0.5px solid #C85C3A;padding:7px 18px;border-radius:100px;background:transparent;cursor:pointer;}
+.privacy{background:#F0F7FF;border-radius:10px;padding:12px 14px;border:0.5px solid #C8D8E8;display:flex;gap:10px;align-items:flex-start;}
+.privacy-icon{font-size:16px;color:#5B8DB8;flex-shrink:0;margin-top:1px;}
+.privacy-t{font-size:11px;font-weight:500;color:#2C4A6E;margin-bottom:2px;}
+.privacy-s{font-size:11px;color:#5B8DB8;font-weight:300;line-height:1.5;}
+.parsed-box{background:#2C1810;border-radius:12px;padding:18px;margin-bottom:16px;}
+.pb-label{font-size:9px;color:#7A5840;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;font-weight:500;}
+.pb-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:0.5px solid #3D2418;}
+.pb-row:last-child{border-bottom:none;}
+.pb-key{font-size:12px;color:#8C7B6E;}
+.pb-val{font-size:12px;font-weight:500;color:#F5F0E8;display:flex;align-items:center;gap:6px;}
+.auto{font-size:9px;background:#1D9E7533;color:#5DCAA5;padding:2px 6px;border-radius:100px;}
+.edit-link{font-size:10px;color:#C85C3A;cursor:pointer;text-decoration:underline;}
+.fl{font-size:11px;font-weight:500;color:#5A4A40;margin-bottom:5px;margin-top:14px;}
+.inp{width:100%;padding:10px 14px;border:0.5px solid #D4C8B8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#2C1810;background:#FFF;outline:none;}
+.inp:focus{border-color:#C85C3A;}
+.ta{width:100%;padding:10px 14px;border:0.5px solid #D4C8B8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#2C1810;background:#FFF;outline:none;height:100px;resize:none;margin-top:0;}
+.ta:focus{border-color:#C85C3A;}
+.tags-label{font-size:11px;font-weight:500;color:#5A4A40;margin-bottom:8px;margin-top:14px;}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+.tag{font-size:11px;padding:5px 12px;border-radius:100px;border:0.5px solid #D4C8B8;color:#8C7B6E;cursor:pointer;background:#FFF;transition:all 0.15s;}
+.tag.on{background:#2C1810;color:#F5F0E8;border-color:#2C1810;}
+.btn-row{display:flex;gap:10px;margin-top:20px;}
+.btn-p{flex:1;padding:12px;border-radius:100px;background:#C85C3A;color:#FFF;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;border:none;cursor:pointer;}
+.btn-p:hover{background:#A8492C;}
+.btn-g{padding:12px 20px;border-radius:100px;background:transparent;color:#8C7B6E;border:1px solid #D4C8B8;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;}
+.success-screen{text-align:center;padding:48px 28px;}
+.suc-icon{font-size:48px;color:#1D9E75;margin-bottom:16px;}
+.suc-h{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#2C1810;margin-bottom:8px;}
+.suc-s{font-size:13px;color:#8C7B6E;line-height:1.7;font-weight:300;max-width:340px;margin:0 auto 24px;}
+.suc-btn{padding:12px 28px;border-radius:100px;background:#2C1810;color:#F5F0E8;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;border:none;cursor:pointer;}
+.suc-link{font-size:12px;color:#C85C3A;margin-top:12px;cursor:pointer;display:block;}
+</style>
+
+<div class="nav">
+  <span class="logo">Hued</span>
+  <div><span class="nl">Knowledge hub</span><span class="nl active">Brand threads</span><span class="nl">How it works</span></div>
+  <span class="nav-cta">Sign in</span>
+</div>
+
+<div class="page">
+
+  <!-- Step indicator -->
+  <div class="step-row">
+    <div class="step-dot" id="d1">1</div>
+    <div class="step-line" id="l1"></div>
+    <div class="step-dot idle" id="d2">2</div>
+    <div class="step-line" id="l2"></div>
+    <div class="step-dot idle" id="d3">3</div>
+  </div>
+
+  <!-- STEP 1: Upload -->
+  <div class="panel" id="s1">
+    <div class="panel-head">
+      <div class="ph">Start a thread</div>
+      <div class="ps">Upload your purchase confirmation. Our AI does the rest.</div>
+    </div>
+    <div class="panel-body">
+      <div class="upload-zone" onclick="goStep2()">
+        <div class="uz-icon">📸</div>
+        <div class="uz-t">Upload your purchase screenshot</div>
+        <div class="uz-s">Order confirmation, receipt, or shipping email · JPG, PNG, PDF</div>
+        <button class="uz-btn">Choose file</button>
+      </div>
+      <div class="privacy">
+        <div class="privacy-icon">🔒</div>
+        <div>
+          <div class="privacy-t">Your receipt stays private</div>
+          <div class="privacy-s">We only read the product details from your screenshot. Your receipt image is never stored, shared, or displayed publicly — only the parsed product information appears on your thread.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: Confirm parsed details -->
+  <div class="panel" id="s2" style="display:none;">
+    <div class="panel-head">
+      <div class="ph">Confirm product details</div>
+      <div class="ps">We pulled these from your screenshot. Edit anything that looks off.</div>
+    </div>
+    <div class="panel-body">
+      <div class="parsed-box">
+        <div class="pb-label">AI parsed from your screenshot</div>
+        <div class="pb-row"><span class="pb-key">Brand</span><span class="pb-val">Zara <span class="auto">auto</span></span></div>
+        <div class="pb-row"><span class="pb-key">Category</span><span class="pb-val">Bottoms <span class="auto">auto</span></span></div>
+        <div class="pb-row"><span class="pb-key">Product</span><span class="pb-val">Straight leg trouser <span class="auto">auto</span></span></div>
+        <div class="pb-row"><span class="pb-key">Size</span><span class="pb-val">S <span class="auto">auto</span></span></div>
+        <div class="pb-row"><span class="pb-key">Price</span><span class="pb-val">$49.90 <span class="auto">auto</span></span></div>
+      </div>
+      <span class="edit-link">Something look wrong? Edit details manually →</span>
+
+      <div class="fl">Share your opening experience *</div>
+      <textarea class="ta" placeholder="What was your first impression? How does it fit? Anything others should know before buying..."></textarea>
+
+      <div class="tags-label">Quick tags — select all that apply</div>
+      <div class="tags">
+        <span class="tag" onclick="tog(this)">runs large</span>
+        <span class="tag on" onclick="tog(this)">true to size</span>
+        <span class="tag" onclick="tog(this)">size up</span>
+        <span class="tag" onclick="tog(this)">size down</span>
+        <span class="tag on" onclick="tog(this)">inseam: long</span>
+        <span class="tag" onclick="tog(this)">inseam: short</span>
+        <span class="tag on" onclick="tog(this)">fabric: good</span>
+        <span class="tag" onclick="tog(this)">waist: big</span>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-g" onclick="goStep1()">← Back</button>
+        <button class="btn-p" onclick="goStep3()">Post thread</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: Success -->
+  <div class="panel" id="s3" style="display:none;">
+    <div class="success-screen">
+      <div class="suc-icon">✓</div>
+      <div class="suc-h">Your thread is live.</div>
+      <div class="suc-s">Your experience with the Zara Straight leg trouser is now live on Brand Threads. Others can comment, and verified buyers can add their experience too.</div>
+      <button class="suc-btn">View your thread</button>
+      <span class="suc-link">Start another thread →</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function goStep1(){
+  document.getElementById('s1').style.display='block';
+  document.getElementById('s2').style.display='none';
+  document.getElementById('s3').style.display='none';
+  document.getElementById('d1').className='step-dot active';
+  document.getElementById('d2').className='step-dot idle';
+  document.getElementById('d3').className='step-dot idle';
+  document.getElementById('l1').className='step-line';
+  document.getElementById('l2').className='step-line';
+}
+function goStep2(){
+  document.getElementById('s1').style.display='none';
+  document.getElementById('s2').style.display='block';
+  document.getElementById('s3').style.display='none';
+  document.getElementById('d1').className='step-dot done';
+  document.getElementById('d2').className='step-dot active';
+  document.getElementById('d3').className='step-dot idle';
+  document.getElementById('l1').className='step-line done';
+  document.getElementById('l2').className='step-line';
+}
+function goStep3(){
+  document.getElementById('s1').style.display='none';
+  document.getElementById('s2').style.display='none';
+  document.getElementById('s3').style.display='block';
+  document.getElementById('d1').className='step-dot done';
+  document.getElementById('d2').className='step-dot done';
+  document.getElementById('d3').className='step-dot done';
+  document.getElementById('l1').className='step-line done';
+  document.getElementById('l2').className='step-line done';
+}
+function tog(el){el.classList.toggle('on');}
+</script>
