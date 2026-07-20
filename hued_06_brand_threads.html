@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hued — Brand Threads</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:#F5F0E8;}
+    .back{font-size:11px;color:#C85C3A;text-decoration:none;display:inline-block;margin:12px 40px;font-weight:500;}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 40px;border-bottom:0.5px solid #E8E0D5;background:#F5F0E8;}
+    .logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#2C1810;}
+    .nl{font-size:12px;color:#8C7B6E;margin-left:24px;text-decoration:none;}
+    .nl.active{color:#C85C3A;font-weight:500;}
+    .nav-cta{font-size:12px;font-weight:500;color:#C85C3A;border:1px solid #C85C3A;padding:6px 16px;border-radius:100px;background:transparent;cursor:pointer;}
+    .layout{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 120px);}
+    .left{padding:28px;border-right:0.5px solid #E8E0D5;}
+    .right{padding:28px;}
+    .bt-h{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#2C1810;margin-bottom:6px;}
+    .bt-s{font-size:12px;color:#8C7B6E;font-weight:300;margin-bottom:18px;}
+    .frow{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+    .ft{font-size:11px;padding:5px 12px;border-radius:100px;border:0.5px solid #D4C8B8;color:#8C7B6E;cursor:pointer;background:#FFF;}
+    .ft.on{background:#C85C3A;color:#FFF;border-color:#C85C3A;}
+    .tc{background:#FAF7F2;border-radius:10px;padding:14px;margin-bottom:10px;border:0.5px solid #E8E0D5;cursor:pointer;transition:border-color 0.15s;}
+    .tc:hover{border-color:#C85C3A;}
+    .tc-m{font-size:10px;color:#B09880;margin-bottom:3px;}
+    .tc-t{font-family:'Playfair Display',serif;font-size:13px;font-weight:500;color:#2C1810;margin-bottom:4px;}
+    .tc-p{font-size:11px;color:#8C7B6E;line-height:1.5;margin-bottom:8px;font-weight:300;}
+    .tc-f{display:flex;align-items:center;gap:6px;}
+    .bdg{font-size:9px;padding:2px 8px;border-radius:100px;}
+    .bg{background:#E1F5EE;color:#085041;}
+    .bx{background:#F0EAE0;color:#8C7B6E;}
+    .tc-time{font-size:10px;color:#B09880;margin-left:auto;}
+    .start-btn{width:100%;padding:11px;border-radius:100px;background:#C85C3A;color:#FFF;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;border:none;cursor:pointer;margin-top:8px;}
+    .ph-brand{font-size:10px;color:#B09880;margin-bottom:3px;}
+    .ph-name{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#2C1810;margin-bottom:8px;line-height:1.2;}
+    .ph-badges{display:flex;gap:6px;margin-bottom:16px;}
+    .sum{background:#FAF7F2;border-radius:10px;padding:14px;margin-bottom:16px;border:0.5px solid #E8E0D5;}
+    .sum-l{font-size:9px;color:#B09880;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;font-weight:500;}
+    .sr{display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:0.5px solid #EDE8E0;}
+    .sr:last-child{border-bottom:none;}
+    .sk{color:#8C7B6E;}.sv{font-weight:500;color:#2C1810;}
+    .div{height:0.5px;background:#E8E0D5;margin:12px 0;}
+    .post{margin-bottom:12px;}
+    .post-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+    .av{width:28px;height:28px;border-radius:50%;background:#EDE8E0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#8C7B6E;flex-shrink:0;}
+    .post-name{font-size:12px;font-weight:500;color:#2C1810;}
+    .post-meta{font-size:10px;color:#B09880;}
+    .post-time{font-size:10px;color:#B09880;margin-left:auto;}
+    .post-body{font-size:12px;color:#5A4A40;line-height:1.6;padding-left:36px;font-weight:300;}
+    .cmt{padding:8px 0;border-top:0.5px solid #EDE8E0;}
+    .cm-head{display:flex;align-items:center;gap:6px;margin-bottom:3px;}
+    .cm-av{width:20px;height:20px;border-radius:50%;background:#EDE8E0;display:flex;align-items:center;justify-content:center;font-size:8px;color:#8C7B6E;}
+    .cm-name{font-size:11px;font-weight:500;color:#2C1810;}
+    .cm-time{font-size:10px;color:#B09880;margin-left:auto;}
+    .cm-body{font-size:11px;color:#8C7B6E;padding-left:26px;line-height:1.5;font-weight:300;}
+    .compose{display:flex;gap:8px;align-items:center;margin-top:14px;padding-top:12px;border-top:0.5px solid #E8E0D5;}
+    .cbox{flex:1;background:#FAF7F2;border:0.5px solid #D4C8B8;border-radius:100px;padding:8px 14px;font-size:12px;color:#B09880;font-family:'DM Sans',sans-serif;}
+    .send{font-size:18px;color:#C85C3A;cursor:pointer;}
+  </style>
+</head>
+<body>
+  <a class="back" href="index.html">← All pages</a>
+  <nav class="nav">
+    <span class="logo">Hued</span>
+    <div><a class="nl" href="hued_02_knowledge_hub.html">Knowledge hub</a><a class="nl active" href="#">Brand threads</a><a class="nl" href="hued_03_how_it_works.html">How it works</a></div>
+    <button class="nav-cta">Sign in</button>
+  </nav>
+  <div class="layout">
+    <div class="left">
+      <div class="bt-h">Brand Threads</div>
+      <div class="bt-s">Verified buyers. Real products. Honest conversations.</div>
+      <div class="frow">
+        <span class="ft on">All</span><span class="ft">Bottoms</span><span class="ft">Outerwear</span><span class="ft">Footwear</span><span class="ft">Knitwear</span>
+      </div>
+      <div class="tc">
+        <div class="tc-m">Zara · Bottoms</div>
+        <div class="tc-t">Straight leg trouser</div>
+        <div class="tc-p">Runs slightly long in the inseam for 5'4. Quality solid for the price.</div>
+        <div class="tc-f"><span class="bdg bg">12 buyers</span><span class="bdg bx">24 comments</span><span class="tc-time">2h ago</span></div>
+      </div>
+      <div class="tc">
+        <div class="tc-m">Arket · Knitwear</div>
+        <div class="tc-t">Merino crew neck sweater</div>
+        <div class="tc-p">True to size. Pilling after 3 washes. Worth it at sale, not full price.</div>
+        <div class="tc-f"><span class="bdg bg">8 buyers</span><span class="bdg bx">17 comments</span><span class="tc-time">5h ago</span></div>
+      </div>
+      <div class="tc">
+        <div class="tc-m">& Other Stories · Footwear</div>
+        <div class="tc-t">Leather loafer mule</div>
+        <div class="tc-p">Half size up — no give at first. Broke in beautifully after two weeks.</div>
+        <div class="tc-f"><span class="bdg bg">5 buyers</span><span class="bdg bx">9 comments</span><span class="tc-time">1d ago</span></div>
+      </div>
+      <button class="start-btn">+ Start a thread</button>
+    </div>
+    <div class="right">
+      <div class="ph-brand">Zara · Bottoms</div>
+      <div class="ph-name">Straight leg trouser</div>
+      <div class="ph-badges"><span class="bdg bg">12 verified buyers</span><span class="bdg bx">24 comments</span><span class="bdg bx">Size S</span></div>
+      <div class="sum">
+        <div class="sum-l">What buyers are saying</div>
+        <div class="sr"><span class="sk">Sizing</span><span class="sv">Runs long in inseam</span></div>
+        <div class="sr"><span class="sk">Quality</span><span class="sv">Good for the price</span></div>
+        <div class="sr"><span class="sk">Fit</span><span class="sv">True to size</span></div>
+      </div>
+      <div class="div"></div>
+      <div class="post">
+        <div class="post-head"><div class="av">JL</div><div><div class="post-name">Jordan L. <span class="bdg bg" style="margin-left:3px;">buyer</span></div><div class="post-meta">Size S · 5'4</div></div><div class="post-time">2h ago</div></div>
+        <div class="post-body">Runs slightly long in the inseam. Fabric quality solid for the price. Would size up if between sizes. Waistband broke in nicely after first wash.</div>
+      </div>
+      <div class="cmt">
+        <div class="cm-head"><div class="cm-av">MR</div><span class="cm-name">Maya R.</span><span class="cm-time">45m ago</span></div>
+        <div class="cm-body">Same on the inseam. Had to hem mine. Love the silhouette though.</div>
+      </div>
+      <div class="cmt">
+        <div class="cm-head"><div class="cm-av">TK</div><span class="cm-name">Tara K.</span><span class="cm-time">20m ago</span></div>
+        <div class="cm-body">Does it work for curvier hips? I usually struggle with straight cuts.</div>
+      </div>
+      <div class="compose">
+        <div class="cbox">Add a comment...</div>
+        <span class="send">→</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

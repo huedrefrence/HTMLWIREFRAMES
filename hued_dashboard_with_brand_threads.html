@@ -1,0 +1,305 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-sans);}
+.dash{background:#FAF8F5;padding:20px;min-height:100vh;}
+.dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.dash-title{font-size:18px;font-weight:600;color:#1a1a1a;}
+.dash-sub{font-size:12px;color:#888;margin-top:2px;}
+.refresh-btn{font-size:11px;font-weight:500;padding:7px 16px;border-radius:8px;background:#2563EB;color:#fff;border:none;display:flex;align-items:center;gap:5px;}
+.filter-bar{display:flex;gap:10px;margin-bottom:20px;}
+.filter-input{flex:1;border:1px solid #E5E5E5;border-radius:8px;padding:8px 12px;font-size:12px;color:#888;background:#fff;}
+.filter-select{border:1px solid #E5E5E5;border-radius:8px;padding:8px 14px;font-size:12px;color:#555;background:#fff;}
+.ticker{background:#1a1a1a;border-radius:12px;padding:14px 18px;margin-bottom:20px;}
+.ticker-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.ticker-title{font-size:12px;font-weight:500;color:#fff;display:flex;align-items:center;gap:6px;}
+.live{font-size:10px;color:#F59E0B;font-weight:500;}
+.ticker-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.titem{background:#2a2a2a;border-radius:8px;padding:10px;}
+.ti-name{font-size:11px;font-weight:500;color:#fff;margin-bottom:2px;}
+.ti-badge{font-size:9px;padding:2px 7px;border-radius:100px;margin-bottom:6px;display:inline-block;}
+.trending{background:#F59E0B22;color:#F59E0B;}
+.stable{background:#10B98122;color:#10B981;}
+.ti-vol{font-size:9px;color:#888;}
+.ti-mom{font-size:11px;font-weight:500;color:#10B981;}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.stat-card{background:#fff;border-radius:12px;padding:14px;border:1px solid #F0EDE8;}
+.sc-label{font-size:11px;color:#888;margin-bottom:4px;}
+.sc-val{font-size:20px;font-weight:600;color:#1a1a1a;}
+.sc-icon{font-size:18px;margin-bottom:6px;}
+.section-label{font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#888;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid #F0EDE8;}
+.new-badge{font-size:9px;background:#EEEDFE;color:#3C3489;padding:2px 8px;border-radius:100px;margin-left:6px;font-weight:500;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
+.panel{background:#fff;border-radius:12px;padding:16px;border:1px solid #F0EDE8;}
+.panel-title{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:12px;display:flex;align-items:center;}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.bar-label{font-size:11px;color:#555;width:130px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bar-track{flex:1;height:6px;background:#F0EDE8;border-radius:100px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:100px;background:#F97316;}
+.bar-pct{font-size:11px;font-weight:500;color:#F97316;width:36px;text-align:right;flex-shrink:0;}
+.bar-time{font-size:10px;color:#aaa;width:28px;text-align:right;flex-shrink:0;}
+.disc-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid #F5F5F5;}
+.disc-row:last-child{border-bottom:none;}
+.disc-name{font-size:11px;color:#333;}
+.disc-stats{display:flex;gap:12px;}
+.disc-stat{font-size:10px;color:#888;}
+.pie-wrap{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:8px;}
+.legend{display:flex;flex-direction:column;gap:6px;}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:10px;color:#555;}
+.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+svg.pie{width:90px;height:90px;}
+
+/* brand threads panels */
+.bt-brand-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #F5F5F5;}
+.bt-brand-row:last-child{border-bottom:none;}
+.bt-brand-name{font-size:11px;font-weight:500;color:#1a1a1a;}
+.bt-brand-meta{font-size:10px;color:#888;margin-top:1px;}
+.bt-stats{display:flex;gap:10px;align-items:center;}
+.bt-stat{font-size:10px;color:#888;display:flex;align-items:center;gap:3px;}
+.bt-vel{font-size:10px;font-weight:500;color:#10B981;}
+.tag-cloud{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px;}
+.ftag{font-size:10px;padding:3px 10px;border-radius:100px;border:1px solid #E5E5E5;color:#555;display:flex;align-items:center;gap:4px;}
+.ftag-count{font-size:9px;font-weight:600;color:#1a1a1a;}
+.sentiment-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.sent-brand{font-size:11px;color:#333;width:80px;flex-shrink:0;}
+.sent-track{flex:1;height:8px;border-radius:100px;overflow:hidden;display:flex;}
+.sent-pos{background:#10B981;height:100%;}
+.sent-neu{background:#F0EDE8;height:100%;}
+.sent-neg{background:#F87171;height:100%;}
+.sent-pct{font-size:10px;color:#10B981;font-weight:500;width:32px;text-align:right;}
+.cite-kw-row{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
+.ckw-label{font-size:11px;color:#555;width:80px;flex-shrink:0;}
+.ckw-track{flex:1;height:8px;background:#F0EDE8;border-radius:100px;overflow:hidden;}
+.ckw-fill{height:100%;border-radius:100px;}
+.ckw-pct{font-size:11px;font-weight:500;width:32px;text-align:right;}
+.eng-line{margin-top:8px;}
+.line-labels{display:flex;justify-content:space-between;font-size:9px;color:#aaa;margin-top:4px;}
+.divider-label{font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#aaa;margin:4px 0 12px;display:flex;align-items:center;gap:8px;}
+.divider-label::after{content:'';flex:1;height:1px;background:#F0EDE8;}
+.view-all{font-size:10px;color:#2563EB;font-weight:500;margin-left:auto;}
+</style>
+
+<div class="dash">
+  <h2 class="sr-only">Updated Hued B2B dashboard showing Knowledge Hub engagement data alongside new Brand Threads data modules including brand thread activity, fit and sizing signals, verified buyer sentiment, and citation keyword breakdown.</h2>
+
+  <div class="dash-header">
+    <div>
+      <div class="dash-title">Fashion Dashboard</div>
+      <div class="dash-sub">Business Intelligence for Fashion Content Analytics</div>
+    </div>
+    <button class="refresh-btn"><i class="ti ti-refresh" aria-hidden="true"></i> Refresh</button>
+  </div>
+
+  <div class="filter-bar">
+    <div class="filter-input">🔍 Search categories or sources...</div>
+    <select class="filter-select"><option>All Categories</option></select>
+    <select class="filter-select"><option>All Sources</option></select>
+    <select class="filter-select"><option>All Brands</option></select>
+  </div>
+
+  <!-- Trend Ticker -->
+  <div class="ticker">
+    <div class="ticker-header">
+      <span class="ticker-title"><i class="ti ti-trending-up" aria-hidden="true"></i> Fashion Trend Ticker</span>
+      <span class="live">● LIVE</span>
+    </div>
+    <div class="ticker-grid">
+      <div class="titem"><div class="ti-name">Sustainable Fabrics</div><span class="ti-badge trending">TRENDING</span><div class="ti-vol">Volume: 1,240</div><div class="ti-mom">+34.0%</div></div>
+      <div class="titem"><div class="ti-name">Oversized Silhouettes</div><span class="ti-badge trending">TRENDING</span><div class="ti-vol">Volume: 890</div><div class="ti-mom">+28.0%</div></div>
+      <div class="titem"><div class="ti-name">Minimalist Design</div><span class="ti-badge stable">STABLE</span><div class="ti-vol">Volume: 750</div><div class="ti-mom">+19.0%</div></div>
+      <div class="titem"><div class="ti-name">Quiet Luxury</div><span class="ti-badge trending">TRENDING</span><div class="ti-vol">Volume: 620</div><div class="ti-mom">+15.0%</div></div>
+    </div>
+  </div>
+
+  <!-- Stat cards -->
+  <div class="stat-grid">
+    <div class="stat-card"><div class="sc-icon">🕐</div><div class="sc-label">Total Time Spent</div><div class="sc-val">56.5m</div></div>
+    <div class="stat-card"><div class="sc-icon">👍</div><div class="sc-label">Total Upvotes</div><div class="sc-val">31</div></div>
+    <div class="stat-card"><div class="sc-icon">👁</div><div class="sc-label">Total Views</div><div class="sc-val">0</div></div>
+    <div class="stat-card"><div class="sc-icon">📄</div><div class="sc-label">Total Content</div><div class="sc-val">16</div></div>
+  </div>
+
+  <!-- Knowledge Hub section -->
+  <div class="divider-label">Knowledge Hub</div>
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-title">Category Performance</div>
+      <div class="bar-row"><span class="bar-label">Assessing Fashion Needs</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="bar-pct">47%</span><span class="bar-time">27m</span></div>
+      <div class="bar-row"><span class="bar-label">Understanding Fashion Basics</span><div class="bar-track"><div class="bar-fill" style="width:47%"></div></div><span class="bar-pct">22%</span><span class="bar-time">13m</span></div>
+      <div class="bar-row"><span class="bar-label">Body Positivity</span><div class="bar-track"><div class="bar-fill" style="width:23%"></div></div><span class="bar-pct">11%</span><span class="bar-time">6m</span></div>
+      <div class="bar-row"><span class="bar-label">Wardrobe Management</span><div class="bar-track"><div class="bar-fill" style="width:13%"></div></div><span class="bar-pct">6%</span><span class="bar-time">3m</span></div>
+      <div class="bar-row"><span class="bar-label">Style Principles</span><div class="bar-track"><div class="bar-fill" style="width:8%"></div></div><span class="bar-pct">4%</span><span class="bar-time">2m</span></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Citation Keyword Breakdown <span class="new-badge">NEW</span></div>
+      <div style="font-size:10px;color:#888;margin-bottom:10px;">How users cite Knowledge Hub content</div>
+      <div class="cite-kw-row">
+        <span class="ckw-label">Actionable</span>
+        <div class="ckw-track"><div class="ckw-fill" style="width:54%;background:#10B981;"></div></div>
+        <span class="ckw-pct" style="color:#10B981;">54%</span>
+      </div>
+      <div class="cite-kw-row">
+        <span class="ckw-label">Insightful</span>
+        <div class="ckw-track"><div class="ckw-fill" style="width:31%;background:#7F77DD;"></div></div>
+        <span class="ckw-pct" style="color:#7F77DD;">31%</span>
+      </div>
+      <div class="cite-kw-row">
+        <span class="ckw-label">Inspiring</span>
+        <div class="ckw-track"><div class="ckw-fill" style="width:15%;background:#F59E0B;"></div></div>
+        <span class="ckw-pct" style="color:#F59E0B;">15%</span>
+      </div>
+      <div style="margin-top:10px;background:#F5F5F5;border-radius:8px;padding:10px;">
+        <div style="font-size:10px;color:#555;line-height:1.6;">
+          <strong style="color:#1a1a1a;">Insight:</strong> Over half of citations are <span style="color:#10B981;font-weight:500;">actionable</span> — your audience wants content they can use immediately, not just inspiration.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-title">Most Upvoted Discussions</div>
+      <div class="disc-row"><span class="disc-name">Assessing Fashion Needs</span><div class="disc-stats"><span class="disc-stat">15 upvotes</span><span class="disc-stat">61 interactions</span></div></div>
+      <div class="disc-row"><span class="disc-name">Understanding Fashion Basics</span><div class="disc-stats"><span class="disc-stat">5 upvotes</span><span class="disc-stat">42 interactions</span></div></div>
+      <div class="disc-row"><span class="disc-name">Sourcing Specific Pieces</span><div class="disc-stats"><span class="disc-stat">3 upvotes</span><span class="disc-stat">28 interactions</span></div></div>
+      <div class="disc-row"><span class="disc-name">Wardrobe Management</span><div class="disc-stats"><span class="disc-stat">1 upvote</span><span class="disc-stat">24 interactions</span></div></div>
+      <div class="disc-row"><span class="disc-name">Body Positivity</span><div class="disc-stats"><span class="disc-stat">1 upvote</span><span class="disc-stat">23 interactions</span></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Content Source Distribution</div>
+      <div class="pie-wrap">
+        <svg class="pie" viewBox="0 0 32 32" aria-label="Pie chart: Substack 41.1%, TikTok 36.7%, Instagram 22.2%">
+          <circle r="16" cx="16" cy="16" fill="#F87171"/>
+          <circle r="16" cx="16" cy="16" fill="transparent" stroke="#6EE7B7" stroke-width="32" stroke-dasharray="23.2 77.8" stroke-dashoffset="-41.1" transform="rotate(-90 16 16)"/>
+          <circle r="16" cx="16" cy="16" fill="transparent" stroke="#93C5FD" stroke-width="32" stroke-dasharray="36.7 63.3" stroke-dashoffset="-64.3" transform="rotate(-90 16 16)"/>
+        </svg>
+        <div class="legend">
+          <div class="leg-item"><div class="leg-dot" style="background:#F87171;"></div>Substack — 41.1%</div>
+          <div class="leg-item"><div class="leg-dot" style="background:#93C5FD;"></div>TikTok — 36.7%</div>
+          <div class="leg-item"><div class="leg-dot" style="background:#6EE7B7;"></div>Instagram — 22.2%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Brand Threads section -->
+  <div class="divider-label">Brand Threads <span class="new-badge">NEW</span></div>
+
+  <div class="grid-3">
+    <div class="panel">
+      <div class="panel-title">Top Brands by Thread Activity</div>
+      <div class="bt-brand-row">
+        <div><div class="bt-brand-name">Zara</div><div class="bt-brand-meta">34 threads · 187 buyers</div></div>
+        <div class="bt-stats"><span class="bt-vel">↑ +12 this week</span></div>
+      </div>
+      <div class="bt-brand-row">
+        <div><div class="bt-brand-name">Arket</div><div class="bt-brand-meta">18 threads · 94 buyers</div></div>
+        <div class="bt-stats"><span class="bt-vel">↑ +7 this week</span></div>
+      </div>
+      <div class="bt-brand-row">
+        <div><div class="bt-brand-name">& Other Stories</div><div class="bt-brand-meta">14 threads · 61 buyers</div></div>
+        <div class="bt-stats"><span class="bt-vel">↑ +5 this week</span></div>
+      </div>
+      <div class="bt-brand-row">
+        <div><div class="bt-brand-name">COS</div><div class="bt-brand-meta">11 threads · 48 buyers</div></div>
+        <div class="bt-stats"><span class="bt-vel">↑ +3 this week</span></div>
+      </div>
+      <div class="bt-brand-row">
+        <div><div class="bt-brand-name">Mango</div><div class="bt-brand-meta">9 threads · 37 buyers</div></div>
+        <div class="bt-stats"><span class="bt-vel">↑ +2 this week</span></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Fit & Sizing Signals</div>
+      <div style="font-size:10px;color:#888;margin-bottom:10px;">Aggregated buyer quick-tags across all threads</div>
+      <div class="tag-cloud">
+        <div class="ftag"><span>runs large</span><span class="ftag-count">284</span></div>
+        <div class="ftag"><span>true to size</span><span class="ftag-count">231</span></div>
+        <div class="ftag"><span>size up</span><span class="ftag-count">198</span></div>
+        <div class="ftag"><span>inseam: long</span><span class="ftag-count">167</span></div>
+        <div class="ftag"><span>size down</span><span class="ftag-count">143</span></div>
+        <div class="ftag"><span>inseam: short</span><span class="ftag-count">89</span></div>
+        <div class="ftag"><span>fabric: good</span><span class="ftag-count">76</span></div>
+        <div class="ftag"><span>waist: big</span><span class="ftag-count">54</span></div>
+      </div>
+      <div style="margin-top:10px;background:#FEF9EE;border-radius:8px;padding:8px 10px;">
+        <div style="font-size:10px;color:#555;line-height:1.5;"><strong style="color:#1a1a1a;">Signal:</strong> "Runs large" is the most common tag this week — dominant across Bottoms and Outerwear categories.</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Verified Buyer Sentiment</div>
+      <div style="font-size:10px;color:#888;margin-bottom:10px;">Positive · Neutral · Negative by brand</div>
+      <div class="sentiment-row">
+        <span class="sent-brand">Zara</span>
+        <div class="sent-track"><div class="sent-pos" style="width:62%;"></div><div class="sent-neu" style="width:28%;"></div><div class="sent-neg" style="width:10%;"></div></div>
+        <span class="sent-pct">62%</span>
+      </div>
+      <div class="sentiment-row">
+        <span class="sent-brand">Arket</span>
+        <div class="sent-track"><div class="sent-pos" style="width:71%;"></div><div class="sent-neu" style="width:20%;"></div><div class="sent-neg" style="width:9%;"></div></div>
+        <span class="sent-pct">71%</span>
+      </div>
+      <div class="sentiment-row">
+        <span class="sent-brand">& Other Stories</span>
+        <div class="sent-track"><div class="sent-pos" style="width:58%;"></div><div class="sent-neu" style="width:30%;"></div><div class="sent-neg" style="width:12%;"></div></div>
+        <span class="sent-pct">58%</span>
+      </div>
+      <div class="sentiment-row">
+        <span class="sent-brand">COS</span>
+        <div class="sent-track"><div class="sent-pos" style="width:79%;"></div><div class="sent-neu" style="width:16%;"></div><div class="sent-neg" style="width:5%;"></div></div>
+        <span class="sent-pct">79%</span>
+      </div>
+      <div class="sentiment-row">
+        <span class="sent-brand">Mango</span>
+        <div class="sent-track"><div class="sent-pos" style="width:44%;"></div><div class="sent-neu" style="width:33%;"></div><div class="sent-neg" style="width:23%;"></div></div>
+        <span class="sent-pct">44%</span>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:8px;">
+        <div class="leg-item" style="font-size:9px;"><div class="leg-dot" style="background:#10B981;"></div>Positive</div>
+        <div class="leg-item" style="font-size:9px;"><div class="leg-dot" style="background:#F0EDE8;border:1px solid #ddd;"></div>Neutral</div>
+        <div class="leg-item" style="font-size:9px;"><div class="leg-dot" style="background:#F87171;"></div>Negative</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Engagement trends -->
+  <div class="panel" style="margin-bottom:14px;">
+    <div class="panel-title">Engagement Trends — Knowledge Hub vs Brand Threads <span class="new-badge">NEW</span></div>
+    <div style="display:flex;gap:16px;margin-bottom:10px;">
+      <div class="leg-item"><div class="leg-dot" style="background:#10B981;"></div><span style="font-size:10px;color:#555;">Knowledge Hub</span></div>
+      <div class="leg-item"><div class="leg-dot" style="background:#F97316;"></div><span style="font-size:10px;color:#555;">Brand Threads</span></div>
+    </div>
+    <svg viewBox="0 0 600 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100px;" aria-label="Line chart showing engagement trends for Knowledge Hub and Brand Threads from Wednesday to Tuesday">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10B981" stop-opacity="0.15"/><stop offset="100%" stop-color="#10B981" stop-opacity="0"/></linearGradient>
+        <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F97316" stop-opacity="0.15"/><stop offset="100%" stop-color="#F97316" stop-opacity="0"/></linearGradient>
+      </defs>
+      <!-- grid lines -->
+      <line x1="0" y1="20" x2="600" y2="20" stroke="#F0EDE8" stroke-width="1"/>
+      <line x1="0" y1="50" x2="600" y2="50" stroke="#F0EDE8" stroke-width="1"/>
+      <line x1="0" y1="80" x2="600" y2="80" stroke="#F0EDE8" stroke-width="1"/>
+      <!-- KH line -->
+      <polyline points="10,80 100,75 190,60 280,40 370,20 460,18 560,18" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- BT line (new, starts lower) -->
+      <polyline points="10,92 100,90 190,88 280,85 370,72 460,50 560,35" fill="none" stroke="#F97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 2"/>
+      <!-- dots KH -->
+      <circle cx="370" cy="20" r="3" fill="#10B981"/>
+      <circle cx="560" cy="18" r="3" fill="#10B981"/>
+      <!-- dots BT -->
+      <circle cx="460" cy="50" r="3" fill="#F97316"/>
+      <circle cx="560" cy="35" r="3" fill="#F97316"/>
+      <!-- x labels -->
+      <text x="10" y="98" font-size="8" fill="#aaa">Wed</text>
+      <text x="96" y="98" font-size="8" fill="#aaa">Thu</text>
+      <text x="186" y="98" font-size="8" fill="#aaa">Fri</text>
+      <text x="276" y="98" font-size="8" fill="#aaa">Sat</text>
+      <text x="366" y="98" font-size="8" fill="#aaa">Sun</text>
+      <text x="453" y="98" font-size="8" fill="#aaa">Mon</text>
+      <text x="549" y="98" font-size="8" fill="#aaa">Tue</text>
+    </svg>
+  </div>
+
+</div>

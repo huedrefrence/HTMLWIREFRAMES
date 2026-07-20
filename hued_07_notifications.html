@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hued — Notification Flow</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:#F5F0E8;padding:40px;}
+    .back{font-size:11px;color:#C85C3A;text-decoration:none;font-weight:500;display:inline-block;margin-bottom:24px;}
+    h1{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#2C1810;margin-bottom:6px;}
+    .page-sub{font-size:13px;color:#8C7B6E;font-weight:300;margin-bottom:32px;}
+    .row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;}
+    .box{background:#FAF7F2;border-radius:12px;border:0.5px solid #E8E0D5;overflow:hidden;}
+    .box-head{padding:16px 18px;border-bottom:0.5px solid #E8E0D5;}
+    .bh{font-family:'Playfair Display',serif;font-size:15px;font-weight:500;color:#2C1810;}
+    .bp{font-size:11px;color:#8C7B6E;margin-top:2px;font-weight:300;}
+    .box-body{padding:14px 18px;}
+    .card{background:#FFF;border-radius:8px;padding:12px;margin-bottom:10px;border:0.5px solid #E8E0D5;}
+    .card-meta{font-size:10px;color:#B09880;margin-bottom:3px;}
+    .card-title{font-family:'Playfair Display',serif;font-size:13px;font-weight:500;color:#2C1810;margin-bottom:4px;}
+    .card-body-text{font-size:11px;color:#8C7B6E;line-height:1.5;font-weight:300;margin-bottom:8px;}
+    .card-foot{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:0.5px solid #EDE8E0;}
+    .cites{font-size:10px;color:#B09880;}
+    .cite-btn{font-size:10px;font-weight:500;color:#C85C3A;border:0.5px solid #C85C3A;padding:3px 10px;border-radius:100px;cursor:pointer;background:transparent;}
+    .sheet{background:#2C1810;border-radius:10px;padding:16px;}
+    .sh-handle{width:28px;height:3px;background:#5A3828;border-radius:100px;margin:0 auto 12px;}
+    .sh-title{font-family:'Playfair Display',serif;font-size:15px;color:#F5F0E8;margin-bottom:4px;}
+    .sh-sub{font-size:11px;color:#8C7B6E;margin-bottom:12px;font-weight:300;}
+    .kw-opt{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:8px;border:0.5px solid #3D2418;margin-bottom:6px;cursor:pointer;}
+    .kw-opt.sel{border-color:#C85C3A;background:#3D2010;}
+    .kw-label{font-size:11px;font-weight:500;color:#F5F0E8;}
+    .kw-desc{font-size:10px;color:#8C7B6E;font-weight:300;}
+    .kw-check{margin-left:auto;color:#C85C3A;font-size:14px;}
+    .sh-btn{width:100%;padding:9px;border-radius:100px;background:#C85C3A;color:#FFF;font-size:12px;font-weight:500;border:none;cursor:pointer;margin-top:8px;}
+    .success{background:#E1F5EE;border-radius:8px;padding:12px;text-align:center;margin-bottom:10px;border:0.5px solid #B8DEC9;}
+    .suc-title{font-size:13px;font-weight:500;color:#085041;margin-bottom:3px;}
+    .suc-sub{font-size:11px;color:#3A7A5E;font-weight:300;line-height:1.5;}
+    .kp{display:inline-block;font-size:10px;font-weight:500;padding:2px 8px;border-radius:100px;margin:0 2px;}
+    .kp-g{background:#E1F5EE;color:#085041;}
+    .kp-p{background:#EEEDFE;color:#3C3489;}
+    .kp-a{background:#FAEEDA;color:#BA7517;}
+    .notif{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:0.5px solid #EDE8E0;}
+    .notif:last-child{border-bottom:none;}
+    .ndot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+    .ntext{font-size:11px;color:#2C1810;line-height:1.5;}
+    .ntime{font-size:10px;color:#B09880;margin-top:1px;}
+    .email-box{background:#FFF;border-radius:12px;padding:20px;border:0.5px solid #E8E0D5;}
+    .email-from{font-size:11px;color:#B09880;margin-bottom:3px;}
+    .email-subject{font-family:'Playfair Display',serif;font-size:16px;font-weight:500;color:#2C1810;margin-bottom:10px;}
+    .email-body{font-size:12px;color:#8C7B6E;line-height:1.7;font-weight:300;margin-bottom:14px;}
+    .email-cta{font-size:12px;font-weight:500;color:#C85C3A;border-top:0.5px solid #EDE8E0;padding-top:12px;cursor:pointer;}
+  </style>
+</head>
+<body>
+  <a class="back" href="index.html">← All pages</a>
+  <h1>Notification Flow</h1>
+  <div class="page-sub">Content card → keyword picker → confirmed → notification center + email</div>
+  <div class="row">
+    <div class="box">
+      <div class="box-head"><div class="bh">Step 1 — Content card</div><div class="bp">Cite button on every card</div></div>
+      <div class="box-body">
+        <div class="card">
+          <div class="card-meta">Styling · via Substack</div>
+          <div class="card-title">How to dress for your frame, not your size</div>
+          <div class="card-body-text">Sizing labels mean nothing. Here's how to use proportions to build outfits that actually work.</div>
+          <div class="card-foot"><span class="cites">12 cites</span><button class="cite-btn">Cite this</button></div>
+        </div>
+        <div class="card">
+          <div class="card-meta">Zara · Bottoms</div>
+          <div class="card-title">Straight leg trouser</div>
+          <div class="card-body-text">Runs slightly long in the inseam for 5'4. Fabric quality solid for the price.</div>
+          <div class="card-foot"><span style="font-size:9px;background:#E1F5EE;color:#085041;padding:2px 7px;border-radius:100px;">12 buyers</span><button class="cite-btn">Cite this</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="box">
+      <div class="box-head"><div class="bh">Step 2 — Keyword picker</div><div class="bp">One word. Sent to the creator.</div></div>
+      <div class="box-body">
+        <div class="sheet">
+          <div class="sh-handle"></div>
+          <div class="sh-title">How did this help you?</div>
+          <div class="sh-sub">Pick one word. This is sent to the creator as your citation.</div>
+          <div class="kw-opt"><div><div class="kw-label">Insightful</div><div class="kw-desc">Gave me new perspective</div></div></div>
+          <div class="kw-opt sel"><div><div class="kw-label">Actionable</div><div class="kw-desc">I could use this right away</div></div><span class="kw-check">✓</span></div>
+          <div class="kw-opt"><div><div class="kw-label">Inspiring</div><div class="kw-desc">Sparked something for me</div></div></div>
+          <button class="sh-btn">Send citation</button>
+        </div>
+      </div>
+    </div>
+    <div class="box">
+      <div class="box-head"><div class="bh">Step 3 — Confirmed + Notifications</div><div class="bp">Citation sent · in-app alerts</div></div>
+      <div class="box-body">
+        <div class="success"><div class="suc-title">Citation sent</div><div class="suc-sub">You cited this as <span class="kp kp-g">actionable</span><br>The creator has been notified.</div></div>
+        <div style="font-family:'Playfair Display',serif;font-size:14px;color:#2C1810;margin-bottom:10px;font-weight:500;">Notifications</div>
+        <div class="notif"><div class="ndot" style="background:#1D9E75;"></div><div><div class="ntext">Your content was cited for its <span class="kp kp-g">actionable</span> context.</div><div class="ntime">Just now · Knowledge Hub</div></div></div>
+        <div class="notif"><div class="ndot" style="background:#7F77DD;"></div><div><div class="ntext">Your content was cited for its <span class="kp kp-p">insightful</span> context.</div><div class="ntime">1h ago · Knowledge Hub</div></div></div>
+        <div class="notif"><div class="ndot" style="background:#BA7517;"></div><div><div class="ntext">Your content was cited for its <span class="kp kp-a">inspiring</span> context.</div><div class="ntime">Yesterday · Knowledge Hub</div></div></div>
+        <div class="notif"><div class="ndot" style="background:#C85C3A;"></div><div><div class="ntext"><span style="font-weight:500;">Maya R.</span> commented on your Brand Thread.</div><div class="ntime">2 days ago · Brand Threads</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="email-box">
+    <div class="email-from">From: Hued · hello@hued.info</div>
+    <div class="email-subject">Your content was just cited for its actionable context</div>
+    <div class="email-body">Hi Jordan,<br><br>Someone found your Knowledge Hub submission genuinely useful — and they told us exactly why.<br><br><strong>"How to dress for your frame, not your size"</strong><br><br>was cited as <span class="kp kp-g">actionable</span> — meaning it gave them something they could use right away.<br><br>You now have 13 citations on this piece.</div>
+    <div class="email-cta">View your content on Hued →</div>
+  </div>
+</body>
+</html>

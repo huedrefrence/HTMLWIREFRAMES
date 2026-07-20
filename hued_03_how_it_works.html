@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hued — How It Works</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:#F5F0E8;}
+    .back{font-size:11px;color:#C85C3A;text-decoration:none;display:inline-block;margin:12px 40px;font-weight:500;}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 40px;border-bottom:0.5px solid #E8E0D5;background:#F5F0E8;}
+    .logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#2C1810;}
+    .nl{font-size:12px;color:#8C7B6E;margin-left:24px;text-decoration:none;}
+    .nl.active{color:#C85C3A;font-weight:500;}
+    .nav-cta{font-size:12px;font-weight:500;color:#C85C3A;border:1px solid #C85C3A;padding:6px 16px;border-radius:100px;background:transparent;cursor:pointer;}
+    .page{padding:48px 40px;}
+    .eye{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#B09880;font-weight:500;margin-bottom:14px;}
+    .h1{font-family:'Playfair Display',serif;font-size:38px;font-weight:700;color:#2C1810;line-height:1.15;margin-bottom:8px;}
+    .sub{font-size:14px;color:#8C7B6E;line-height:1.7;font-weight:300;max-width:420px;margin-bottom:40px;}
+    .sec{padding:36px 0;border-bottom:0.5px solid #E8E0D5;}
+    .sec:last-child{border-bottom:none;}
+    .sec-tag{display:inline-block;font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:18px;}
+    .sec-h{font-family:'Playfair Display',serif;font-size:26px;font-weight:500;color:#2C1810;margin-bottom:8px;}
+    .sec-sub{font-size:13px;color:#8C7B6E;line-height:1.7;font-weight:300;max-width:480px;margin-bottom:24px;}
+    .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
+    .ic{border-radius:10px;padding:16px;border:0.5px solid #E8E0D5;background:#FAF7F2;}
+    .ic-l{font-size:9px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:#B09880;margin-bottom:8px;}
+    .ic-t{font-family:'Playfair Display',serif;font-size:14px;font-weight:500;color:#2C1810;margin-bottom:5px;}
+    .ic-d{font-size:11px;color:#8C7B6E;line-height:1.55;font-weight:300;}
+    .steps{background:#FAF7F2;border-radius:12px;padding:18px 20px;border:0.5px solid #E8E0D5;}
+    .step{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:0.5px solid #EDE8E0;}
+    .step:last-child{border-bottom:none;}
+    .sn{width:22px;height:22px;border-radius:50%;border:1px solid #D4C8B8;display:flex;align-items:center;justify-content:center;font-size:10px;color:#8C7B6E;flex-shrink:0;font-family:'DM Sans',sans-serif;}
+    .st{font-size:12px;font-weight:500;color:#2C1810;margin-bottom:2px;}
+    .sd{font-size:11px;color:#8C7B6E;font-weight:300;}
+    .kw-row{display:flex;gap:7px;margin-top:14px;}
+    .kw{font-size:11px;padding:4px 12px;border-radius:100px;border:1px solid #D4C8B8;color:#8C7B6E;}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+    .pm{border:1px dashed #D4C8B8;border-radius:10px;padding:14px;background:#FAF7F2;}
+    .pm-l{font-size:9px;color:#B09880;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;font-weight:500;}
+    .pm-r{display:flex;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid #EDE8E0;font-size:11px;}
+    .pm-r:last-child{border-bottom:none;}
+    .pm-k{color:#8C7B6E;}.pm-v{font-weight:500;color:#2C1810;}
+    .auto{font-size:8px;background:#E1F5EE;color:#085041;padding:1px 5px;border-radius:100px;margin-left:3px;}
+    .part-row{padding:8px 0;border-bottom:0.5px solid #EDE8E0;}
+    .part-row:last-child{border-bottom:none;}
+  </style>
+</head>
+<body>
+  <a class="back" href="index.html">← All pages</a>
+  <nav class="nav">
+    <span class="logo">Hued</span>
+    <div><a class="nl" href="hued_02_knowledge_hub.html">Knowledge hub</a><a class="nl" href="hued_06_brand_threads.html">Brand threads</a><a class="nl active" href="#">How it works</a></div>
+    <button class="nav-cta">Sign in</button>
+  </nav>
+  <div class="page">
+    <div class="eye">How it works</div>
+    <div class="h1">Two features. One platform.</div>
+    <div class="sub">Hued shifts fashion consumption from impulsive to intentional.</div>
+    <div class="sec">
+      <span class="sec-tag" style="background:#FAEEDA;color:#BA7517;">Knowledge hub</span>
+      <div class="sec-h">Fashion knowledge, without the agenda</div>
+      <div class="sec-sub">A platform to share fashion-related content that helps people with specific fashion problems — curated by real shoppers, creators, and professionals.</div>
+      <div class="three-col">
+        <div class="ic"><div class="ic-l">What it is</div><div class="ic-t">A curated content layer</div><div class="ic-d">Real fashion knowledge. No brand sponsorships, no paid placements — only content that passes a helpfulness review.</div></div>
+        <div class="ic"><div class="ic-l">How it's used</div><div class="ic-t">Create, import, submit</div><div class="ic-d">Upload directly or import from Instagram, TikTok, YouTube Shorts, or Substack. Tag a category. Submit for review.</div></div>
+        <div class="ic"><div class="ic-l">How it offers value</div><div class="ic-t">Cited by the community</div><div class="ic-d">When your content helps someone, they cite it with one word. You get notified exactly how it helped.</div></div>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="sn">1</div><div><div class="st">Create your profile</div><div class="sd">Choose who you are — consumer, creator, or professional. Pick up to 3 categories.</div></div></div>
+        <div class="step"><div class="sn">2</div><div><div class="st">Upload or import your content</div><div class="sd">Device upload (article, video) or paste a link from your social posts.</div></div></div>
+        <div class="step"><div class="sn">3</div><div><div class="st">Tag a category and submit</div><div class="sd">Select the category that fits. Our team reviews it for helpfulness and fit.</div></div></div>
+        <div class="step"><div class="sn">4</div><div><div class="st">Get cited</div><div class="sd">When your content is cited, you receive a notification telling you exactly how it helped.</div></div></div>
+        <div class="kw-row"><span class="kw">insightful</span><span class="kw">actionable</span><span class="kw">inspiring</span></div>
+      </div>
+    </div>
+    <div class="sec">
+      <span class="sec-tag" style="background:#E1F5EE;color:#085041;">Brand threads</span>
+      <div class="sec-h">Real experiences with specific products</div>
+      <div class="sec-sub">A space where you share your experience with specific brands and products — anchored by a verified purchase. Not reviews. Conversations.</div>
+      <div class="two-col">
+        <div class="ic"><div class="ic-l">What it is</div><div class="ic-t">Verified product conversations</div><div class="ic-d">Each thread is tied to one product. It starts with a purchase screenshot — so every voice in it actually bought the item.</div></div>
+        <div class="ic"><div class="ic-l">How it offers value</div><div class="ic-t">Capturing real journeys</div><div class="ic-d">After purchasing, real experiences are shared — fit, quality, sizing, wear over time. People talk to each other, not at a rating system.</div></div>
+      </div>
+      <div class="two-col">
+        <div class="pm">
+          <div class="pm-l">Purchase screenshot — AI reads this</div>
+          <div class="pm-r"><span class="pm-k">Brand</span><span class="pm-v">Zara <span class="auto">auto</span></span></div>
+          <div class="pm-r"><span class="pm-k">Category</span><span class="pm-v">Bottoms <span class="auto">auto</span></span></div>
+          <div class="pm-r"><span class="pm-k">Product</span><span class="pm-v">Straight leg trouser <span class="auto">auto</span></span></div>
+          <div class="pm-r"><span class="pm-k">Size</span><span class="pm-v">S <span class="auto">auto</span></span></div>
+        </div>
+        <div class="ic">
+          <div class="ic-l" style="margin-bottom:10px;">Who participates</div>
+          <div class="part-row"><div class="ic-t" style="font-size:12px;">Verified buyer</div><div class="ic-d">Posts in the thread. Purchase required.</div></div>
+          <div class="part-row"><div class="ic-t" style="font-size:12px;">Registered user</div><div class="ic-d">Can comment. No purchase required.</div></div>
+          <div class="part-row"><div class="ic-t" style="font-size:12px;">Anyone</div><div class="ic-d">Can read and browse. No account needed.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

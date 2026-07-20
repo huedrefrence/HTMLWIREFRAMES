@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hued — Knowledge Hub</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:#F5F0E8;}
+    .back{font-size:11px;color:#C85C3A;text-decoration:none;display:inline-block;margin:12px 40px;font-weight:500;}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 40px;border-bottom:0.5px solid #E8E0D5;background:#F5F0E8;position:sticky;top:0;z-index:10;}
+    .logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#2C1810;}
+    .nl{font-size:12px;color:#8C7B6E;margin-left:24px;text-decoration:none;}
+    .nl.active{color:#C85C3A;font-weight:500;}
+    .nav-cta{font-size:12px;font-weight:500;color:#C85C3A;border:1px solid #C85C3A;padding:6px 16px;border-radius:100px;background:transparent;cursor:pointer;}
+    .cat-wrap{overflow-x:auto;border-bottom:0.5px solid #E8E0D5;}
+    .cat-wrap::-webkit-scrollbar{display:none;}
+    .cats{display:flex;width:max-content;}
+    .cat{padding:13px 22px;font-size:12px;font-weight:500;color:#8C7B6E;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.2s;}
+    .cat.on{color:#C85C3A;border-bottom-color:#C85C3A;}
+    .section{transition:background 0.5s ease;}
+    .sec-hero{padding:48px 40px 36px;}
+    .sec-eye{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;margin-bottom:12px;transition:color 0.4s;}
+    .sec-h{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;line-height:1.15;margin-bottom:8px;transition:color 0.4s;}
+    .sec-sub{font-size:13px;line-height:1.75;font-weight:300;max-width:480px;transition:color 0.4s;}
+    .strip{margin:0 40px 24px;background:rgba(255,255,255,0.5);border-radius:12px;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;border:0.5px solid rgba(255,255,255,0.6);}
+    .strip-t{font-family:'Playfair Display',serif;font-size:15px;color:#2C1810;font-style:italic;}
+    .strip-btn{font-size:11px;font-weight:500;color:#F5F0E8;background:#C85C3A;padding:8px 18px;border-radius:100px;border:none;cursor:pointer;}
+    .content{padding:0 40px 40px;}
+    .sort-wrap{position:relative;margin-bottom:18px;}
+    .sort-wrap select{appearance:none;-webkit-appearance:none;width:100%;padding:10px 40px 10px 18px;border-radius:100px;border:1px solid #E8E0D5;background:rgba(255,255,255,0.6);font-family:'DM Sans',sans-serif;font-size:12px;color:#8C7B6E;outline:none;cursor:pointer;}
+    .sort-wrap::after{content:'↓';position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:11px;color:#B09880;pointer-events:none;}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+    .card{background:rgba(255,255,255,0.72);border-radius:12px;overflow:hidden;border:0.5px solid rgba(255,255,255,0.5);}
+    .card-img{height:72px;display:flex;align-items:center;justify-content:center;font-size:26px;}
+    .cb{padding:14px;}
+    .cm{font-size:10px;color:#B09880;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px;font-weight:500;}
+    .ct{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:#2C1810;line-height:1.4;margin-bottom:5px;}
+    .cx{font-size:11px;color:#8C7B6E;line-height:1.5;margin-bottom:8px;font-weight:300;}
+    .cf{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:0.5px solid #F0EAE0;}
+    .cc{font-size:10px;color:#B09880;}
+    .cite{font-size:10px;font-weight:500;color:#C85C3A;border:0.5px solid #C85C3A;padding:3px 9px;border-radius:100px;cursor:pointer;background:transparent;}
+  </style>
+</head>
+<body>
+  <a class="back" href="index.html">← All pages</a>
+  <nav class="nav">
+    <span class="logo">Hued</span>
+    <div><a class="nl active" href="#">Knowledge hub</a><a class="nl" href="hued_06_brand_threads.html">Brand threads</a><a class="nl" href="hued_03_how_it_works.html">How it works</a></div>
+    <button class="nav-cta">Sign in</button>
+  </nav>
+  <div class="cat-wrap">
+    <div class="cats">
+      <div class="cat on" onclick="sc(0)">All</div>
+      <div class="cat" onclick="sc(1)">Styling</div>
+      <div class="cat" onclick="sc(2)">Fit & sizing</div>
+      <div class="cat" onclick="sc(3)">Sustainability</div>
+      <div class="cat" onclick="sc(4)">Wardrobe</div>
+      <div class="cat" onclick="sc(5)">Occasion</div>
+      <div class="cat" onclick="sc(6)">Cultural awareness</div>
+      <div class="cat" onclick="sc(7)">Body positivity</div>
+    </div>
+  </div>
+  <div class="section" id="sec">
+    <div class="sec-hero">
+      <div class="sec-eye" id="eye">Knowledge hub · all categories</div>
+      <div class="sec-h" id="h1">Fashion knowledge,<br>without the agenda.</div>
+      <div class="sec-sub" id="sub">Real content from real people across every fashion topic — curated, reviewed, and cited by the community.</div>
+    </div>
+    <div class="strip">
+      <div class="strip-t">Have fashion knowledge worth sharing?</div>
+      <button class="strip-btn">Submit content</button>
+    </div>
+    <div class="content">
+      <div class="sort-wrap"><select><option>Most cited</option><option>Newest</option><option>Most viewed</option></select></div>
+      <div class="cards">
+        <div class="card"><div class="card-img" style="background:#FAEEDA;">👗</div><div class="cb"><div class="cm">Styling · via Substack</div><div class="ct">How to dress for your frame, not your size</div><div class="cx">Sizing labels mean nothing. Here's how to use proportions to build outfits that actually work.</div><div class="cf"><span class="cc">13 cites</span><button class="cite">Cite this</button></div></div></div>
+        <div class="card"><div class="card-img" style="background:#E1F5EE;">🌿</div><div class="cb"><div class="cm">Sustainability · via TikTok</div><div class="ct">The real cost of fast fashion nobody talks about</div><div class="cx">What "cost per wear" actually means and why buying better is buying less.</div><div class="cf"><span class="cc">8 cites</span><button class="cite">Cite this</button></div></div></div>
+        <div class="card"><div class="card-img" style="background:#EEEDFE;">📐</div><div class="cb"><div class="cm">Fit & sizing · via YouTube</div><div class="ct">Why your clothes never fit right — and how to fix it</div><div class="cx">An honest guide to fit across brands, cuts, and body types.</div><div class="cf"><span class="cc">21 cites</span><button class="cite">Cite this</button></div></div></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const C=[
+      {bg:'#F5F0E8',eye:'Knowledge hub · all categories',h:'Fashion knowledge,\nwithout the agenda.',s:'Real content from real people across every fashion topic — curated, reviewed, and cited by the community.',tc:'#2C1810',sc:'#8C7B6E',ec:'#B09880'},
+      {bg:'#BA7517',eye:'Category 01 · Styling',h:'Styling &\npersonal expression.',s:'How people are building their visual identity through clothing.',tc:'#FFF8EE',sc:'#FAC775',ec:'#EF9F27'},
+      {bg:'#534AB7',eye:'Category 02 · Fit & sizing',h:'Fit & sizing\nintelligence.',s:'Real people explaining how garments actually fit. No size charts — real verified experience.',tc:'#EEEDFE',sc:'#AFA9EC',ec:'#7F77DD'},
+      {bg:'#0F6E56',eye:'Category 03 · Sustainability',h:'Sustainable &\nconscious buying.',s:'How to consume fashion more intentionally — not less.',tc:'#E1F5EE',sc:'#5DCAA5',ec:'#1D9E75'},
+      {bg:'#712B13',eye:'Category 04 · Wardrobe',h:'Wardrobe\nmanagement.',s:'Building something cohesive from what you own.',tc:'#FAECE7',sc:'#F0997B',ec:'#D85A30'},
+      {bg:'#3B6D11',eye:'Category 05 · Occasion',h:'Occasion &\ncontext dressing.',s:'What to wear and why — real situational guidance from real people.',tc:'#EAF3DE',sc:'#97C459',ec:'#639922'},
+      {bg:'#444441',eye:'Category 06 · Cultural awareness',h:'Cultural awareness\nin fashion.',s:'Fashion through the lens of culture, identity, and representation.',tc:'#F1EFE8',sc:'#B4B2A9',ec:'#888780'},
+      {bg:'#993556',eye:'Category 07 · Body positivity',h:'Body positivity\n& self-expression.',s:'Fashion knowledge that works for every body.',tc:'#FBEAF0',sc:'#ED93B1',ec:'#D4537E'},
+    ];
+    const tabs=document.querySelectorAll('.cat');
+    function sc(i){
+      tabs.forEach((t,j)=>t.classList.toggle('on',j===i));
+      const c=C[i];
+      document.getElementById('sec').style.background=c.bg;
+      const e=document.getElementById('eye');e.style.color=c.ec;e.textContent=c.eye;
+      const h=document.getElementById('h1');h.style.color=c.tc;h.textContent=c.h;
+      const s=document.getElementById('sub');s.style.color=c.sc;s.textContent=c.s;
+    }
+  </script>
+</body>
+</html>
