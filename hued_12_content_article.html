@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hued — Content Page (Article)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:#F5F0E8;}
+    .back{font-size:11px;color:#C85C3A;text-decoration:none;display:inline-block;margin:12px 40px;font-weight:500;}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 40px;border-bottom:0.5px solid #E8E0D5;background:#F5F0E8;}
+    .logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#2C1810;}
+    .navback{font-size:12px;color:#8C7B6E;text-decoration:none;}
+    .nav-cta{font-size:12px;font-weight:500;color:#C85C3A;border:1px solid #C85C3A;padding:6px 16px;border-radius:100px;background:transparent;cursor:pointer;}
+    .layout{display:grid;grid-template-columns:2fr 1fr;max-width:1100px;margin:0 auto;padding:32px 40px;gap:32px;}
+    .meta-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+    .pill{font-size:10px;padding:4px 12px;border-radius:100px;font-weight:500;}
+    .pill-cat{background:#E1F5EE;color:#0F6E56;}
+    .pill-type{background:#F0EAE0;color:#8C7B6E;}
+    .h1{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#2C1810;line-height:1.25;margin-bottom:10px;}
+    .creator-row{display:flex;align-items:center;gap:10px;margin-bottom:24px;}
+    .avatar{width:36px;height:36px;border-radius:50%;background:#EDE8E0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#8C7B6E;}
+    .creator-name{font-size:13px;font-weight:500;color:#2C1810;}
+    .creator-sub{font-size:10.5px;color:#B09880;}
+    .hero-img{width:100%;height:280px;border-radius:14px;background:linear-gradient(135deg,#1D9E75,#0F6E56);margin-bottom:22px;position:relative;}
+    .source-badge{position:absolute;bottom:12px;left:12px;background:rgba(0,0,0,0.5);color:#FFF;font-size:9.5px;padding:4px 10px;border-radius:100px;}
+    .article-body{font-size:14px;color:#3A2E24;line-height:1.85;font-weight:300;}
+    .article-body p{margin-bottom:16px;}
+    .article-body h3{font-family:'Playfair Display',serif;font-size:18px;color:#2C1810;font-weight:700;margin:24px 0 10px;}
+    .cite-bar{display:flex;align-items:center;justify-content:space-between;background:#FAF7F2;border-radius:12px;padding:16px 20px;border:0.5px solid #E8E0D5;margin-top:24px;margin-bottom:24px;flex-wrap:wrap;gap:12px;}
+    .cite-count{font-size:12px;color:#8C7B6E;}
+    .cite-count strong{color:#2C1810;font-size:16px;}
+    .cite-btn{font-size:12px;font-weight:500;color:#FFF;background:#C85C3A;padding:9px 22px;border-radius:100px;border:none;cursor:pointer;}
+    .keyword-breakdown{display:flex;gap:8px;}
+    .kw-tag{font-size:10px;padding:4px 11px;border-radius:100px;background:#F0EAE0;color:#8C7B6E;}
+    .side-card{background:#FFF;border-radius:12px;padding:18px;border:0.5px solid #E8E0D5;margin-bottom:14px;}
+    .side-title{font-size:10px;color:#B09880;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;font-weight:500;}
+    .related-item{display:flex;gap:10px;padding:8px 0;border-bottom:0.5px solid #F0EAE0;cursor:pointer;}
+    .related-item:last-child{border-bottom:none;}
+    .rel-thumb{width:48px;height:38px;border-radius:6px;flex-shrink:0;}
+    .rel-title{font-size:11px;color:#2C1810;font-weight:500;line-height:1.4;}
+    .rel-meta{font-size:9px;color:#B09880;margin-top:2px;}
+    .pipe-badge{font-size:9px;background:#FAEEDA;color:#BA7517;padding:3px 9px;border-radius:100px;display:inline-block;margin-bottom:8px;}
+  </style>
+</head>
+<body>
+  <a class="back" href="index.html">← All pages</a>
+  <div class="nav">
+    <span class="logo">Hued</span>
+    <a class="navback" href="hued_02_knowledge_hub.html">← Back to Knowledge Hub</a>
+    <button class="nav-cta">Sign in</button>
+  </div>
+  <div class="layout">
+    <div>
+      <div class="meta-row">
+        <span class="pill pill-cat">Sustainability</span>
+        <span class="pill pill-type">Article · 4 min read</span>
+      </div>
+      <div class="h1">The real cost of fast fashion nobody talks about</div>
+      <div class="creator-row">
+        <div class="avatar">ET</div>
+        <div><div class="creator-name">Eco Threads</div><div class="creator-sub">@ecothreads · imported from TikTok</div></div>
+      </div>
+      <div class="hero-img"><div class="source-badge">Source: TikTok</div></div>
+      <div class="article-body">
+        <p>Every fashion conversation about sustainability eventually lands on the same word: less. Buy less. Consume less. Want less. But that framing misses the actual problem — it's not how much we buy, it's how little we understand about what we're buying.</p>
+        <h3>Cost per wear is the number that matters</h3>
+        <p>A $200 coat worn 150 times costs $1.33 per wear. A $40 coat worn 8 times before it falls apart costs $5 per wear. The price tag tells you almost nothing about the actual cost of an item — the wear count does.</p>
+        <p>This is why "buying better" and "buying less" aren't the same instruction. You can buy more items and still buy better, if what you're buying is built to be worn for years instead of weeks.</p>
+        <h3>What to actually check before buying</h3>
+        <p>Look at the fabric composition first. Natural fibers with a tight weave outlast synthetic blends by years, not months. Check the stitching at stress points: underarms, crotch seams, button holes. Loose or single-stitched seams are the first thing to fail.</p>
+      </div>
+      <div class="cite-bar">
+        <div>
+          <div class="cite-count"><strong>8</strong> people cited this</div>
+          <div class="keyword-breakdown" style="margin-top:8px;">
+            <span class="kw-tag">insightful × 5</span>
+            <span class="kw-tag">actionable × 2</span>
+            <span class="kw-tag">inspiring × 1</span>
+          </div>
+        </div>
+        <button class="cite-btn">Cite this</button>
+      </div>
+    </div>
+    <div>
+      <div class="side-card">
+        <div class="pipe-badge">HOW THIS IS PIPED IN</div>
+        <div style="font-size:10.5px;color:#8C7B6E;line-height:1.6;">Creator pasted a TikTok link. Hued extracted the caption text and hero frame automatically, then the creator added the expanded written version in the submission form. Original TikTok stays linked as the source.</div>
+      </div>
+      <div class="side-card">
+        <div class="side-title">More in Sustainability</div>
+        <div class="related-item"><div class="rel-thumb" style="background:#5DCAA5;"></div><div><div class="rel-title">Reading a care label like a pro</div><div class="rel-meta">11 cites · Article</div></div></div>
+        <div class="related-item"><div class="rel-thumb" style="background:#1D9E75;"></div><div><div class="rel-title">Thrifting without the overwhelm</div><div class="rel-meta">17 cites · Video</div></div></div>
+        <div class="related-item"><div class="rel-thumb" style="background:#0F6E56;"></div><div><div class="rel-title">What "deadstock fabric" actually means</div><div class="rel-meta">5 cites · Article</div></div></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

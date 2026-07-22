@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hued — Content Page (Video)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:#F5F0E8;}
+    .back{font-size:11px;color:#C85C3A;text-decoration:none;display:inline-block;margin:12px 40px;font-weight:500;}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 40px;border-bottom:0.5px solid #E8E0D5;background:#F5F0E8;}
+    .logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#2C1810;}
+    .navback{font-size:12px;color:#8C7B6E;text-decoration:none;}
+    .nav-cta{font-size:12px;font-weight:500;color:#C85C3A;border:1px solid #C85C3A;padding:6px 16px;border-radius:100px;background:transparent;cursor:pointer;}
+    .layout{display:grid;grid-template-columns:2fr 1fr;max-width:1100px;margin:0 auto;padding:32px 40px;gap:32px;}
+    .meta-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+    .pill{font-size:10px;padding:4px 12px;border-radius:100px;font-weight:500;}
+    .pill-cat{background:#FAEEDA;color:#BA7517;}
+    .pill-type{background:#F0EAE0;color:#8C7B6E;}
+    .h1{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#2C1810;line-height:1.25;margin-bottom:10px;}
+    .creator-row{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+    .avatar{width:36px;height:36px;border-radius:50%;background:#EDE8E0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#8C7B6E;}
+    .creator-name{font-size:13px;font-weight:500;color:#2C1810;}
+    .creator-sub{font-size:10.5px;color:#B09880;}
+    .video-frame{width:100%;aspect-ratio:16/9;background:#000;border-radius:14px;position:relative;overflow:hidden;margin-bottom:16px;}
+    .video-thumb{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#BA7517,#8A5610);}
+    .play-btn{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.9);display:flex;align-items:center;justify-content:center;font-size:22px;color:#2C1810;cursor:pointer;}
+    .video-source{position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.5);color:#FFF;font-size:9.5px;padding:4px 10px;border-radius:100px;}
+    .duration-badge{position:absolute;bottom:12px;right:12px;background:rgba(0,0,0,0.6);color:#FFF;font-size:9.5px;padding:4px 10px;border-radius:100px;}
+    .desc{font-size:13px;color:#5A4A40;line-height:1.75;font-weight:300;margin-bottom:20px;}
+    .cite-bar{display:flex;align-items:center;justify-content:space-between;background:#FAF7F2;border-radius:12px;padding:16px 20px;border:0.5px solid #E8E0D5;margin-bottom:24px;flex-wrap:wrap;gap:12px;}
+    .cite-count{font-size:12px;color:#8C7B6E;}
+    .cite-count strong{color:#2C1810;font-size:16px;}
+    .cite-btn{font-size:12px;font-weight:500;color:#FFF;background:#C85C3A;padding:9px 22px;border-radius:100px;border:none;cursor:pointer;}
+    .keyword-breakdown{display:flex;gap:8px;}
+    .kw-tag{font-size:10px;padding:4px 11px;border-radius:100px;background:#F0EAE0;color:#8C7B6E;}
+    .side-card{background:#FFF;border-radius:12px;padding:18px;border:0.5px solid #E8E0D5;margin-bottom:14px;}
+    .side-title{font-size:10px;color:#B09880;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;font-weight:500;}
+    .related-item{display:flex;gap:10px;padding:8px 0;border-bottom:0.5px solid #F0EAE0;cursor:pointer;}
+    .related-item:last-child{border-bottom:none;}
+    .rel-thumb{width:48px;height:38px;border-radius:6px;flex-shrink:0;}
+    .rel-title{font-size:11px;color:#2C1810;font-weight:500;line-height:1.4;}
+    .rel-meta{font-size:9px;color:#B09880;margin-top:2px;}
+    .pipe-badge{font-size:9px;background:#E1F5EE;color:#085041;padding:3px 9px;border-radius:100px;display:inline-block;margin-bottom:8px;}
+  </style>
+</head>
+<body>
+  <a class="back" href="index.html">← All pages</a>
+  <div class="nav">
+    <span class="logo">Hued</span>
+    <a class="navback" href="hued_02_knowledge_hub.html">← Back to Knowledge Hub</a>
+    <button class="nav-cta">Sign in</button>
+  </div>
+  <div class="layout">
+    <div>
+      <div class="meta-row">
+        <span class="pill pill-cat">Styling</span>
+        <span class="pill pill-type">Video · 6:42</span>
+      </div>
+      <div class="h1">How to dress for your frame, not your size</div>
+      <div class="creator-row">
+        <div class="avatar">MS</div>
+        <div><div class="creator-name">Maya Santos</div><div class="creator-sub">@mayastyles · imported from Substack</div></div>
+      </div>
+      <div class="video-frame">
+        <div class="video-thumb"><div class="play-btn">▶</div></div>
+        <div class="video-source">Embedded from Substack Video</div>
+        <div class="duration-badge">6:42</div>
+      </div>
+      <div class="desc">Sizing labels mean nothing when every brand cuts differently. In this video I walk through how to actually measure your proportions — shoulder-to-hip ratio, torso length, and where your natural waist sits — so you can build outfits that work with your frame instead of against a number on a tag.</div>
+      <div class="cite-bar">
+        <div>
+          <div class="cite-count"><strong>13</strong> people cited this</div>
+          <div class="keyword-breakdown" style="margin-top:8px;">
+            <span class="kw-tag">actionable × 8</span>
+            <span class="kw-tag">insightful × 4</span>
+            <span class="kw-tag">inspiring × 1</span>
+          </div>
+        </div>
+        <button class="cite-btn">Cite this</button>
+      </div>
+    </div>
+    <div>
+      <div class="side-card">
+        <div class="pipe-badge">HOW THIS IS PIPED IN</div>
+        <div style="font-size:10.5px;color:#8C7B6E;line-height:1.6;">Creator submitted a Substack video link. Hued's oEmbed fetch pulled title, thumbnail, and duration automatically. The video plays via Substack's embed player — Hued never re-hosts the file.</div>
+      </div>
+      <div class="side-card">
+        <div class="side-title">More in Styling</div>
+        <div class="related-item"><div class="rel-thumb" style="background:#F0CC8E;"></div><div><div class="rel-title">5 outfit formulas that never fail</div><div class="rel-meta">9 cites · Video</div></div></div>
+        <div class="related-item"><div class="rel-thumb" style="background:#EEDAB8;"></div><div><div class="rel-title">Color theory for your actual skin tone</div><div class="rel-meta">6 cites · Article</div></div></div>
+        <div class="related-item"><div class="rel-thumb" style="background:#F5E4C8;"></div><div><div class="rel-title">Building a signature silhouette</div><div class="rel-meta">14 cites · Video</div></div></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

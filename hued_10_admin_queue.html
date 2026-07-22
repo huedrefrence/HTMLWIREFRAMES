@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hued — Admin Review Queue</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:#F5F0E8;}
+    .back{font-size:11px;color:#C85C3A;text-decoration:none;display:inline-block;margin:12px 40px;font-weight:500;}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 40px;border-bottom:0.5px solid #E8E0D5;background:#2C1810;}
+    .logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#F5F0E8;}
+    .badge{font-size:10px;background:#C85C3A;color:#FFF;padding:3px 10px;border-radius:100px;margin-left:10px;font-weight:500;}
+    .admin-name{font-size:12px;color:#9A8878;}
+    .page{padding:32px 40px;}
+    .head-row{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:16px;}
+    .h1{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;color:#2C1810;}
+    .sub{font-size:12px;color:#8C7B6E;margin-top:4px;font-weight:300;}
+    .stat-row{display:flex;gap:12px;}
+    .stat{background:#FFF;border-radius:10px;padding:10px 18px;border:0.5px solid #E8E0D5;text-align:center;}
+    .stat-n{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#2C1810;}
+    .stat-l{font-size:9px;color:#B09880;text-transform:uppercase;letter-spacing:0.05em;}
+    .tabs{display:flex;gap:0;border-bottom:0.5px solid #E8E0D5;margin-bottom:20px;}
+    .tab{padding:10px 20px;font-size:12px;font-weight:500;color:#8C7B6E;cursor:pointer;border-bottom:2px solid transparent;background:none;border-top:none;border-left:none;border-right:none;font-family:'DM Sans',sans-serif;}
+    .tab.on{color:#C85C3A;border-bottom-color:#C85C3A;}
+    .tab-count{font-size:9px;background:#EDE8E0;color:#8C7B6E;padding:1px 6px;border-radius:100px;margin-left:5px;}
+    .tab.on .tab-count{background:#C85C3A;color:#FFF;}
+    .queue-list{display:flex;flex-direction:column;gap:10px;}
+    .qi{background:#FFF;border-radius:12px;border:0.5px solid #E8E0D5;padding:16px 18px;display:grid;grid-template-columns:70px 1fr auto;gap:16px;align-items:center;}
+    .thumb{width:70px;height:56px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;}
+    .qi-meta{font-size:10px;color:#B09880;margin-bottom:3px;}
+    .qi-title{font-family:'Playfair Display',serif;font-size:14px;font-weight:500;color:#2C1810;margin-bottom:4px;}
+    .qi-sub{font-size:10.5px;color:#8C7B6E;line-height:1.4;margin-bottom:6px;}
+    .gate-row{display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;}
+    .gate{font-size:9px;padding:3px 9px;border-radius:100px;display:flex;align-items:center;gap:4px;}
+    .gate.pass{background:#E1F5EE;color:#085041;}
+    .gate.pending{background:#F0EAE0;color:#8C7B6E;}
+    .actions{display:flex;flex-direction:column;gap:6px;align-items:flex-end;}
+    .act-row{display:flex;gap:6px;}
+    .btn-approve{font-size:10.5px;font-weight:500;color:#FFF;background:#1D9E75;padding:7px 16px;border-radius:100px;border:none;cursor:pointer;}
+    .btn-reject{font-size:10.5px;font-weight:500;color:#C85C3A;background:transparent;border:0.5px solid #C85C3A;padding:7px 16px;border-radius:100px;cursor:pointer;}
+    .btn-view{font-size:10px;color:#8C7B6E;text-decoration:underline;cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;}
+    .submitted-by{font-size:9.5px;color:#B09880;}
+  </style>
+</head>
+<body>
+  <a class="back" href="index.html">← All pages</a>
+  <div class="nav">
+    <div style="display:flex;align-items:center;"><span class="logo">Hued</span><span class="badge">ADMIN</span></div>
+    <span class="admin-name">Signed in as Luw</span>
+  </div>
+  <div class="page">
+    <div class="head-row">
+      <div>
+        <div class="h1">Content Review Queue</div>
+        <div class="sub">Every submission needs a category check and a helpfulness gate before it goes live.</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-n">7</div><div class="stat-l">Pending</div></div>
+        <div class="stat"><div class="stat-n">142</div><div class="stat-l">Approved</div></div>
+        <div class="stat"><div class="stat-n">9</div><div class="stat-l">Rejected</div></div>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab on">Pending review <span class="tab-count">7</span></button>
+      <button class="tab">Approved</button>
+      <button class="tab">Rejected</button>
+    </div>
+    <div class="queue-list">
+      <div class="qi">
+        <div class="thumb" style="background:#FAEEDA;">👗</div>
+        <div>
+          <div class="qi-meta">Styling · Video · Submitted 2h ago</div>
+          <div class="qi-title">How to dress for your frame, not your size</div>
+          <div class="qi-sub">Sizing labels mean nothing. Here's how to use proportions to build outfits that actually work for your body.</div>
+          <div class="gate-row">
+            <span class="gate pass">✓ Category fits</span>
+            <span class="gate pending">◷ Helpfulness — needs review</span>
+          </div>
+          <div class="submitted-by" style="margin-top:6px;">Submitted by @mayastyles</div>
+        </div>
+        <div class="actions">
+          <div class="act-row">
+            <button class="btn-reject">Reject</button>
+            <button class="btn-approve">Approve</button>
+          </div>
+          <button class="btn-view">View full submission →</button>
+        </div>
+      </div>
+      <div class="qi">
+        <div class="thumb" style="background:#E1F5EE;">🌿</div>
+        <div>
+          <div class="qi-meta">Sustainability · Social link (TikTok) · Submitted 5h ago</div>
+          <div class="qi-title">The real cost of fast fashion nobody talks about</div>
+          <div class="qi-sub">What "cost per wear" actually means and why buying better is buying less.</div>
+          <div class="gate-row">
+            <span class="gate pass">✓ Category fits</span>
+            <span class="gate pass">✓ Helpful — clear takeaway</span>
+          </div>
+          <div class="submitted-by" style="margin-top:6px;">Submitted by @ecothreads</div>
+        </div>
+        <div class="actions">
+          <div class="act-row">
+            <button class="btn-reject">Reject</button>
+            <button class="btn-approve">Approve</button>
+          </div>
+          <button class="btn-view">View full submission →</button>
+        </div>
+      </div>
+      <div class="qi">
+        <div class="thumb" style="background:#EEEDFE;">📐</div>
+        <div>
+          <div class="qi-meta">Fit & sizing · Written article · Submitted 1d ago</div>
+          <div class="qi-title">Why your clothes never fit right — and how to fix it</div>
+          <div class="qi-sub">An honest guide to understanding fit across brands, cuts, and body types.</div>
+          <div class="gate-row">
+            <span class="gate pending">◷ Category — unclear, could be Wardrobe</span>
+            <span class="gate pass">✓ Helpful — clear takeaway</span>
+          </div>
+          <div class="submitted-by" style="margin-top:6px;">Submitted by @fitfirst</div>
+        </div>
+        <div class="actions">
+          <div class="act-row">
+            <button class="btn-reject">Reject</button>
+            <button class="btn-approve">Approve</button>
+          </div>
+          <button class="btn-view">View full submission →</button>
+        </div>
+      </div>
+      <div class="qi">
+        <div class="thumb" style="background:#FAECE7;">👚</div>
+        <div>
+          <div class="qi-meta">Wardrobe · Video · Submitted 1d ago</div>
+          <div class="qi-title">Building a 20-piece capsule that actually works</div>
+          <div class="qi-sub">A practical approach to wardrobe reduction without sacrificing versatility.</div>
+          <div class="gate-row">
+            <span class="gate pass">✓ Category fits</span>
+            <span class="gate pass">✓ Helpful — clear takeaway</span>
+          </div>
+          <div class="submitted-by" style="margin-top:6px;">Submitted by @lessismore_wardrobe</div>
+        </div>
+        <div class="actions">
+          <div class="act-row">
+            <button class="btn-reject">Reject</button>
+            <button class="btn-approve">Approve</button>
+          </div>
+          <button class="btn-view">View full submission →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
