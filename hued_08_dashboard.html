@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hued — B2B Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:#F5F0E8;}
+    .back{font-size:11px;color:#C85C3A;text-decoration:none;display:inline-block;margin:12px 40px;font-weight:500;}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 40px;border-bottom:0.5px solid #E8E0D5;background:#2C1810;}
+    .logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#F5F0E8;text-decoration:none;}
+    .badge{font-size:10px;background:#C85C3A;color:#FFF;padding:3px 10px;border-radius:100px;margin-left:10px;font-weight:500;}
+    .partner-name{font-size:12px;color:#9A8878;}
+    .page{padding:28px 40px;}
+    .dash-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+    .dash-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#2C1810;}
+    .dash-sub{font-size:12px;color:#8C7B6E;font-weight:300;margin-top:3px;}
+    .refresh{font-size:11px;font-weight:500;color:#C85C3A;border:0.5px solid #C85C3A;padding:8px 18px;border-radius:100px;cursor:pointer;background:transparent;display:flex;align-items:center;gap:6px;}
+    .ticker{background:#2C1810;border-radius:12px;padding:16px 20px;margin-bottom:20px;}
+    .tick-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+    .tick-title{font-size:12px;font-weight:500;color:#F5F0E8;}
+    .live{font-size:10px;color:#C85C3A;font-weight:500;}
+    .tick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+    .ti{background:#3D2010;border-radius:8px;padding:12px;}
+    .ti-name{font-size:11px;font-weight:500;color:#F5F0E8;margin-bottom:5px;}
+    .ti-badge{font-size:8px;padding:2px 6px;border-radius:100px;margin-bottom:6px;display:inline-block;background:#FAEEDA22;color:#F59E0B;}
+    .ti-vol{font-size:9px;color:#7A5840;}
+    .ti-mom{font-size:11px;font-weight:500;color:#1D9E75;margin-top:3px;}
+    .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+    .stat{background:#FFF;border-radius:12px;padding:16px;border:0.5px solid #E8E0D5;display:flex;align-items:center;gap:12px;}
+    .stat-icon{width:34px;height:34px;border-radius:9px;background:#FAEEDA;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .stat-icon svg{width:17px;height:17px;stroke:#BA7517;fill:none;stroke-width:1.8;}
+    .stat-label{font-size:10.5px;color:#B09880;margin-bottom:2px;}
+    .stat-val{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;color:#2C1810;}
+    .section-label{font-size:9.5px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:#B09880;margin-bottom:12px;padding-bottom:8px;border-bottom:0.5px solid #E8E0D5;}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
+    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;}
+    .panel{background:#FFF;border-radius:12px;padding:16px;border:0.5px solid #E8E0D5;}
+    .panel-title{font-family:'Playfair Display',serif;font-size:14.5px;font-weight:500;color:#2C1810;margin-bottom:12px;}
+    .bar-row{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
+    .bar-lbl{font-size:10.5px;color:#5A4A40;width:130px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .bar-track{flex:1;height:6px;background:#F0EAE0;border-radius:100px;overflow:hidden;}
+    .bar-fill{height:100%;border-radius:100px;}
+    .bar-pct{font-size:10.5px;font-weight:500;width:32px;text-align:right;}
+    .insight{border-radius:8px;padding:10px 12px;margin-top:10px;font-size:10.5px;line-height:1.6;}
+    .bt-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:0.5px solid #F0EAE0;}
+    .bt-row:last-child{border-bottom:none;}
+    .bt-name{font-size:11.5px;font-weight:500;color:#2C1810;}
+    .bt-meta{font-size:10px;color:#B09880;}
+    .bt-vel{font-size:10.5px;font-weight:500;color:#1D9E75;}
+    .ftag{font-size:10.5px;padding:4px 10px;border-radius:100px;border:0.5px solid #E8E0D5;color:#5A4A40;display:inline-flex;gap:3px;margin:3px 3px 3px 0;}
+    .ftag-n{font-weight:600;color:#2C1810;}
+    .sent-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+    .sent-lbl{font-size:10.5px;color:#5A4A40;width:82px;flex-shrink:0;}
+    .sent-track{flex:1;height:7px;border-radius:100px;overflow:hidden;display:flex;}
+    .sent-pos{background:#1D9E75;height:100%;}
+    .sent-neu{background:#E8E0D5;height:100%;}
+    .sent-neg{background:#C85C3A;height:100%;}
+    .sent-pct{font-size:10.5px;font-weight:500;color:#1D9E75;width:30px;text-align:right;}
+    .new-badge{font-size:8px;background:#EEEDFE;color:#3C3489;padding:2px 6px;border-radius:100px;margin-left:6px;font-weight:500;}
+  </style>
+</head>
+<body>
+  <a class="back" href="index.html">← All pages</a>
+  <div class="nav">
+    <div style="display:flex;align-items:center;"><a class="logo" href="hued_01_landing.html">Hued</a><span class="badge">B2B</span></div>
+    <span class="partner-name">Signed in as Pilot Partner</span>
+  </div>
+  <div class="page">
+    <div class="dash-head">
+      <div><div class="dash-title">Fashion Dashboard</div><div class="dash-sub">Business Intelligence for Fashion Content Analytics</div></div>
+      <button class="refresh">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+        Refresh
+      </button>
+    </div>
+    <div class="ticker">
+      <div class="tick-head"><span class="tick-title">Fashion Trend Ticker</span><span class="live">● LIVE</span></div>
+      <div class="tick-grid">
+        <div class="ti"><div class="ti-name">Sustainable Fabrics</div><span class="ti-badge">TRENDING</span><div class="ti-vol">Volume: 1,240</div><div class="ti-mom">+34.0%</div></div>
+        <div class="ti"><div class="ti-name">Oversized Silhouettes</div><span class="ti-badge">TRENDING</span><div class="ti-vol">Volume: 890</div><div class="ti-mom">+28.0%</div></div>
+        <div class="ti"><div class="ti-name">Minimalist Design</div><span class="ti-badge" style="color:#1D9E75;">STABLE</span><div class="ti-vol">Volume: 750</div><div class="ti-mom">+19.0%</div></div>
+        <div class="ti"><div class="ti-name">Quiet Luxury</div><span class="ti-badge">TRENDING</span><div class="ti-vol">Volume: 620</div><div class="ti-mom">+15.0%</div></div>
+      </div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat">
+        <div class="stat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+        <div><div class="stat-label">Total time spent</div><div class="stat-val">56.5m</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon" style="background:#E1F5EE;"><svg viewBox="0 0 24 24" style="stroke:#0F6E56;"><path d="M7 11l5-6 5 6M12 5v14"/></svg></div>
+        <div><div class="stat-label">Total upvotes</div><div class="stat-val">31</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon" style="background:#EEEDFE;"><svg viewBox="0 0 24 24" style="stroke:#534AB7;"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <div><div class="stat-label">Total views</div><div class="stat-val">0</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon" style="background:#FAECE7;"><svg viewBox="0 0 24 24" style="stroke:#D85A30;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></div>
+        <div><div class="stat-label">Total content</div><div class="stat-val">16</div></div>
+      </div>
+    </div>
+    <div class="section-label">Knowledge Hub</div>
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-title">Category Performance</div>
+        <div class="bar-row"><span class="bar-lbl">Assessing Fashion Needs</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#C85C3A;"></div></div><span class="bar-pct" style="color:#C85C3A;">47%</span></div>
+        <div class="bar-row"><span class="bar-lbl">Understanding Fashion Basics</span><div class="bar-track"><div class="bar-fill" style="width:47%;background:#C85C3A;"></div></div><span class="bar-pct" style="color:#C85C3A;">22%</span></div>
+        <div class="bar-row"><span class="bar-lbl">Body Positivity</span><div class="bar-track"><div class="bar-fill" style="width:23%;background:#C85C3A;"></div></div><span class="bar-pct" style="color:#C85C3A;">11%</span></div>
+        <div class="bar-row"><span class="bar-lbl">Wardrobe Management</span><div class="bar-track"><div class="bar-fill" style="width:13%;background:#C85C3A;"></div></div><span class="bar-pct" style="color:#C85C3A;">6%</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Citation Keyword Breakdown <span class="new-badge">NEW</span></div>
+        <div class="bar-row"><span class="bar-lbl">Actionable</span><div class="bar-track"><div class="bar-fill" style="width:54%;background:#1D9E75;"></div></div><span class="bar-pct" style="color:#1D9E75;">54%</span></div>
+        <div class="bar-row"><span class="bar-lbl">Insightful</span><div class="bar-track"><div class="bar-fill" style="width:31%;background:#7F77DD;"></div></div><span class="bar-pct" style="color:#7F77DD;">31%</span></div>
+        <div class="bar-row"><span class="bar-lbl">Inspiring</span><div class="bar-track"><div class="bar-fill" style="width:15%;background:#BA7517;"></div></div><span class="bar-pct" style="color:#BA7517;">15%</span></div>
+        <div class="insight" style="background:#FAEEDA;color:#BA7517;"><strong>Insight:</strong> Over half of citations are actionable — your audience wants content they can use immediately.</div>
+      </div>
+    </div>
+    <div class="section-label">Brand Threads <span class="new-badge">NEW</span></div>
+    <div class="grid-3">
+      <div class="panel">
+        <div class="panel-title">Top Brands by Thread Activity</div>
+        <div class="bt-row"><div><div class="bt-name">Zara</div><div class="bt-meta">34 threads · 187 buyers</div></div><span class="bt-vel">↑ +12</span></div>
+        <div class="bt-row"><div><div class="bt-name">Arket</div><div class="bt-meta">18 threads · 94 buyers</div></div><span class="bt-vel">↑ +7</span></div>
+        <div class="bt-row"><div><div class="bt-name">& Other Stories</div><div class="bt-meta">14 threads · 61 buyers</div></div><span class="bt-vel">↑ +5</span></div>
+        <div class="bt-row"><div><div class="bt-name">COS</div><div class="bt-meta">11 threads · 48 buyers</div></div><span class="bt-vel">↑ +3</span></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Fit & Sizing Signals</div>
+        <div>
+          <span class="ftag">runs large <span class="ftag-n">284</span></span>
+          <span class="ftag">true to size <span class="ftag-n">231</span></span>
+          <span class="ftag">size up <span class="ftag-n">198</span></span>
+          <span class="ftag">inseam: long <span class="ftag-n">167</span></span>
+          <span class="ftag">size down <span class="ftag-n">143</span></span>
+          <span class="ftag">fabric: good <span class="ftag-n">76</span></span>
+        </div>
+        <div class="insight" style="background:#FAEEDA;color:#BA7517;"><strong>Signal:</strong> "Runs large" dominant across Bottoms and Outerwear this week.</div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Verified Buyer Sentiment</div>
+        <div class="sent-row"><span class="sent-lbl">Zara</span><div class="sent-track"><div class="sent-pos" style="width:62%;"></div><div class="sent-neu" style="width:28%;"></div><div class="sent-neg" style="width:10%;"></div></div><span class="sent-pct">62%</span></div>
+        <div class="sent-row"><span class="sent-lbl">Arket</span><div class="sent-track"><div class="sent-pos" style="width:71%;"></div><div class="sent-neu" style="width:20%;"></div><div class="sent-neg" style="width:9%;"></div></div><span class="sent-pct">71%</span></div>
+        <div class="sent-row"><span class="sent-lbl">& Other Stories</span><div class="sent-track"><div class="sent-pos" style="width:58%;"></div><div class="sent-neu" style="width:30%;"></div><div class="sent-neg" style="width:12%;"></div></div><span class="sent-pct">58%</span></div>
+        <div class="sent-row"><span class="sent-lbl">COS</span><div class="sent-track"><div class="sent-pos" style="width:79%;"></div><div class="sent-neu" style="width:16%;"></div><div class="sent-neg" style="width:5%;"></div></div><span class="sent-pct">79%</span></div>
+        <div class="sent-row"><span class="sent-lbl">Mango</span><div class="sent-track"><div class="sent-pos" style="width:44%;"></div><div class="sent-neu" style="width:33%;"></div><div class="sent-neg" style="width:23%;"></div></div><span class="sent-pct">44%</span></div>
+      </div>
+    </div>
+    <div class="panel" style="margin-bottom:20px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div class="panel-title" style="margin-bottom:0;">Engagement Trends — Knowledge Hub vs Brand Threads</div>
+        <div style="display:flex;gap:14px;">
+          <span style="font-size:10.5px;color:#1D9E75;display:flex;align-items:center;gap:5px;"><span style="width:8px;height:8px;border-radius:50%;background:#1D9E75;display:inline-block;"></span>Knowledge Hub</span>
+          <span style="font-size:10.5px;color:#C85C3A;display:flex;align-items:center;gap:5px;"><span style="width:8px;height:8px;border-radius:50%;background:#C85C3A;display:inline-block;"></span>Brand Threads</span>
+        </div>
+      </div>
+      <svg width="100%" height="180" viewBox="0 0 700 180" preserveAspectRatio="none" style="overflow:visible;">
+        <line x1="0" y1="170" x2="700" y2="170" stroke="#E8E0D5" stroke-width="1"/>
+        <polyline points="0,120 116,95 233,60 350,35 466,32 583,25 700,20" fill="none" stroke="#1D9E75" stroke-width="2.5"/>
+        <polyline points="0,155 116,150 233,145 350,140 466,110 583,80 700,65" fill="none" stroke="#C85C3A" stroke-width="2.5"/>
+        <circle cx="700" cy="20" r="4" fill="#1D9E75"/>
+        <circle cx="700" cy="65" r="4" fill="#C85C3A"/>
+      </svg>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;">
+        <span style="font-size:9.5px;color:#B09880;">Wed</span>
+        <span style="font-size:9.5px;color:#B09880;">Thu</span>
+        <span style="font-size:9.5px;color:#B09880;">Fri</span>
+        <span style="font-size:9.5px;color:#B09880;">Sat</span>
+        <span style="font-size:9.5px;color:#B09880;">Sun</span>
+        <span style="font-size:9.5px;color:#B09880;">Mon</span>
+        <span style="font-size:9.5px;color:#B09880;">Tue</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
