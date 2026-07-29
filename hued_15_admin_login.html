@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hued — Admin Access</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:#2C1810;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;}
+    .back{font-size:11px;color:#C85C3A;text-decoration:none;font-weight:500;position:fixed;top:20px;left:20px;}
+    .logo{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#F5F0E8;margin-bottom:6px;text-align:center;}
+    .badge-row{display:flex;justify-content:center;margin-bottom:28px;}
+    .badge{font-size:10px;background:#C85C3A;color:#FFF;padding:4px 12px;border-radius:100px;font-weight:500;letter-spacing:0.05em;}
+    .panel{background:#3D2418;border-radius:16px;border:0.5px solid #4A2C20;overflow:hidden;width:100%;max-width:360px;}
+    .panel-head{padding:26px 30px 18px;text-align:center;}
+    .ph{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;color:#F5F0E8;margin-bottom:6px;}
+    .ps{font-size:12.5px;color:#9A8878;font-weight:300;line-height:1.6;}
+    .panel-body{padding:8px 30px 30px;}
+    .passcode-row{display:flex;gap:8px;justify-content:center;margin:18px 0 4px;}
+    .digit{width:44px;height:52px;border:0.5px solid #5A3828;border-radius:10px;background:#2C1810;color:#F5F0E8;font-size:20px;text-align:center;outline:none;font-family:'DM Sans',sans-serif;}
+    .digit:focus{border-color:#C85C3A;}
+    .btn{width:100%;padding:12px;border-radius:100px;background:#C85C3A;color:#FFF;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;border:none;cursor:pointer;margin-top:22px;}
+    .btn:hover{background:#A8492C;}
+    .footnote{font-size:10.5px;color:#7A5840;text-align:center;margin-top:16px;line-height:1.6;}
+  </style>
+</head>
+<body>
+  <a class="back" href="index.html">← All pages</a>
+  <div class="logo">Hued</div>
+  <div class="badge-row"><span class="badge">INTERNAL ADMIN</span></div>
+  <div class="panel">
+    <div class="panel-head">
+      <div class="ph">Enter Passcode</div>
+      <div class="ps">Internal access only. No account, no login — just the passcode.</div>
+    </div>
+    <div class="panel-body">
+      <div class="passcode-row">
+        <input class="digit" maxlength="1" type="password" oninput="moveNext(this,0)"/>
+        <input class="digit" maxlength="1" type="password" oninput="moveNext(this,1)"/>
+        <input class="digit" maxlength="1" type="password" oninput="moveNext(this,2)"/>
+        <input class="digit" maxlength="1" type="password" oninput="moveNext(this,3)"/>
+      </div>
+      <button class="btn" onclick="window.location.href='hued_10_admin_queue.html'">Unlock</button>
+      <div class="footnote">This page is not linked from anywhere on the public site.</div>
+    </div>
+  </div>
+  <script>
+    function moveNext(el, idx){
+      const digits = document.querySelectorAll('.digit');
+      if(el.value.length === 1 && idx < digits.length - 1){
+        digits[idx+1].focus();
+      }
+    }
+  </script>
+</body>
+</html>
