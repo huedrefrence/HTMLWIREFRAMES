@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hued — Submit Content</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:#F5F0E8;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;}
+    .back{font-size:11px;color:#C85C3A;text-decoration:none;font-weight:500;position:fixed;top:20px;left:20px;}
+    .panel{background:#FAF7F2;border-radius:16px;border:0.5px solid #E8E0D5;overflow:hidden;width:100%;max-width:540px;}
+    .panel-head{padding:24px 28px;border-bottom:0.5px solid #E8E0D5;}
+    .ph{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#2C1810;margin-bottom:4px;}
+    .ps{font-size:13px;color:#8C7B6E;font-weight:300;}
+    .panel-body{padding:24px 28px;}
+    .tab-row{display:flex;border:0.5px solid #D4C8B8;border-radius:100px;overflow:hidden;margin-bottom:20px;}
+    .tab{flex:1;padding:9px;text-align:center;font-size:12px;font-weight:500;color:#8C7B6E;cursor:pointer;background:#FFF;border:none;font-family:'DM Sans',sans-serif;transition:all 0.15s;}
+    .tab.on{background:#C85C3A;color:#FFF;}
+    .upload-zone{border:1px dashed #D4C8B8;border-radius:12px;padding:32px;text-align:center;margin-bottom:18px;background:#FFF;cursor:pointer;}
+    .uz-icon{font-size:28px;color:#C85C3A;margin-bottom:8px;}
+    .uz-t{font-size:13px;color:#5A4A40;font-weight:500;margin-bottom:3px;}
+    .uz-s{font-size:11px;color:#B09880;margin-bottom:12px;}
+    .uz-btn{font-size:11px;font-weight:500;color:#C85C3A;border:0.5px solid #C85C3A;padding:6px 16px;border-radius:100px;background:transparent;cursor:pointer;}
+    .fl{font-size:11px;font-weight:500;color:#5A4A40;margin-bottom:5px;}
+    .inp{width:100%;padding:10px 14px;border:0.5px solid #D4C8B8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#2C1810;background:#FFF;outline:none;margin-bottom:14px;}
+    .inp:focus{border-color:#C85C3A;}
+    .ta{width:100%;padding:10px 14px;border:0.5px solid #D4C8B8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#2C1810;background:#FFF;outline:none;margin-bottom:14px;height:90px;resize:none;}
+    .pill-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+    .pill{font-size:11px;padding:5px 13px;border-radius:100px;border:0.5px solid #D4C8B8;color:#8C7B6E;cursor:pointer;background:#FFF;transition:all 0.15s;}
+    .pill.on{background:#C85C3A;color:#FFF;border-color:#C85C3A;}
+    .btn{width:100%;padding:12px;border-radius:100px;background:#C85C3A;color:#FFF;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;border:none;cursor:pointer;}
+    .btn:hover{background:#A8492C;}
+  </style>
+</head>
+<body>
+  <a class="back" href="index.html">← All pages</a>
+  <div class="panel">
+    <div class="panel-head">
+      <div class="ph">Submit content</div>
+      <div class="ps">Share fashion knowledge that helps people — video or written.</div>
+    </div>
+    <div class="panel-body">
+      <div class="tab-row">
+        <button class="tab on">Upload video</button>
+        <button class="tab">Social link</button>
+        <button class="tab">Written article</button>
+      </div>
+      <div class="upload-zone">
+        <div class="uz-icon">↑</div>
+        <div class="uz-t">Drop your video here</div>
+        <div class="uz-s">MP4, MOV, or WebM · Max 500MB</div>
+        <button class="uz-btn">Browse files</button>
+      </div>
+      <div class="fl">Title *</div>
+      <input class="inp" placeholder="Give your content a descriptive title"/>
+      <div class="fl">Description</div>
+      <textarea class="ta" placeholder="What does this help people understand or do?"></textarea>
+      <div class="fl">Fashion category *</div>
+      <div class="pill-wrap">
+        <span class="pill">Styling</span>
+        <span class="pill on">Fit & sizing</span>
+        <span class="pill">Sustainability</span>
+        <span class="pill">Wardrobe</span>
+        <span class="pill">Body positivity</span>
+        <span class="pill">Occasion</span>
+        <span class="pill">Cultural awareness</span>
+      </div>
+      <div class="fl">Tags (optional)</div>
+      <input class="inp" placeholder="Add keywords..."/>
+      <button class="btn">Submit for review</button>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hued — Sign Up</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:#F5F0E8;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;}
+    .back{font-size:11px;color:#C85C3A;text-decoration:none;font-weight:500;position:fixed;top:20px;left:20px;}
+    .panel{background:#FAF7F2;border-radius:16px;border:0.5px solid #E8E0D5;overflow:hidden;width:100%;max-width:520px;}
+    .panel-head{padding:24px 28px;border-bottom:0.5px solid #E8E0D5;}
+    .ph{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#2C1810;margin-bottom:4px;}
+    .ps{font-size:13px;color:#8C7B6E;font-weight:300;}
+    .panel-body{padding:24px 28px;}
+    .sec-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:500;color:#2C1810;margin:16px 0 12px;}
+    .sec-title:first-child{margin-top:0;}
+    .fl{font-size:11px;font-weight:500;color:#5A4A40;margin-bottom:5px;}
+    .inp{width:100%;padding:10px 14px;border:0.5px solid #D4C8B8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#2C1810;background:#FFF;outline:none;margin-bottom:14px;}
+    .inp:focus{border-color:#C85C3A;}
+    .ta{width:100%;padding:10px 14px;border:0.5px solid #D4C8B8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#2C1810;background:#FFF;outline:none;margin-bottom:14px;height:80px;resize:none;}
+    .role-row{display:flex;gap:8px;margin-bottom:16px;}
+    .role{flex:1;padding:9px;border-radius:100px;border:0.5px solid #D4C8B8;color:#8C7B6E;font-family:'DM Sans',sans-serif;font-size:12px;text-align:center;cursor:pointer;background:#FFF;transition:all 0.15s;}
+    .role.on{background:#C85C3A;color:#FFF;border-color:#C85C3A;}
+    .pill-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+    .pill{font-size:11px;padding:5px 13px;border-radius:100px;border:0.5px solid #D4C8B8;color:#8C7B6E;cursor:pointer;background:#FFF;transition:all 0.15s;}
+    .pill.on{background:#C85C3A;color:#FFF;border-color:#C85C3A;}
+    .consent{background:#E8F5EE;border-radius:10px;padding:14px;margin-bottom:16px;border:0.5px solid #B8DEC9;}
+    .ct{font-size:12px;font-weight:500;color:#085041;margin-bottom:4px;}
+    .cd{font-size:11px;color:#3A7A5E;line-height:1.5;font-weight:300;}
+    .btn{width:100%;padding:12px;border-radius:100px;background:#C85C3A;color:#FFF;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;border:none;cursor:pointer;}
+    .btn:hover{background:#A8492C;}
+  </style>
+</head>
+<body>
+  <a class="back" href="index.html">← All pages</a>
+  <div class="panel">
+    <div class="panel-head">
+      <div class="ph">Join Hued</div>
+      <div class="ps">Share your fashion perspective with people who care.</div>
+    </div>
+    <div class="panel-body">
+      <div class="sec-title">Account information</div>
+      <div class="fl">Username</div><input class="inp" placeholder="@yourname"/>
+      <div class="fl">Email address</div><input class="inp" placeholder="email@address.com"/>
+      <div class="fl">Password</div><input class="inp" type="password" placeholder="••••••••"/>
+      <div class="sec-title">Contributor profile</div>
+      <div class="fl">Short bio (optional)</div>
+      <textarea class="ta" placeholder="Tell us about your fashion perspective..."></textarea>
+      <div class="fl">I am a...</div>
+      <div class="role-row">
+        <button class="role on">Consumer</button>
+        <button class="role">Creator</button>
+        <button class="role">Professional</button>
+      </div>
+      <div class="fl">Categories I care about (pick up to 3)</div>
+      <div class="pill-wrap">
+        <span class="pill on">Styling</span>
+        <span class="pill">Fit & sizing</span>
+        <span class="pill on">Sustainability</span>
+        <span class="pill">Wardrobe</span>
+        <span class="pill">Body positivity</span>
+        <span class="pill">Occasion</span>
+        <span class="pill">Cultural awareness</span>
+      </div>
+      <div class="consent">
+        <div class="ct">Help shape fashion intelligence</div>
+        <div class="cd">I consent to sharing my submitted content for aggregated insights and community learning.</div>
+      </div>
+      <button class="btn">Create account & start contributing</button>
+    </div>
+  </div>
+</body>
+</html>
