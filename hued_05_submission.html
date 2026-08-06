@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hued — Submit Content</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;background:#F5F0E8;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;}
+    .back{font-size:11px;color:#C85C3A;text-decoration:none;font-weight:500;position:fixed;top:20px;left:20px;}
+    .panel{background:#FAF7F2;border-radius:16px;border:0.5px solid #E8E0D5;overflow:hidden;width:100%;max-width:540px;}
+    .panel-head{padding:24px 28px;border-bottom:0.5px solid #E8E0D5;}
+    .ph{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#2C1810;margin-bottom:4px;}
+    .ps{font-size:13px;color:#8C7B6E;font-weight:300;}
+    .panel-body{padding:24px 28px;}
+    .tab-row{display:flex;border:0.5px solid #D4C8B8;border-radius:100px;overflow:hidden;margin-bottom:20px;}
+    .tab{flex:1;padding:9px;text-align:center;font-size:12px;font-weight:500;color:#8C7B6E;cursor:pointer;background:#FFF;border:none;font-family:'DM Sans',sans-serif;transition:all 0.15s;}
+    .tab.on{background:#C85C3A;color:#FFF;}
+    .method-panel{display:none;}
+    .method-panel.show{display:block;}
+    .upload-zone{border:1px dashed #D4C8B8;border-radius:12px;padding:32px;text-align:center;margin-bottom:18px;background:#FFF;cursor:pointer;}
+    .uz-icon{font-size:28px;color:#C85C3A;margin-bottom:8px;}
+    .uz-t{font-size:13px;color:#5A4A40;font-weight:500;margin-bottom:3px;}
+    .uz-s{font-size:11px;color:#B09880;margin-bottom:12px;}
+    .uz-btn{font-size:11px;font-weight:500;color:#C85C3A;border:0.5px solid #C85C3A;padding:6px 16px;border-radius:100px;background:transparent;cursor:pointer;}
+    .fl{font-size:11px;font-weight:500;color:#5A4A40;margin-bottom:5px;margin-top:14px;}
+    .fl:first-of-type{margin-top:0;}
+    .inp{width:100%;padding:10px 14px;border:0.5px solid #D4C8B8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#2C1810;background:#FFF;outline:none;}
+    .inp:focus{border-color:#C85C3A;}
+    .ta{width:100%;padding:10px 14px;border:0.5px solid #D4C8B8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#2C1810;background:#FFF;outline:none;height:90px;resize:none;}
+    .ta-large{height:220px;}
+    .pill-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+    .pill{font-size:11px;padding:5px 13px;border-radius:100px;border:0.5px solid #D4C8B8;color:#8C7B6E;cursor:pointer;background:#FFF;transition:all 0.15s;}
+    .pill.on{background:#C85C3A;color:#FFF;border-color:#C85C3A;}
+    .btn{width:100%;padding:12px;border-radius:100px;background:#C85C3A;color:#FFF;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;border:none;cursor:pointer;margin-top:20px;}
+    .btn:hover{background:#A8492C;}
+    .gate-panel{background:#FAF7F2;border-radius:16px;border:0.5px solid #E8E0D5;overflow:hidden;width:100%;max-width:420px;padding:36px 30px;text-align:center;}
+    .gate-icon{font-size:30px;margin-bottom:12px;}
+    .btn-g{width:100%;padding:11px;border-radius:100px;background:transparent;color:#8C7B6E;border:0.5px solid #D4C8B8;font-family:'DM Sans',sans-serif;font-size:12.5px;cursor:pointer;margin-top:10px;}
+    .link-preview{display:none;background:#2C1810;border-radius:10px;padding:14px;margin-top:12px;}
+    .link-preview.show{display:flex;gap:12px;}
+    .lp-thumb{width:64px;height:48px;border-radius:6px;background:linear-gradient(135deg,#BA7517,#8A5610);flex-shrink:0;}
+    .lp-label{font-size:9px;color:#7A5840;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;font-weight:500;}
+    .lp-title{font-size:12px;color:#F5F0E8;font-weight:500;line-height:1.4;}
+    .lp-source{font-size:10px;color:#9A8878;margin-top:3px;}
+    .char-count{font-size:10px;color:#B09880;text-align:right;margin-top:-10px;margin-bottom:14px;}
+  </style>
+</head>
+<body>
+  <a class="back" href="index.html">← All pages</a>
+
+  <div class="panel" id="formPanel">
+    <div class="panel-head">
+      <div class="ph">Submit content</div>
+      <div class="ps">Share fashion knowledge that helps people — video, link, or written.</div>
+    </div>
+    <div class="panel-body">
+      <div class="tab-row">
+        <button class="tab on" id="tabVideo" onclick="setMethod('video')">Upload video</button>
+        <button class="tab" id="tabLink" onclick="setMethod('link')">Social link</button>
+        <button class="tab" id="tabArticle" onclick="setMethod('article')">Written article</button>
+      </div>
+
+      <!-- VIDEO UPLOAD -->
+      <div class="method-panel show" id="panelVideo">
+        <div class="upload-zone">
+          <div class="uz-icon">↑</div>
+          <div class="uz-t">Drop your video here</div>
+          <div class="uz-s">MP4, MOV, or WebM · Max 500MB</div>
+          <button class="uz-btn">Browse files</button>
+        </div>
+      </div>
+
+      <!-- SOCIAL LINK -->
+      <div class="method-panel" id="panelLink">
+        <div class="fl">Paste your content link *</div>
+        <input class="inp" id="linkInput" placeholder="https://instagram.com/... or tiktok.com/... or youtube.com/..." oninput="checkLink()"/>
+        <div class="link-preview" id="linkPreview">
+          <div class="lp-thumb"></div>
+          <div>
+            <div class="lp-label">Link detected</div>
+            <div class="lp-title">Title and thumbnail will be pulled in automatically</div>
+            <div class="lp-source">Source will show here once submitted</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WRITTEN ARTICLE -->
+      <div class="method-panel" id="panelArticle">
+        <div class="fl">Write your article *</div>
+        <textarea class="ta ta-large" id="articleBody" placeholder="Share the full piece here — what you learned, what you'd tell someone facing this exact fashion problem..." oninput="updateCharCount()"></textarea>
+        <div class="char-count" id="charCount">0 characters</div>
+      </div>
+
+      <div class="fl" style="margin-top:18px;">Title *</div>
+      <input class="inp" placeholder="Give your content a descriptive title" style="margin-bottom:14px;"/>
+      <div class="fl">Description</div>
+      <textarea class="ta" placeholder="What does this help people understand or do?"></textarea>
+      <div class="fl">Fashion category *</div>
+      <div class="pill-wrap">
+        <span class="pill" onclick="this.classList.toggle('on')">Styling</span>
+        <span class="pill on" onclick="this.classList.toggle('on')">Fit & sizing</span>
+        <span class="pill" onclick="this.classList.toggle('on')">Sustainability</span>
+        <span class="pill" onclick="this.classList.toggle('on')">Wardrobe</span>
+        <span class="pill" onclick="this.classList.toggle('on')">Body positivity</span>
+        <span class="pill" onclick="this.classList.toggle('on')">Occasion</span>
+        <span class="pill" onclick="this.classList.toggle('on')">Cultural awareness</span>
+      </div>
+      <div class="fl">Tags (optional)</div>
+      <input class="inp" placeholder="Add keywords..."/>
+      <button class="btn" onclick="showSuccess()">Submit for review</button>
+      <div style="text-align:center;font-size:11.5px;color:#8C7B6E;margin-top:12px;">You must <a href="hued_16_signin.html" style="color:#C85C3A;font-weight:500;text-decoration:underline;">sign in</a> to submit content.</div>
+    </div>
+  </div>
+
+  <div class="panel" id="successPanel" style="display:none;">
+    <div class="panel-body" style="text-align:center;padding:44px 30px;">
+      <div style="font-size:44px;color:#1D9E75;margin-bottom:14px;">✓</div>
+      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#2C1810;margin-bottom:8px;">Submitted for review</div>
+      <div style="font-size:12.5px;color:#8C7B6E;line-height:1.7;font-weight:300;max-width:360px;margin:0 auto 22px;">Your content is now in the queue. Here's exactly what happens next:</div>
+      <div style="text-align:left;background:#FFF;border-radius:12px;border:0.5px solid #E8E0D5;padding:16px 20px;margin-bottom:20px;">
+        <div style="display:flex;gap:10px;margin-bottom:14px;">
+          <div style="width:22px;height:22px;border-radius:50%;background:#FAEEDA;color:#BA7517;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+          <div><div style="font-size:12.5px;font-weight:500;color:#2C1810;">Category check</div><div style="font-size:11px;color:#8C7B6E;font-weight:300;">Does this fit the taxonomy topic you tagged it with?</div></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-bottom:14px;">
+          <div style="width:22px;height:22px;border-radius:50%;background:#FAEEDA;color:#BA7517;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+          <div><div style="font-size:12.5px;font-weight:500;color:#2C1810;">Helpfulness check</div><div style="font-size:11px;color:#8C7B6E;font-weight:300;">Is this genuinely useful — not promotional, not spam?</div></div>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <div style="width:22px;height:22px;border-radius:50%;background:#E1F5EE;color:#085041;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;">✓</div>
+          <div><div style="font-size:12.5px;font-weight:500;color:#2C1810;">You'll be notified either way</div><div style="font-size:11px;color:#8C7B6E;font-weight:300;">Approved and live, or rejected with the reason — by email and on your profile.</div></div>
+        </div>
+      </div>
+      <a href="hued_02_knowledge_hub.html" style="display:block;padding:12px;border-radius:100px;background:#C85C3A;color:#FFF;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;text-decoration:none;margin-bottom:10px;">Back to Knowledge Hub</a>
+      <a href="hued_05_submission.html" style="font-size:11.5px;color:#8C7B6E;text-decoration:underline;">Submit another piece</a>
+    </div>
+  </div>
+
+  <script>
+    function showSuccess(){
+      document.getElementById('formPanel').style.display = 'none';
+      document.getElementById('successPanel').style.display = 'block';
+    }
+  </script>
+
+  <script>
+    function setMethod(method){
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+      document.querySelectorAll('.method-panel').forEach(p=>p.classList.remove('show'));
+      document.getElementById('tab'+method.charAt(0).toUpperCase()+method.slice(1)).classList.add('on');
+      document.getElementById('panel'+method.charAt(0).toUpperCase()+method.slice(1)).classList.add('show');
+    }
+    function checkLink(){
+      const val = document.getElementById('linkInput').value.trim();
+      const preview = document.getElementById('linkPreview');
+      if(val.length > 8){
+        preview.classList.add('show');
+      } else {
+        preview.classList.remove('show');
+      }
+    }
+    function updateCharCount(){
+      const len = document.getElementById('articleBody').value.length;
+      document.getElementById('charCount').textContent = len + ' characters';
+    }
+  </script>
+</body>
+</html>
