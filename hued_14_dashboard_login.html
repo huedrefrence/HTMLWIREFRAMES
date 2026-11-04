@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hued — B2B Dashboard Access</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --bg:#2C1810;--card:#3D2418;--card-2:#34201A;--line:#4E3024;--line-2:#5A3828;
+      --cream:#F5F0E8;--body:#CDBDAE;--muted:#B3A190;--faint:#8E7462;
+      --accent:#C85C3A;--accent-dk:#A8492C;--accent-soft:#E07A57;--green:#1D9E75;
+    }
+    html{-webkit-text-size-adjust:100%;}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--cream);min-height:100vh;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+    .back{font-size:13px;color:var(--accent-soft);text-decoration:none;font-weight:500;position:fixed;top:22px;left:24px;z-index:10;}
+    .logo{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;color:var(--cream);text-align:center;padding-top:48px;margin-bottom:8px;}
+    .badge-row{display:flex;justify-content:center;margin-bottom:48px;}
+    .badge{font-size:11.5px;background:var(--accent);color:#FFF;padding:5px 14px;border-radius:100px;font-weight:500;letter-spacing:0.08em;}
+    .page{max-width:1000px;margin:0 auto;padding:0 24px 96px;}
+
+    .eyebrow{font-size:12.5px;color:var(--accent-soft);font-weight:500;letter-spacing:0.14em;text-transform:uppercase;text-align:center;margin-bottom:16px;}
+
+    /* Hero */
+    .hero{margin-bottom:96px;}
+    .h1{font-family:'Playfair Display',serif;font-size:44px;font-weight:400;color:var(--muted);text-align:center;line-height:1.2;margin-bottom:8px;letter-spacing:-0.01em;}
+    .h1 em{font-style:italic;color:var(--cream);}
+    .h1-strong{font-family:'Playfair Display',serif;font-size:44px;font-weight:700;color:var(--cream);text-align:center;line-height:1.2;margin-bottom:24px;letter-spacing:-0.01em;}
+    .h1-strong em{color:var(--accent);font-style:italic;}
+    .sub{font-size:18px;color:var(--body);text-align:center;line-height:1.7;max-width:600px;margin:0 auto 36px;}
+    .sub b{color:var(--cream);font-weight:500;}
+    .cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+    .cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#FFF;font-family:inherit;font-size:15px;font-weight:500;padding:14px 30px;border-radius:100px;border:none;cursor:pointer;text-decoration:none;}
+    .cta-btn:hover{background:var(--accent-dk);}
+    .ghost-btn{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--cream);font-family:inherit;font-size:15px;font-weight:500;padding:14px 28px;border-radius:100px;border:1px solid var(--line-2);cursor:pointer;text-decoration:none;}
+    .ghost-btn:hover{border-color:var(--accent);}
+
+    /* Section heads */
+    .sec{margin-bottom:104px;}
+    .sec-title{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:var(--cream);text-align:center;line-height:1.25;margin-bottom:14px;letter-spacing:-0.01em;}
+    .sec-title em{color:var(--accent);font-style:italic;}
+    .sec-sub{font-size:17px;color:var(--body);text-align:center;line-height:1.7;max-width:600px;margin:0 auto 40px;}
+
+    /* Problem intro */
+    .intro{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:40px 44px;display:grid;grid-template-columns:240px 1fr;gap:44px;align-items:center;margin-bottom:16px;}
+    .stat-num{font-family:'Playfair Display',serif;font-size:64px;font-weight:700;color:var(--accent);line-height:1;letter-spacing:-0.02em;}
+    .stat-cap{font-size:14.5px;color:var(--muted);line-height:1.6;margin-top:14px;}
+    .intro-head{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--cream);line-height:1.3;margin-bottom:14px;}
+    .intro-head em{color:var(--accent);font-style:italic;}
+    .intro-body{font-size:16.5px;color:var(--body);line-height:1.75;}
+    .intro-body b{color:var(--cream);font-weight:500;}
+
+    /* Outcomes */
+    .outcomes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+    .outcome{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 22px 26px;display:flex;flex-direction:column;}
+    .viz{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:16px;height:176px;margin-bottom:22px;display:flex;flex-direction:column;justify-content:center;gap:12px;overflow:hidden;}
+    .o-tag{font-size:12px;color:var(--accent-soft);font-weight:500;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;}
+    .o-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--cream);line-height:1.3;margin-bottom:10px;}
+    .o-desc{font-size:15px;color:var(--body);line-height:1.7;}
+
+    /* viz: cart */
+    .cart-line{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;}
+    .swatch{width:32px;height:32px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,#C85C3A 0%,#D9A273 55%,#7A8C6E 100%);}
+    .cl-text{flex:1;min-width:0;display:flex;flex-direction:column;}
+    .cl-name{font-size:13px;font-weight:500;color:var(--cream);white-space:nowrap;}
+    .cl-meta{font-size:12px;color:var(--muted);white-space:nowrap;}
+    .pill{font-size:11px;font-weight:500;color:#F2C9B8;background:rgba(200,92,58,0.18);border:1px solid rgba(200,92,58,0.4);padding:3px 9px;border-radius:100px;white-space:nowrap;}
+    .opts{display:grid;grid-template-columns:repeat(9,1fr);gap:5px;}
+    .opts span{height:20px;border-radius:5px;background:var(--line-2);}
+    .opts span:nth-child(n+3){opacity:.75}.opts span:nth-child(n+5){opacity:.5}.opts span:nth-child(n+7){opacity:.3}.opts span:nth-child(n+9){opacity:.15}
+    .viz-note{font-size:12px;color:var(--faint);display:flex;justify-content:space-between;}
+
+    /* viz: chat */
+    .chat{display:flex;flex-direction:column;gap:8px;}
+    .bubble{align-self:flex-start;max-width:88%;background:var(--card);border:1px solid var(--line);border-radius:14px 14px 14px 4px;padding:10px 12px;}
+    .b-text{font-size:13.5px;color:var(--cream);margin-bottom:8px;}
+    .b-link{display:flex;align-items:center;gap:10px;background:var(--card-2);border-radius:8px;padding:6px 8px;}
+    .b-link .swatch{width:28px;height:28px;border-radius:6px;}
+    .b-url{font-size:12px;color:var(--muted);}
+    .b-seen{font-size:11.5px;color:var(--faint);padding-left:4px;}
+    .saved{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:12px;font-weight:500;color:var(--muted);border:1px dashed var(--line-2);border-radius:100px;padding:4px 10px;}
+    .saved svg{width:12px;height:12px;stroke:var(--muted);fill:none;stroke-width:2;}
+
+    /* viz: bars */
+    .bars{display:flex;flex-direction:column;gap:10px;}
+    .bar-row{display:grid;grid-template-columns:92px 1fr;align-items:center;gap:10px;}
+    .bar-lbl{font-size:12.5px;color:var(--body);}
+    .bar-track{height:10px;background:var(--card);border-radius:100px;overflow:hidden;}
+    .bar-fill{height:100%;border-radius:100px;background:var(--accent);}
+    .bar-fill.dim{background:var(--line-2);}
+
+    .cost{text-align:center;font-size:17px;color:var(--body);margin-top:36px;line-height:1.6;}
+    .cost b{color:var(--cream);font-weight:500;}
+    .turn{text-align:center;margin-top:44px;padding-top:44px;border-top:1px solid var(--line);}
+    .turn-line{font-family:'Playfair Display',serif;font-size:32px;color:var(--cream);line-height:1.3;}
+    .turn-line em{color:var(--accent);font-style:italic;}
+    .turn-sub{font-size:16.5px;color:var(--body);margin-top:10px;}
+
+    /* Teams */
+    .teams{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+    .team{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px 26px;transition:border-color 0.15s;}
+    .team:hover{border-color:var(--accent);}
+    .t-icon{width:40px;height:40px;border-radius:10px;background:var(--bg);display:flex;align-items:center;justify-content:center;margin-bottom:18px;}
+    .t-icon svg{width:18px;height:18px;stroke:var(--accent);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+    .t-who{font-size:12px;color:var(--accent-soft);font-weight:500;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:10px;}
+    .t-title{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;color:var(--cream);line-height:1.3;margin-bottom:12px;}
+    .t-desc{font-size:15px;color:var(--body);line-height:1.7;}
+
+    /* Principles */
+    .principles{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:18px;overflow:hidden;}
+    .pr{padding:28px 26px;border-right:1px solid var(--line);}
+    .pr:last-child{border-right:none;}
+    .pr-title{font-size:17px;font-weight:700;color:var(--cream);margin-bottom:10px;}
+    .pr-desc{font-size:15px;color:var(--body);line-height:1.7;}
+
+    /* Login */
+    .divider{display:flex;align-items:center;gap:16px;margin:0 0 36px;}
+    .divider-line{flex:1;height:1px;background:var(--line);}
+    .divider-text{font-size:12.5px;color:var(--muted);font-weight:500;letter-spacing:0.12em;}
+    .panel{background:var(--card);border-radius:18px;border:1px solid var(--line);overflow:hidden;max-width:460px;margin:0 auto;}
+    .panel-head{padding:32px 32px 4px;text-align:center;}
+    .ph{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--cream);margin-bottom:6px;}
+    .ps{font-size:14.5px;color:var(--muted);}
+    .panel-body{padding:24px 32px 32px;}
+    .fl{display:block;font-size:13.5px;font-weight:500;color:var(--body);margin-bottom:8px;margin-top:18px;}
+    .fl:first-of-type{margin-top:0;}
+    .inp{width:100%;padding:13px 16px;border:1px solid var(--line-2);border-radius:10px;font-family:inherit;font-size:15px;color:var(--cream);background:var(--bg);outline:none;}
+    .inp:focus{border-color:var(--accent);}
+    .inp::placeholder{color:var(--faint);}
+    .btn{width:100%;padding:14px;border-radius:100px;background:var(--accent);color:#FFF;font-family:inherit;font-size:15px;font-weight:500;border:none;cursor:pointer;margin-top:22px;}
+    .btn:hover{background:var(--accent-dk);}
+    .footnote{font-size:13.5px;color:var(--muted);text-align:center;margin-top:16px;line-height:1.6;}
+    .footnote a{color:var(--accent-soft);text-decoration:underline;cursor:pointer;}
+
+    /* Modal */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(20,12,8,0.65);z-index:200;align-items:center;justify-content:center;}
+    .modal-overlay.show{display:flex;}
+    .modal{background:#FAF7F2;border-radius:20px;padding:36px 38px;width:100%;max-width:480px;margin:20px;position:relative;box-shadow:0 12px 40px rgba(0,0,0,0.25);max-height:calc(100vh - 40px);overflow-y:auto;}
+    .modal-close{position:absolute;top:18px;right:18px;width:34px;height:34px;border-radius:50%;background:#FFF;border:1px solid #E8E0D5;font-size:14px;color:#5A4A40;cursor:pointer;}
+    .modal-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#2C1810;text-align:center;margin-bottom:10px;}
+    .modal-sub{font-size:15px;color:#6E5D50;text-align:center;line-height:1.65;margin-bottom:24px;}
+    .benefits{background:#E1F5EE;border-radius:12px;padding:16px 18px;margin-bottom:24px;}
+    .benefit-row{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;color:#0F3D2E;line-height:1.55;font-weight:500;margin-bottom:10px;}
+    .benefit-row:last-child{margin-bottom:0;}
+    .benefit-check{color:var(--green);font-weight:700;flex-shrink:0;}
+    .m-inp{width:100%;padding:13px 16px;border:1px solid #D4C8B8;border-radius:10px;font-family:inherit;font-size:15px;color:#2C1810;background:#FFF;outline:none;margin-bottom:12px;}
+    .m-inp:focus{border-color:var(--accent);}
+    .m-inp::placeholder{color:#A08870;}
+    .submit-btn{width:100%;padding:14px;border-radius:100px;background:var(--green);color:#FFF;font-family:inherit;font-size:15px;font-weight:700;border:none;cursor:pointer;margin-top:4px;transition:all 0.15s;}
+    .submit-btn.disabled{background:#B8DFCE;cursor:not-allowed;}
+    .success-msg{text-align:center;padding:6px 0;}
+    .success-icon{font-size:32px;color:var(--green);margin-bottom:10px;}
+    .success-text{font-size:15px;color:#2C1810;font-weight:500;line-height:1.6;}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .outcomes,.teams{grid-template-columns:1fr;max-width:560px;margin-left:auto;margin-right:auto;}
+      .principles{grid-template-columns:1fr;}
+      .pr{border-right:none;border-bottom:1px solid var(--line);}
+      .pr:last-child{border-bottom:none;}
+      .intro{grid-template-columns:1fr;gap:24px;padding:32px;}
+    }
+    @media (max-width:600px){
+      .page{padding:0 16px 72px;}
+      .back{position:absolute;top:18px;left:16px;}
+      .h1,.h1-strong{font-size:31px;}
+      .sub{font-size:16.5px;}
+      .sec{margin-bottom:80px;}
+      .hero{margin-bottom:80px;}
+      .sec-title{font-size:28px;}
+      .sec-sub{font-size:16px;}
+      .intro{padding:26px 22px;}
+      .stat-num{font-size:54px;}
+      .intro-head{font-size:23px;}
+      .turn-line{font-size:26px;}
+      .panel-head{padding:28px 22px 4px;}
+      .panel-body{padding:22px 22px 28px;}
+      .modal{padding:30px 22px;}
+    }
+  </style>
+</head>
+<body>
+  <a class="back" href="index.html">← All pages</a>
+  <div class="logo">Hued</div>
+  <div class="badge-row"><span class="badge">B2B DASHBOARD</span></div>
+
+  <div class="page">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="h1">Traditional retail stops at the <em>'Buy'</em> button.</div>
+      <div class="h1-strong">Hued stays for the <em>entire conversation.</em></div>
+      <div class="sub">Understand what your customers need before they commit, and hear it in <b>their words</b>, not an algorithm's guess.</div>
+      <div class="cta-row">
+        <button class="cta-btn" onclick="openRequestModal()">Request pilot access</button>
+        <a class="ghost-btn" href="#partner-login">Partner sign in</a>
+      </div>
+    </section>
+
+    <!-- WHERE THE SALE GETS LOST -->
+    <section class="sec">
+      <div class="eyebrow">Where the sale gets lost</div>
+      <div class="sec-title">Interest isn't the problem.<br><em>Confidence is.</em></div>
+      <div class="sec-sub">Your product gets noticed. What happens next is where most brands lose the customer.</div>
+
+      <div class="intro">
+        <div>
+          <div class="stat-num">70–100</div>
+          <div class="stat-cap">short-form ads the average person sees every day, many of them presented as helpful content.</div>
+        </div>
+        <div>
+          <div class="intro-head">The feed creates desire. It doesn't create <em>certainty.</em></div>
+          <div class="intro-body">Your customer already has a look in mind. Your product catches their eye, but nothing in the noise helps them <b>tell, verify or trust</b> that it's the right fit in quality, utility and value for what they're trying to achieve. So they pause, and the sale stalls.</div>
+        </div>
+      </div>
+
+      <div class="outcomes">
+        <!-- 1: Cart / choice overload -->
+        <div class="outcome">
+          <div class="viz" aria-hidden="true">
+            <div class="cart-line">
+              <div class="swatch"></div>
+              <div class="cl-text"><span class="cl-name">Your product</span><span class="cl-meta">In cart · 14 days</span></div>
+              <span class="pill">Not purchased</span>
+            </div>
+            <div class="opts"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="viz-note"><span>Still browsing alternatives</span><span>→</span></div>
+          </div>
+          <div class="o-tag">Choice overload</div>
+          <div class="o-title">It sits in the cart</div>
+          <div class="o-desc">Interest was there; confidence wasn't. With unlimited alternatives a scroll away, your customer keeps comparing, and the checkout never happens.</div>
+        </div>
+
+        <!-- 2: Shared / bookmarked -->
+        <div class="outcome">
+          <div class="viz" aria-hidden="true">
+            <div class="chat">
+              <div class="bubble">
+                <div class="b-text">check this out</div>
+                <div class="b-link"><div class="swatch"></div><span class="b-url">yourbrand.com</span></div>
+              </div>
+              <div class="b-seen">Seen</div>
+              <div class="saved"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>Saved for later</div>
+            </div>
+          </div>
+          <div class="o-tag">Shared, not bought</div>
+          <div class="o-title">It's sent to a friend</div>
+          <div class="o-desc">"Check this out." The link sparks a moment of interest, then settles into a bookmark. The intent was real; the purchase never followed.</div>
+        </div>
+
+        <!-- 3: Awareness without affinity -->
+        <div class="outcome">
+          <div class="viz" aria-hidden="true">
+            <div class="bars">
+              <div class="bar-row"><span class="bar-lbl">Awareness</span><div class="bar-track"><div class="bar-fill" style="width:94%"></div></div></div>
+              <div class="bar-row"><span class="bar-lbl">Engagement</span><div class="bar-track"><div class="bar-fill" style="width:68%"></div></div></div>
+              <div class="bar-row"><span class="bar-lbl">Affinity</span><div class="bar-track"><div class="bar-fill dim" style="width:16%"></div></div></div>
+              <div class="bar-row"><span class="bar-lbl">Relationship</span><div class="bar-track"><div class="bar-fill dim" style="width:7%"></div></div></div>
+            </div>
+            <div class="viz-note"><span>Illustrative</span></div>
+          </div>
+          <div class="o-tag">Attention without affinity</div>
+          <div class="o-title">It earns applause, not loyalty</div>
+          <div class="o-desc">Awareness grows and the likes and comments roll in, but the connection never moves past online support. Your audience grows, but conversion doesn't follow.</div>
+        </div>
+      </div>
+
+      <div class="cost">Your analytics capture the click. <b>Hued shows you what stands between the click and the checkout.</b></div>
+
+      <div class="turn">
+        <div class="turn-line">Hued replaces <em>persuasion</em> with <em>clarity.</em></div>
+        <div class="turn-sub">Insight that comes from your customers, not at them.</div>
+      </div>
+    </section>
+
+    <!-- FOR YOUR TEAMS -->
+    <section class="sec">
+      <div class="eyebrow">Built for the people shaping what's next</div>
+      <div class="sec-title">Clarity for <em>every team</em> at the table</div>
+      <div class="sec-sub">One view of the customer conversation, read three ways.</div>
+      <div class="teams">
+        <div class="team">
+          <div class="t-icon"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0012 2z"/></svg></div>
+          <div class="t-who">Product &amp; Design</div>
+          <div class="t-title">Design from real need, not last season's guess</div>
+          <div class="t-desc">See the gaps people describe in their own wardrobes, in their own words, before you sketch the next drop.</div>
+        </div>
+        <div class="team">
+          <div class="t-icon"><svg viewBox="0 0 24 24"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg></div>
+          <div class="t-who">Merchandising</div>
+          <div class="t-title">Know what earns a place in the closet</div>
+          <div class="t-desc">Understand how customers weigh quality, utility and value before they commit, and where that confidence breaks down.</div>
+        </div>
+        <div class="team">
+          <div class="t-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+          <div class="t-who">Digital Marketing</div>
+          <div class="t-title">Move from awareness to affinity</div>
+          <div class="t-desc">Build narratives from the conversations customers are already having, and give them a reason to stay, not just to scroll.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRINCIPLES -->
+    <section class="sec">
+      <div class="eyebrow">How we earn trust on both sides</div>
+      <div class="principles">
+        <div class="pr">
+          <div class="pr-title">Understanding, not advantage</div>
+          <div class="pr-desc">Brands get access and understanding. Rankings, approvals and removals are never for sale.</div>
+        </div>
+        <div class="pr">
+          <div class="pr-title">Grounded in expertise</div>
+          <div class="pr-desc">Our knowledge is curated by people who know fashion, so the signal stays independent of sponsorship.</div>
+        </div>
+        <div class="pr">
+          <div class="pr-title">Consumer-driven</div>
+          <div class="pr-desc">People come to Hued to solve their own style problems. What you see reflects what they actually asked for.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOGIN -->
+    <div class="divider" id="partner-login"><div class="divider-line"></div><span class="divider-text">ALREADY A PILOT PARTNER?</span><div class="divider-line"></div></div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div class="ph">Partner Access</div>
+        <div class="ps">Available to Hued's pilot brand partners only.</div>
+      </div>
+      <div class="panel-body">
+        <label class="fl" for="partnerName">Company or partner name</label>
+        <input class="inp" id="partnerName" placeholder="Your brand name"/>
+        <label class="fl" for="passcode">Access passcode</label>
+        <input class="inp" id="passcode" type="password" placeholder="Enter your passcode"/>
+        <button class="btn" onclick="window.location.href='hued_08_dashboard.html'">Access dashboard</button>
+        <div class="footnote">Don't have a passcode yet? <a onclick="openRequestModal()">Request pilot access</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REQUEST MODAL -->
+  <div class="modal-overlay" id="requestModal" onclick="if(event.target===this)closeRequestModal()">
+    <div class="modal" id="modalInner">
+      <button class="modal-close" onclick="closeRequestModal()" aria-label="Close">✕</button>
+      <div class="modal-title">Join the Pilot</div>
+      <div class="modal-sub">Request pilot access to Hued's B2B Dashboard and hear what your customers really need before they commit.</div>
+
+      <div class="benefits">
+        <div class="benefit-row"><span class="benefit-check">✓</span>A clearer view of why customers hesitate before they buy</div>
+        <div class="benefit-row"><span class="benefit-check">✓</span>Consumer-driven signal, separated from paid promotion</div>
+        <div class="benefit-row"><span class="benefit-check">✓</span>An early say in how the dashboard grows with your team</div>
+      </div>
+
+      <div class="modal-body" id="requestBody">
+        <input class="m-inp" id="brandInput" placeholder="Brand or company name" oninput="checkForm()"/>
+        <input class="m-inp" id="emailInput" type="email" placeholder="Work email" oninput="checkForm()"/>
+        <input class="m-inp" id="roleInput" placeholder="Role" oninput="checkForm()"/>
+        <button class="submit-btn disabled" id="submitBtn" onclick="submitRequest()">Submit request</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openRequestModal(){ document.getElementById('requestModal').classList.add('show'); }
+    function closeRequestModal(){ document.getElementById('requestModal').classList.remove('show'); }
+    function checkForm(){
+      const b = document.getElementById('brandInput').value.trim();
+      const e = document.getElementById('emailInput').value.trim();
+      const r = document.getElementById('roleInput').value.trim();
+      const btn = document.getElementById('submitBtn');
+      if(b && e && r){ btn.classList.remove('disabled'); } else { btn.classList.add('disabled'); }
+    }
+    function submitRequest(){
+      const btn = document.getElementById('submitBtn');
+      if(btn.classList.contains('disabled')) return;
+      document.getElementById('requestBody').innerHTML = '<div class="success-msg"><div class="success-icon">✓</div><div class="success-text">Request received.<br>We\'ll follow up at the email you provided.</div></div>';
+    }
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeRequestModal(); });
+  </script>
+</body>
+</html>
