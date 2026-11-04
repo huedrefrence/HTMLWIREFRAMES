@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hued · Brand Threads</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!--
+  DATA: this page reads one Supabase view, `thread_feed`, plus `thread_posts` for an open thread
+  (see hued_brand_threads.sql). Until SUPABASE_URL is set it runs on MOCK data with the same shape.
+  Brands below are fictional placeholders.
+-->
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --esp:#2C1810;--cream:#F5F0E8;--paper:#FAF7F2;--line:#E8E0D5;
+  --ink:#2C1810;--ink-2:#5A4A40;--mute:#7A685B;--accent:#C85C3A;--accent-dk:#A8492C;
+  --s1:#E9C9BB;--s2:#C85C3A;--s3:#2C1810; /* journey: considering, bought, wearing */
+  --nav:62px;--bar:56px;
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+html,body{height:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow:hidden;}
+button{font-family:inherit;}
+.ang{clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);}
+.ang-s{clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px);}
+.hex{clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);}
+.gk{font-family:'Space Grotesk',sans-serif;}
+
+/* ---------- Nav (same as Knowledge Hub) ---------- */
+.nav{height:var(--nav);display:flex;align-items:center;gap:30px;padding:0 28px;border-bottom:1px solid var(--line);background:var(--cream);position:relative;z-index:60;}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);}
+.brand svg{width:26px;height:32px;}
+.brand b{font-family:'Playfair Display',serif;font-size:23px;font-weight:700;}
+.nl{display:flex;gap:26px;}
+.nl a{font-size:14.5px;color:var(--mute);text-decoration:none;font-weight:500;}
+.nl a.on{color:var(--accent);}
+.nav-r{margin-left:auto;display:flex;align-items:center;gap:18px;}
+.back{font-size:13px;color:var(--mute);text-decoration:none;}
+.signin{font-size:14px;font-weight:500;color:#FFF;background:var(--accent);padding:9px 20px;text-decoration:none;}
+.bar{height:var(--bar);display:flex;align-items:center;gap:16px;padding:0 28px;border-bottom:1px solid var(--line);background:var(--cream);position:relative;z-index:55;}
+.cats{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0;}
+.cats::-webkit-scrollbar{display:none;}
+.chip{flex-shrink:0;display:inline-flex;align-items:center;gap:8px;border:none;background:#FFF;padding:8px 14px;font-size:13.5px;font-weight:500;color:var(--ink-2);cursor:pointer;}
+.chip em{font-style:normal;font-size:12px;opacity:.7;}
+.chip.on{background:var(--ink);color:#FFF;}
+.start{flex-shrink:0;border:none;background:var(--accent);color:#FFF;padding:9px 16px;font-size:13.5px;font-weight:700;cursor:pointer;}
+.start:hover{background:var(--accent-dk);}
+
+/* ---------- Page ---------- */
+.view{position:absolute;top:calc(var(--nav) + var(--bar));bottom:0;left:0;right:0;overflow-y:auto;}
+.hb{padding:22px 28px 90px;}
+.hb-top{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:26px;flex-wrap:wrap;}
+.k{font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.k svg{width:18px;height:22px;}
+.h1{font-family:'Space Grotesk',sans-serif;font-size:46px;font-weight:600;line-height:1.04;margin-bottom:12px;letter-spacing:-.035em;}
+.h1 em{color:var(--accent);font-style:normal;}
+.sub{font-size:16.5px;color:var(--ink-2);line-height:1.6;max-width:600px;}
+.forbrands{max-width:360px;background:#FFF;padding:16px 18px;}
+.forbrands b{display:block;font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;letter-spacing:-.01em;margin-bottom:4px;}
+.forbrands span{display:block;font-size:14px;color:var(--ink-2);line-height:1.5;margin-bottom:10px;}
+.forbrands a{font-size:14px;font-weight:700;color:var(--accent);text-decoration:none;}
+
+.lb{display:grid;grid-template-columns:200px minmax(0,1fr);gap:32px;}
+.ix{position:sticky;top:12px;align-self:start;}
+.ixh{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--mute);padding-bottom:8px;border-bottom:2px solid var(--ink);}
+.ix button{display:grid;grid-template-columns:30px 1fr auto;align-items:center;width:100%;border:none;border-bottom:1px solid var(--line);background:none;text-align:left;padding:7px 0;font-size:14.5px;color:var(--ink-2);cursor:pointer;position:relative;}
+.ix button b{font-size:12.5px;color:var(--mute);letter-spacing:.06em;font-weight:700;}
+.ix button em{font-style:normal;font-size:13px;color:var(--mute);}
+.ix button i{display:inline-block;width:7px;height:7px;background:#1D9E75;margin-left:7px;vertical-align:2px;}
+.ix button::before{content:"";position:absolute;left:-12px;top:8px;bottom:8px;width:3px;background:var(--accent);opacity:0;}
+.ix button.on{color:var(--ink);font-weight:700;}
+.ix button.on b{color:var(--accent);}
+.ix button.on::before{opacity:1;}
+.ix-key{font-size:12.5px;color:var(--mute);margin-top:10px;display:flex;align-items:center;gap:7px;}
+.ix-key i{width:7px;height:7px;background:#1D9E75;}
+.body{min-width:0;perspective:1600px;}
+
+/* brand chapter */
+.ch{margin-bottom:56px;scroll-margin-top:12px;transform-origin:50% 50%;}
+.ch-h{display:flex;align-items:baseline;gap:16px;margin-bottom:10px;flex-wrap:wrap;}
+.ch-n{font-family:'Space Grotesk',sans-serif;font-size:44px;font-weight:500;line-height:1;color:var(--accent);letter-spacing:-.04em;}
+.ch-h h2{font-family:'Space Grotesk',sans-serif;font-size:31px;font-weight:600;line-height:1.1;letter-spacing:-.03em;}
+.ch-c{font-size:13px;color:var(--mute);letter-spacing:.06em;text-transform:uppercase;font-weight:500;}
+.listen{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#0F6E56;background:#E1F5EE;padding:4px 9px;}
+.listen i{width:7px;height:7px;background:#1D9E75;}
+.ch-bio{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:500;letter-spacing:-.015em;color:var(--ink);margin-bottom:2px;}
+.ch-meta{font-size:15px;color:var(--ink-2);margin-bottom:16px;}
+.rs-nav{margin-left:auto;display:flex;align-items:center;gap:4px;align-self:center;}
+.rs-pos{font-size:13px;color:var(--mute);margin-right:10px;font-variant-numeric:tabular-nums;}
+.rs-nav button{width:42px;height:42px;border:none;background:#FFF;color:var(--ink);font-size:18px;cursor:pointer;}
+.rs-nav button:hover{background:var(--ink);color:var(--cream);}
+.rs-nav button:disabled{opacity:.35;cursor:default;background:#FFF;color:var(--ink);}
+.rail{position:relative;}
+.rail::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(245,240,232,0) 86%,var(--cream) 100%);pointer-events:none;z-index:2;}
+.track{position:relative;display:flex;align-items:flex-start;overflow-x:auto;scrollbar-width:none;perspective:1300px;perspective-origin:18% 0;padding:6px 0 18px;outline:none;}
+.track::-webkit-scrollbar{display:none;}
+.track .pad{flex:0 0 calc(100% - 340px);}
+.slot{flex-shrink:0;width:320px;margin-right:30px;transform-origin:50% 0;}
+.slot.hide{display:none;}
+
+/* thread card */
+.tc{background:#FFF;cursor:pointer;outline:none;}
+.tc-cov{position:relative;height:150px;overflow:hidden;}
+.tc-cov .pat{position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.12) 0 2px,transparent 2px 14px);}
+.tc-cov .g{position:absolute;inset:0;background-image:var(--grain);mix-blend-mode:overlay;opacity:.45;}
+.tc-cov .word{position:absolute;left:16px;bottom:10px;font-family:'Space Grotesk',sans-serif;font-size:44px;font-weight:600;letter-spacing:-.05em;line-height:.9;color:rgba(255,255,255,.88);}
+.tc-cov .top{position:absolute;top:12px;left:16px;right:16px;display:flex;justify-content:space-between;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:rgba(255,255,255,.9);}
+.tc-cov .reply{position:absolute;right:12px;top:10px;background:rgba(255,255,255,.92);color:#0F6E56;font-size:11.5px;font-weight:700;letter-spacing:.04em;padding:4px 8px;}
+.tc-b{padding:14px 16px 16px;}
+.tc-k{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-bottom:4px;}
+.tc-t{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:600;letter-spacing:-.02em;line-height:1.2;margin-bottom:12px;}
+.jbar{display:flex;height:8px;gap:2px;margin-bottom:6px;}
+.jbar span{display:block;height:100%;}
+.jleg{display:flex;gap:12px;font-size:12.5px;color:var(--mute);margin-bottom:12px;flex-wrap:wrap;}
+.jleg b{color:var(--ink);font-weight:700;}
+.jleg i{display:inline-block;width:8px;height:8px;margin-right:5px;}
+.sig{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+.sig span{font-size:12.5px;font-weight:500;background:#F3ECE1;color:var(--ink-2);padding:4px 8px;}
+.tc-m{font-size:13px;color:var(--mute);display:flex;justify-content:space-between;gap:8px;}
+.tc-m b{color:var(--ink-2);font-weight:500;}
+.slot:not(.front) .tc-b{opacity:.6;}
+
+/* ---------- Thread panel ---------- */
+.scrim{position:fixed;inset:0;background:rgba(20,12,8,.45);z-index:90;opacity:0;pointer-events:none;transition:opacity .3s;}
+.scrim.on{opacity:1;pointer-events:auto;}
+.panel{position:fixed;top:0;right:0;bottom:0;width:min(580px,100%);z-index:100;background:var(--paper);transform:translateX(102%);visibility:hidden;transition:transform .45s cubic-bezier(.2,.75,.25,1),visibility 0s .45s;overflow-y:auto;}
+.panel.on{transform:none;visibility:visible;transition:transform .45s cubic-bezier(.2,.75,.25,1);box-shadow:-20px 0 50px rgba(0,0,0,.2);}
+.p-x{position:absolute;top:16px;right:16px;z-index:3;width:40px;height:40px;border:none;background:#FFF;font-size:15px;cursor:pointer;color:var(--ink);}
+.p-head{padding:24px 72px 20px 28px;border-bottom:2px solid var(--ink);}
+.p-head .tc-k{font-size:12.5px;}
+.p-head h2{font-family:'Space Grotesk',sans-serif;font-size:30px;font-weight:600;letter-spacing:-.03em;line-height:1.1;margin:4px 0 10px;}
+.p-b{padding:22px 28px 40px;}
+.blk{margin-bottom:26px;}
+.blk-h{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--mute);margin-bottom:10px;display:flex;justify-content:space-between;}
+.blk-h span{letter-spacing:0;text-transform:none;font-weight:500;}
+.big .jbar{height:14px;}
+.big .jleg{font-size:14px;}
+.hold{display:grid;grid-template-columns:72px 1fr 40px;gap:8px 10px;align-items:center;font-size:14px;}
+.hold .tr{height:10px;background:#EDE5D8;}
+.hold .tr i{display:block;height:100%;background:var(--accent);}
+.hold em{font-style:normal;color:var(--mute);text-align:right;font-variant-numeric:tabular-nums;}
+.says{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.says div{background:#FFF;padding:12px;}
+.says b{display:block;font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;letter-spacing:-.01em;line-height:1.2;}
+.says span{font-size:12px;color:var(--mute);letter-spacing:.08em;text-transform:uppercase;font-weight:700;}
+.tabs{display:flex;gap:2px;margin-bottom:14px;flex-wrap:wrap;}
+.tabs button{border:none;background:#FFF;padding:8px 12px;font-size:13.5px;font-weight:500;color:var(--ink-2);cursor:pointer;}
+.tabs button.on{background:var(--ink);color:var(--cream);}
+.post{background:#FFF;padding:14px 16px;margin-bottom:8px;}
+.post.br{background:#E1F5EE;}
+.post-h{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;}
+.av{width:34px;height:34px;display:grid;place-items:center;font-size:12.5px;font-weight:700;color:#FFF;background:var(--esp);flex-shrink:0;}
+.post.br .av{background:#0F6E56;}
+.post-n{font-size:14.5px;font-weight:700;}
+.post-t{font-size:12.5px;color:var(--mute);margin-left:auto;}
+.stg{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;}
+.stg.considering{background:var(--s1);color:var(--ink);}
+.stg.bought{background:var(--s2);color:#FFF;}
+.stg.wearing{background:var(--s3);color:#FFF;}
+.stg.brand{background:#0F6E56;color:#FFF;}
+.post-f{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;}
+.post-f span{font-size:12.5px;background:#F3ECE1;padding:3px 7px;color:var(--ink-2);}
+.post.br .post-f span{background:#fff;}
+.post p{font-size:15px;line-height:1.6;color:var(--ink-2);}
+.cmp{background:#FFF;padding:16px;margin-top:18px;}
+.cmp h3{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:600;letter-spacing:-.02em;margin-bottom:10px;}
+.cmp-l{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--mute);margin:12px 0 7px;}
+.opts{display:flex;flex-wrap:wrap;gap:5px;}
+.opts button{border:none;background:#F3ECE1;padding:8px 12px;font-size:13.5px;font-weight:500;color:var(--ink-2);cursor:pointer;}
+.opts button.on{background:var(--ink);color:var(--cream);}
+.cmp-row{display:flex;gap:8px;}
+.cmp input,.cmp textarea{width:100%;border:1px solid var(--line);background:var(--paper);padding:10px 12px;font-family:inherit;font-size:15px;color:var(--ink);outline:none;}
+.cmp input:focus,.cmp textarea:focus{border-color:var(--accent);}
+.cmp textarea{min-height:84px;resize:vertical;margin-top:12px;}
+.cmp .go{margin-top:12px;width:100%;border:none;background:var(--accent);color:#FFF;padding:13px;font-size:15px;font-weight:700;cursor:pointer;}
+.cmp .go:disabled{background:#E3C2B6;cursor:default;}
+.note{font-size:13.5px;color:var(--mute);line-height:1.55;margin-top:14px;padding:12px 14px;border-left:3px solid #1D9E75;background:#FFF;}
+.note b{color:var(--ink);}
+
+@media (max-width:1000px){.nl{display:none;}.lb{grid-template-columns:1fr;gap:0;}.ix{display:none;}.forbrands{max-width:none;width:100%;}}
+@media (max-width:720px){
+  .nav{padding:0 16px;gap:14px;}.back{display:none;}.bar{padding:0 16px;gap:10px;}
+  .hb{padding:20px 16px 70px;}.h1{font-size:34px;}
+  .ch-n{font-size:34px;}.ch-h h2{font-size:25px;}.rs-nav button{display:none;}.rs-nav{margin-left:0;width:100%;}.rs-pos{margin:0;}
+  .slot{width:270px;margin-right:18px;}.track .pad{flex-basis:calc(100% - 280px);}
+  .p-head{padding:22px 64px 18px 20px;}.p-b{padding:20px 20px 34px;}.p-head h2{font-size:25px;}
+  .says{grid-template-columns:1fr;}
+}
+@media (prefers-reduced-motion:reduce){.panel{transition:none;}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="brand" href="hued_01_landing.html" aria-label="Hued home"><svg id="navMark" viewBox="0 0 100 120"></svg><b>Hued</b></a>
+  <div class="nl"><a href="hued2_knowledge_hub.html">Knowledge Hub</a><a class="on" href="#">Brand Threads</a><a href="hued_03_how_it_works.html">How It Works</a><a href="hued_13_profile.html">Profile</a></div>
+  <div class="nav-r"><a class="back" href="index.html">← All Pages</a><a class="signin ang-s" href="hued_04_signin.html?return=hued2_brand_threads.html">Sign In</a></div>
+</nav>
+
+<div class="bar">
+  <div class="cats" id="cats"></div>
+  <button class="start ang-s" id="startBtn">Start a Thread</button>
+</div>
+
+<main class="view" id="view">
+  <div class="hb">
+    <div class="hb-top">
+      <div>
+        <div class="k"><svg class="mark" viewBox="0 0 100 120"></svg><span>Brand Threads · All Brands</span></div>
+        <div class="h1">Real buyers. Real products.<br><em>Honest conversations.</em></div>
+        <div class="sub">Ask before you buy, report back after you wear it. Every thread follows a piece from the first question to the closet.</div>
+      </div>
+      <div class="forbrands ang">
+        <b>Are you a brand?</b>
+        <span>Reply to your buyers in their own threads and see what holds people back before they buy.</span>
+        <a href="hued_14_dashboard_login.html">Join the Pilot →</a>
+      </div>
+    </div>
+    <div class="lb">
+      <nav class="ix" id="ix"></nav>
+      <div class="body" id="body"></div>
+    </div>
+  </div>
+</main>
+
+<div class="scrim" id="scrim"></div>
+<aside class="panel" id="panel" aria-hidden="true"></aside>
+
+<script>
+/* =========================================================
+   1. DATA  (Supabase view `thread_feed` → page model)
+   Brands are fictional placeholders.
+   ========================================================= */
+const SUPABASE_URL='', SUPABASE_ANON_KEY='';
+const TYPES=['Bottoms','Outerwear','Footwear','Knitwear','Tops'];
+const TYPE_COL={Bottoms:'#7A4A0C',Outerwear:'#2F2876',Footwear:'#43170A',Knitwear:'#063F31',Tops:'#5E1C33'};
+// thread_feed rows
+const MOCK_FEED=[
+ {thread_id:'t01',brand_slug:'atelier-okoro',product_name:'Pleated wide trouser',product_type:'Bottoms',considering:9,bought:12,wearing:7,top_concern:'fit',fit_signal:'Runs long',value_signal:'Worth it',quality_signal:'Holding up',posts:28,last_activity:'2h ago',brand_replied:true},
+ {thread_id:'t02',brand_slug:'atelier-okoro',product_name:'Boxy wool overshirt',product_type:'Outerwear',considering:14,bought:6,wearing:3,top_concern:'value',fit_signal:'True to size',value_signal:'Worth it on sale',quality_signal:'Too early to tell',posts:23,last_activity:'5h ago',brand_replied:true},
+ {thread_id:'t03',brand_slug:'atelier-okoro',product_name:'Linen camp shirt',product_type:'Tops',considering:4,bought:5,wearing:4,top_concern:'quality',fit_signal:'Runs large',value_signal:'Worth it',quality_signal:'Wrinkles easily',posts:13,last_activity:'1d ago',brand_replied:false},
+ {thread_id:'t04',brand_slug:'nori-knit',product_name:'Merino crew neck',product_type:'Knitwear',considering:6,bought:8,wearing:6,top_concern:'quality',fit_signal:'True to size',value_signal:'Worth it on sale',quality_signal:'Pills after washing',posts:20,last_activity:'3h ago',brand_replied:true},
+ {thread_id:'t05',brand_slug:'nori-knit',product_name:'Chunky cardigan',product_type:'Knitwear',considering:11,bought:3,wearing:1,top_concern:'utility',fit_signal:'Runs large',value_signal:'Too early to tell',quality_signal:'Too early to tell',posts:15,last_activity:'8h ago',brand_replied:false},
+ {thread_id:'t06',brand_slug:'fieldline',product_name:'Leather loafer mule',product_type:'Footwear',considering:5,bought:5,wearing:4,top_concern:'fit',fit_signal:'Size up half',value_signal:'Worth it',quality_signal:'Breaks in well',posts:14,last_activity:'1d ago',brand_replied:false},
+ {thread_id:'t07',brand_slug:'fieldline',product_name:'Canvas court sneaker',product_type:'Footwear',considering:7,bought:2,wearing:2,top_concern:'utility',fit_signal:'True to size',value_signal:'Worth it',quality_signal:'Too early to tell',posts:11,last_activity:'2d ago',brand_replied:false},
+ {thread_id:'t08',brand_slug:'slow-hem',product_name:'Straight leg denim',product_type:'Bottoms',considering:10,bought:9,wearing:5,top_concern:'fit',fit_signal:'Runs small',value_signal:'Worth it',quality_signal:'Holding up',posts:24,last_activity:'40m ago',brand_replied:true},
+ {thread_id:'t09',brand_slug:'slow-hem',product_name:'Wide leg chino',product_type:'Bottoms',considering:3,bought:4,wearing:2,top_concern:'fit',fit_signal:'Runs long',value_signal:'Worth it on sale',quality_signal:'Holding up',posts:9,last_activity:'3d ago',brand_replied:false},
+ {thread_id:'t10',brand_slug:'maison-ebi',product_name:'Cropped trench',product_type:'Outerwear',considering:12,bought:3,wearing:2,top_concern:'value',fit_signal:'True to size',value_signal:'Not worth full price',quality_signal:'Holding up',posts:17,last_activity:'6h ago',brand_replied:false}
+];
+// brands table rows (is_claimed = the brand has joined and can reply)
+const BRANDS=[
+ {slug:'atelier-okoro',name:'Atelier Okoro',is_claimed:true,joined:'Oct 2026',bio:'Tailoring made in small runs.'},
+ {slug:'nori-knit',name:'Nori Knit Co.',is_claimed:true,joined:'Sep 2026',bio:'Everyday knitwear in natural fibers.'},
+ {slug:'slow-hem',name:'Slow Hem',is_claimed:true,joined:'Nov 2026',bio:'Denim and trousers cut for real inseams.'},
+ {slug:'fieldline',name:'Fieldline',is_claimed:false},
+ {slug:'maison-ebi',name:'Maison Ebi',is_claimed:false}
+];
+const CONCERN={fit:'Fit',quality:'Quality',value:'Value',utility:'Utility'};
+
+// thread_posts for an open thread (generated for the mock; live = select * from thread_posts where thread_id = …)
+function mockPosts(t,b){
+  const P=t.product_name.toLowerCase();
+  const out=[
+   {stage:'considering',name:'Tara K.',time:'20m ago',concerns:['fit'],body:`Does the ${P} work for curvier hips? I usually struggle with this cut and can't tell from the photos.`},
+   {stage:'bought',name:'Jordan L.',time:'2h ago',size:'S',height:"5'4",fit:t.fit_signal,value:t.value_signal,kept:true,body:`${t.fit_signal==='Runs long'?'Runs slightly long in the leg. Had to hem mine. ':''}Quality feels solid for the price. Would size up if you're between sizes.`},
+   {stage:'considering',name:'Sam W.',time:'4h ago',concerns:[t.top_concern],body:t.top_concern==='value'?`Is it worth full price, or should I wait for a sale? Curious how it holds up after a few months.`:t.top_concern==='quality'?`How does the fabric hold up after washing? That's what's stopping me.`:t.top_concern==='utility'?`Can this work for both office and weekends, or is it too casual?`:`Between two sizes. Which way did people go?`},
+   {stage:'wearing',name:'Maya R.',time:'1d ago',worn:'15+',holding:t.quality_signal,body:`Update after a month: ${t.quality_signal.toLowerCase()}. Still one of the pieces I reach for most.`},
+   {stage:'bought',name:'Ade O.',time:'2d ago',size:'M',height:"5'10",fit:'True to size',value:t.value_signal,kept:false,body:`Returned mine. The fit was fine but the colour was flatter in person than on the site.`}
+  ];
+  if(t.brand_replied&&b.is_claimed)out.splice(1,0,{stage:'brand',name:b.name,time:'1h ago',body:`Thanks for asking. The ${P} is cut with room through the hip, and most people between sizes go down. Happy to answer anything else here.`});
+  return out;
+}
+let THREADS=[];
+function normalize(rows){THREADS=rows.map(r=>({...r,brand:BRANDS.find(b=>b.slug===r.brand_slug)})).filter(t=>t.brand);}
+async function loadData(){
+  if(SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase){try{const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);window.__sb=sb;const {data,error}=await sb.from('thread_feed').select('*');if(!error)return data;}catch(e){}}
+  return MOCK_FEED;
+}
+
+/* =========================================================
+   2. LOGO MARK
+   ========================================================= */
+const LOGO=[[0,0,'#65E57E'],[0,1,'#5ACCB6'],[-2,1,'#C47EA8'],[-2,2,'#F27A5D'],[-1,2,'#A586D1'],[-3,3,'#F9AA31'],[-1,3,'#6AB0E5'],[-3,4,'#F5E322']];
+(function(){const P=26,RH=P*Math.sqrt(3)/2,W=24,H=W*2/Math.sqrt(3);const pts=LOGO.map(([q,r])=>({x:P*(q+r/2),y:RH*r}));const mx=Math.min(...pts.map(p=>p.x)),my=Math.min(...pts.map(p=>p.y));
+  const vb=`${-W/2-1} ${-H/2-1} ${Math.max(...pts.map(p=>p.x))-mx+W+2} ${Math.max(...pts.map(p=>p.y))-my+H+2}`;
+  const svg=LOGO.map(([q,r,c],i)=>{const x=pts[i].x-mx,y=pts[i].y-my;return `<polygon points="${[[0,-H/2],[W/2,-H/4],[W/2,H/4],[0,H/2],[-W/2,H/4],[-W/2,-H/4]].map(([a,b])=>`${(x+a).toFixed(1)},${(y+b).toFixed(1)}`).join(' ')}" fill="${c}"/>`;}).join('');
+  document.querySelectorAll('#navMark,.mark').forEach(m=>{m.setAttribute('viewBox',vb);m.innerHTML=svg;});})();
+
+/* =========================================================
+   3. FILTERS + INDEX + CHAPTERS
+   ========================================================= */
+let type='All';
+const view=document.getElementById('view'),body=document.getElementById('body'),ix=document.getElementById('ix');
+const pad2=n=>String(n).padStart(2,'0');
+function renderChips(){
+  document.getElementById('cats').innerHTML=['All',...TYPES].map(t=>{const n=t==='All'?THREADS.length:THREADS.filter(x=>x.product_type===t).length;return n||t==='All'?`<button class="chip ang-s ${type===t?'on':''}" data-t="${t}">${t} <em>${n}</em></button>`:'';}).join('');
+}
+document.getElementById('cats').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;type=b.dataset.t;renderChips();filter();view.scrollTop=0;});
+const byBrand=b=>THREADS.filter(t=>t.brand_slug===b.slug).sort((a,c)=>c.posts-a.posts);
+function journey(t,big){const tot=t.considering+t.bought+t.wearing||1;
+  return `<div class="${big?'big':''}"><div class="jbar"><span style="width:${t.considering/tot*100}%;background:var(--s1)"></span><span style="width:${t.bought/tot*100}%;background:var(--s2)"></span><span style="width:${t.wearing/tot*100}%;background:var(--s3)"></span></div>
+    <div class="jleg"><span><i style="background:var(--s1)"></i><b>${t.considering}</b> Considering</span><span><i style="background:var(--s2)"></i><b>${t.bought}</b> Bought</span><span><i style="background:var(--s3)"></i><b>${t.wearing}</b> Still wearing</span></div></div>`;}
+function card(t,k){
+  return `<article class="tc ang" data-id="${t.thread_id}" tabindex="0">
+    <div class="tc-cov" style="background:${TYPE_COL[t.product_type]}"><div class="pat"></div><div class="g"></div>
+      <div class="top"><span>Thread ${pad2(k+1)}</span></div>
+      <div class="word">${t.product_type}</div>${t.brand_replied?'<span class="reply ang-s">Brand replied</span>':''}</div>
+    <div class="tc-b"><div class="tc-k">${t.brand.name}</div><div class="tc-t">${t.product_name}</div>
+      ${journey(t)}
+      <div class="sig"><span>${t.fit_signal}</span><span>${t.value_signal}</span></div>
+      <div class="tc-m"><span>Most asked: <b>${CONCERN[t.top_concern]}</b></span><span>${t.posts} posts · ${t.last_activity}</span></div></div></article>`;}
+function build(){
+  const brands=BRANDS.filter(b=>byBrand(b).length).sort((a,b)=>(b.is_claimed-a.is_claimed)||byBrand(b).reduce((s,t)=>s+t.posts,0)-byBrand(a).reduce((s,t)=>s+t.posts,0));
+  ix.innerHTML=`<div class="ixh">Brands</div>`+brands.map((b,i)=>`<button data-b="${b.slug}"><b>${pad2(i+1)}</b><span>${b.name}${b.is_claimed?'<i title="Listening"></i>':''}</span><em>${byBrand(b).length}</em></button>`).join('')+`<div class="ix-key"><i></i>Brand is listening</div>`;
+  body.innerHTML=brands.map((b,i)=>{const ts=byBrand(b);
+    return `<section class="ch" id="b-${b.slug}" data-b="${b.slug}">
+      <div class="ch-h"><span class="ch-n">${pad2(i+1)}</span><h2>${b.name}</h2><span class="ch-c">${ts.length} ${ts.length===1?'Thread':'Threads'} · Most Active</span>${b.is_claimed?'<span class="listen"><i></i>Listening</span>':''}
+        <div class="rs-nav"><span class="rs-pos"></span><button class="ang-s" data-d="-1" aria-label="Previous">‹</button><button class="ang-s" data-d="1" aria-label="Next">›</button></div></div>
+      ${b.is_claimed?`<div class="ch-bio">${b.bio}</div><div class="ch-meta">Joined Hued in ${b.joined} and replies in its threads.</div>`:`<div class="ch-meta">Threads started by buyers. This brand hasn't joined Hued yet.</div>`}
+      <div class="rail"><div class="track" tabindex="0">${ts.map((t,k)=>`<div class="slot" data-id="${t.thread_id}">${card(t,k)}</div>`).join('')}<div class="pad"></div></div></div></section>`;}).join('');
+  body.querySelectorAll('.track').forEach(t=>t.addEventListener('scroll',()=>queue(t),{passive:true}));
+  filter();
+}
+function filter(){
+  body.querySelectorAll('.ch').forEach(ch=>{
+    ch.querySelectorAll('.slot').forEach(s=>{const t=THREADS.find(x=>x.thread_id===s.dataset.id);s.classList.toggle('hide',type!=='All'&&t.product_type!==type);});
+    const show=!!ch.querySelector('.slot:not(.hide)');ch.style.display=show?'':'none';
+    const tr=ch.querySelector('.track');tr.scrollLeft=0;if(show)depth(tr);
+  });
+  ix.querySelectorAll('button').forEach(b=>b.style.display=document.getElementById('b-'+b.dataset.b).style.display);
+  spy();requestAnimationFrame(vdepth);
+}
+
+/* =========================================================
+   4. DEPTH (same behaviour as the Knowledge Hub)
+   ========================================================= */
+const DEPTH=()=>innerWidth<720?170:320;
+const slots=t=>[...t.querySelectorAll('.slot:not(.hide)')];
+const pending=new Set();let raf=0;
+function queue(t){pending.add(t);if(!raf)raf=requestAnimationFrame(()=>{pending.forEach(depth);pending.clear();raf=0;});clearTimeout(t._st);t._st=setTimeout(()=>{const s=slots(t)[frontIdx(t)];if(s&&Math.abs(s.offsetLeft-t.scrollLeft)>2)goTo(t,s);},140);}
+function frontIdx(t){const ss=slots(t),x=t.scrollLeft;let best=0,bd=1e9;ss.forEach((s,k)=>{const d=Math.abs(s.offsetLeft-x);if(d<bd){bd=d;best=k;}});return best;}
+function depth(t){
+  const ss=slots(t),span=t.clientWidth*.9,x0=t.scrollLeft,B=DEPTH(),fi=frontIdx(t);
+  ss.forEach((s,k)=>{const d=(s.offsetLeft-x0)/span,e=Math.min(1,Math.abs(d));let z=-B*(1-Math.sqrt(1-e*e));if(Math.abs(d)>1)z-=(Math.abs(d)-1)*B*.6;
+    s.style.transform=`translateZ(${z.toFixed(1)}px) rotateY(${Math.max(-26,Math.min(26,d*22)).toFixed(2)}deg)`;
+    s.style.opacity=Math.max(.2,1-Math.max(0,Math.abs(d)-.55)*.9).toFixed(3);s.style.zIndex=String(100-Math.round(Math.abs(d)*20));s.classList.toggle('front',k===fi);});
+  const ch=t.closest('.ch'),nav=ch.querySelectorAll('.rs-nav button');nav[0].disabled=fi<=0;nav[1].disabled=fi>=ss.length-1;
+  ch.querySelector('.rs-pos').textContent=`${pad2(fi+1)} / ${pad2(ss.length)}`;
+}
+function goTo(t,s){t.scrollTo({left:s.offsetLeft,behavior:'smooth'});}
+let vraf=0;
+function vdepth(){vraf=0;const vr=view.getBoundingClientRect(),mid=vr.top+vr.height/2,half=vr.height*.85,B=innerWidth<720?120:220;
+  const br=body.getBoundingClientRect();body.style.perspectiveOrigin=`50% ${(mid-br.top).toFixed(0)}px`;
+  body.querySelectorAll('.ch').forEach(ch=>{if(ch.style.display==='none')return;const r=ch.getBoundingClientRect();const d=((r.top+Math.min(r.height,vr.height)/2)-mid)/half;const e=Math.min(1,Math.abs(d));let z=-B*(1-Math.sqrt(1-e*e));if(Math.abs(d)>1)z-=(Math.abs(d)-1)*B*.5;
+    ch.style.transform=`translateZ(${z.toFixed(1)}px) rotateX(${Math.max(-10,Math.min(10,-d*7)).toFixed(2)}deg)`;ch.style.opacity=Math.max(.35,1-Math.max(0,Math.abs(d)-.45)*.9).toFixed(3);});}
+function spy(){const secs=[...body.querySelectorAll('.ch')].filter(s=>s.style.display!=='none');const top=view.getBoundingClientRect().top+160;let cur=secs[0];secs.forEach(s=>{if(s.getBoundingClientRect().top<=top)cur=s;});ix.querySelectorAll('button').forEach(b=>b.classList.toggle('on',!!cur&&b.dataset.b===cur.dataset.b));}
+view.addEventListener('scroll',()=>{spy();if(!vraf)vraf=requestAnimationFrame(vdepth);},{passive:true});
+addEventListener('resize',()=>{body.querySelectorAll('.track').forEach(depth);if(!vraf)vraf=requestAnimationFrame(vdepth);});
+ix.addEventListener('click',e=>{const b=e.target.closest('button');if(b)document.getElementById('b-'+b.dataset.b).scrollIntoView({behavior:'smooth',block:'start'});});
+body.addEventListener('click',e=>{
+  const nb=e.target.closest('.rs-nav button');
+  if(nb){const t=nb.closest('.ch').querySelector('.track');const ss=slots(t);goTo(t,ss[Math.max(0,Math.min(ss.length-1,frontIdx(t)+ +nb.dataset.d))]);return;}
+  const s=e.target.closest('.slot');if(!s)return;
+  if(!s.classList.contains('front')){goTo(s.closest('.track'),s);return;}
+  openThread(s.dataset.id);
+});
+body.addEventListener('keydown',e=>{const t=e.target.closest('.track');
+  if(t&&(e.key==='ArrowRight'||e.key==='ArrowLeft')){e.preventDefault();const ss=slots(t);goTo(t,ss[Math.max(0,Math.min(ss.length-1,frontIdx(t)+(e.key==='ArrowRight'?1:-1)))]);return;}
+  if(e.key==='Enter'){const s=e.target.closest('.slot')||(t&&t.querySelector('.slot.front'));if(s)openThread(s.dataset.id);}});
+
+/* =========================================================
+   5. THREAD PANEL
+   Every post carries a few structured answers. These are what
+   make a thread useful to the buyer next in line, and what a
+   brand sees, grouped and anonymous, on its dashboard.
+   ========================================================= */
+const panel=document.getElementById('panel'),scrim=document.getElementById('scrim');
+const POSTS={};
+const ini=n=>n.split(' ').map(w=>w[0]).join('').slice(0,2);
+const STAGE_L={considering:'Thinking about it',bought:'Bought it',wearing:'Wearing update',brand:'Brand'};
+function postHTML(p){
+  const f=[];
+  if(p.stage==='considering')p.concerns.forEach(c=>f.push('Unsure about '+CONCERN[c].toLowerCase()));
+  if(p.stage==='bought'){if(p.size)f.push('Size '+p.size);if(p.height)f.push(p.height);f.push(p.fit);f.push(p.value);f.push(p.kept?'Kept it':'Returned it');}
+  if(p.stage==='wearing'){f.push('Worn '+p.worn+' times');f.push(p.holding);}
+  return `<div class="post ang-s ${p.stage==='brand'?'br':''}" data-stage="${p.stage}"><div class="post-h"><div class="av ang-s">${ini(p.name)}</div><span class="post-n">${p.name}</span><span class="stg ${p.stage}">${STAGE_L[p.stage]}</span><span class="post-t">${p.time}</span></div>
+    ${f.length?`<div class="post-f">${f.map(x=>`<span>${x}</span>`).join('')}</div>`:''}<p>${p.body}</p></div>`;
+}
+function holdBack(t){
+  // share of 'Thinking about it' posts that flagged each concern (thread_feed: concern_fit … concern_utility)
+  const base=t.concern_fit!=null?{fit:t.concern_fit,quality:t.concern_quality,value:t.concern_value,utility:t.concern_utility}:(()=>{const m={fit:.2,quality:.2,value:.2,utility:.1};m[t.top_concern]+=.35;return m;})();const s=Object.values(base).reduce((a,b)=>a+b,0);
+  return Object.entries(base).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<span>${CONCERN[k]}</span><div class="tr"><i style="width:${(v/s*100).toFixed(0)}%"></i></div><em>${(v/s*100).toFixed(0)}%</em>`).join('');
+}
+function openThread(id){
+  const t=THREADS.find(x=>x.thread_id===id),b=t.brand;
+  POSTS[id]=POSTS[id]||mockPosts(t,b);
+  panel.innerHTML=`<button class="p-x ang-s" aria-label="Close">✕</button>
+   <div class="p-head"><div class="tc-k">${b.name} · ${t.product_type}</div><h2>${t.product_name}</h2>${b.is_claimed?'<span class="listen"><i></i>Brand is listening</span>':''}</div>
+   <div class="p-b">
+     <div class="blk"><div class="blk-h">Where buyers are<span>${t.posts} posts</span></div>${journey(t,true)}</div>
+     <div class="blk"><div class="blk-h">What buyers say</div><div class="says"><div><span>Fit</span><b>${t.fit_signal}</b></div><div><span>Value</span><b>${t.value_signal}</b></div><div><span>After wearing</span><b>${t.quality_signal}</b></div></div></div>
+     <div class="blk"><div class="blk-h">What holds people back<span>from “Thinking about it” posts</span></div><div class="hold">${holdBack(t)}</div></div>
+     <div class="blk"><div class="tabs" id="tabs"><button class="on" data-s="all">All</button><button data-s="considering">Thinking about it</button><button data-s="bought">Bought it</button><button data-s="wearing">Wearing</button>${b.is_claimed?'<button data-s="brand">Brand</button>':''}</div>
+       <div id="posts">${POSTS[id].map(postHTML).join('')}</div>
+       ${composer()}
+       <div class="note"><b>What ${b.is_claimed?b.name:'brands'} can see:</b> the answers above, grouped and anonymous. Brands can reply in the thread, but they can never remove, hide or rank posts.</div>
+     </div>
+   </div>`;
+  panel.classList.add('on');scrim.classList.add('on');panel.setAttribute('aria-hidden','false');panel.scrollTop=0;
+  panel.querySelector('.p-x').onclick=close;
+  panel.querySelector('#tabs').onclick=e=>{const x=e.target.closest('button');if(!x)return;panel.querySelectorAll('#tabs button').forEach(y=>y.classList.toggle('on',y===x));panel.querySelectorAll('#posts .post').forEach(p=>p.style.display=(x.dataset.s==='all'||p.dataset.stage===x.dataset.s)?'':'none');};
+  wireComposer(t);
+}
+function composer(){
+  return `<div class="cmp ang" id="cmp"><h3>Add to this thread</h3>
+    <div class="cmp-l">Where are you with it?</div>
+    <div class="opts" data-k="stage"><button data-v="considering">Thinking about it</button><button data-v="bought">I bought it</button><button data-v="wearing">Wearing update</button></div>
+    <div id="cmpMore"></div>
+    <textarea id="cmpBody" placeholder="Share what you'd want the next person to know"></textarea>
+    <button class="go ang-s" id="cmpGo" disabled>Post</button></div>`;
+}
+function wireComposer(t){
+  const st={stage:null,concerns:[],fit:null,value:null,kept:null,worn:null,holding:null,size:''};
+  const more=panel.querySelector('#cmpMore'),go=panel.querySelector('#cmpGo'),txt=panel.querySelector('#cmpBody');
+  const opts=(k,list,multi)=>`<div class="cmp-l">${k}</div><div class="opts" data-k="${multi?'concerns':k}" ${multi?'data-multi="1"':''}>${list.map(v=>`<button data-v="${v}">${v}</button>`).join('')}</div>`;
+  const ready=()=>{go.disabled=!(st.stage&&txt.value.trim().length>2&&(st.stage!=='considering'||st.concerns.length)&&(st.stage!=='bought'||(st.fit&&st.kept!==null))&&(st.stage!=='wearing'||st.holding));};
+  function stageFields(){
+    if(st.stage==='considering')more.innerHTML=opts("What's holding you back?",['Fit','Quality','Value','Utility'],true);
+    if(st.stage==='bought')more.innerHTML=`<div class="cmp-l">Size and height (optional)</div><div class="cmp-row"><input id="cmpSize" placeholder="Size, e.g. M"><input id="cmpH" placeholder="Height, e.g. 5'6"></div>`+opts('Fit',['Runs small','True to size','Runs large','Runs long'])+opts('Value',['Worth it','Worth it on sale','Not worth full price'])+opts('Kept it?',['Kept it','Returned it']);
+    if(st.stage==='wearing')more.innerHTML=opts('Times worn',['1–5','5–15','15+'])+opts('How is it holding up?',['Holding up','Showing wear','Better with time']);
+    ready();
+  }
+  panel.querySelector('#cmp').addEventListener('click',e=>{const b=e.target.closest('.opts button');if(!b)return;const g=b.parentElement,k=g.dataset.k,v=b.dataset.v;
+    if(g.dataset.multi){b.classList.toggle('on');st.concerns=[...g.querySelectorAll('.on')].map(x=>x.dataset.v.toLowerCase());}
+    else{g.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+      if(k==='stage'){st.stage=v;st.concerns=[];stageFields();}
+      if(k==='Fit')st.fit=v;if(k==='Value')st.value=v;if(k==='Kept it?')st.kept=v==='Kept it';if(k==='Times worn')st.worn=v.replace('–',' to ');if(k==='How is it holding up?')st.holding=v;}
+    ready();});
+  txt.addEventListener('input',ready);
+  go.onclick=()=>{
+    const p={stage:st.stage,name:'You',time:'just now',concerns:st.concerns,fit:st.fit,value:st.value||'No view on value yet',kept:st.kept,worn:st.worn,holding:st.holding,size:(panel.querySelector('#cmpSize')||{}).value,height:(panel.querySelector('#cmpH')||{}).value,body:txt.value.trim().replace(/[<>]/g,'')};
+    POSTS[t.thread_id].unshift(p);t[st.stage==='considering'?'considering':st.stage==='bought'?'bought':'wearing']++;t.posts++;
+    // live: insert into posts (thread_id, user_id, stage, concerns, size_bought, height, fit_feel, value_feel, kept, wear_band, holding_up, body)
+    openThread(t.thread_id);
+    const el=body.querySelector(`.slot[data-id="${t.thread_id}"] .tc`);if(el){const k=[...el.closest('.track').querySelectorAll('.slot')].indexOf(el.closest('.slot'));el.outerHTML=card(t,k);}
+  };
+}
+function close(){panel.classList.remove('on');scrim.classList.remove('on');panel.setAttribute('aria-hidden','true');}
+scrim.onclick=close;addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+document.getElementById('startBtn').onclick=()=>{location.href='hued2_start_thread.html';};
+
+loadData().then(rows=>{normalize(rows);renderChips();build();});
+</script>
+</body>
+</html>

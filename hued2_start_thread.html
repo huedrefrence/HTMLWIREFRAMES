@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hued · Start a Thread</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!--
+  Writes (see hued_brand_threads.sql, to be merged with the live schema):
+    brands            look up by name; insert only if no match (is_claimed = false)
+    brand_threads     product_name, category, brand_id, created_by
+    thread_comments   first row of the thread: stage, concerns, size, height, fit, fit_details,
+                      value_feel, kept, wear_band, holding_up, comment_text
+    receipts          optional upload; sets thread_comments.verified_purchase only after review
+  Brands below are fictional placeholders.
+-->
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--cream:#F5F0E8;--paper:#FAF7F2;--line:#E8E0D5;--ink:#2C1810;--ink-2:#5A4A40;--mute:#7A685B;--accent:#C85C3A;--accent-dk:#A8492C;--green:#0F6E56;--nav:62px;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+button,input,select,textarea{font-family:inherit;}
+.ang{clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);}
+.ang-s{clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px);}
+
+.nav{height:var(--nav);display:flex;align-items:center;gap:30px;padding:0 28px;border-bottom:1px solid var(--line);background:var(--cream);position:sticky;top:0;z-index:60;}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);}
+.brand svg{width:26px;height:32px;}
+.brand b{font-family:'Playfair Display',serif;font-size:23px;font-weight:700;}
+.nl{display:flex;gap:26px;}
+.nl a{font-size:14.5px;color:var(--mute);text-decoration:none;font-weight:500;}
+.nl a.on{color:var(--accent);}
+.nav-r{margin-left:auto;display:flex;align-items:center;gap:18px;}
+.back{font-size:13.5px;color:var(--mute);text-decoration:none;}
+
+.wrap{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:32px;max-width:1180px;margin:0 auto;padding:32px 28px 90px;}
+.k{font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-bottom:10px;}
+h1{font-family:'Space Grotesk',sans-serif;font-size:44px;font-weight:600;line-height:1.04;letter-spacing:-.035em;margin-bottom:10px;}
+h1 em{color:var(--accent);font-style:normal;}
+.lead{font-size:16.5px;color:var(--ink-2);max-width:600px;margin-bottom:28px;}
+
+.step{background:#FFF;padding:24px 26px;margin-bottom:12px;}
+.step-h{display:flex;align-items:baseline;gap:12px;margin-bottom:6px;}
+.step-n{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:500;color:var(--accent);letter-spacing:-.03em;}
+.step h2{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:600;letter-spacing:-.02em;}
+.step-s{font-size:14.5px;color:var(--mute);margin-bottom:16px;}
+.step.off{opacity:.45;pointer-events:none;}
+
+.stages{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.stage{border:none;background:var(--paper);text-align:left;padding:16px;cursor:pointer;border-left:4px solid transparent;transition:background .15s;}
+.stage b{display:block;font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;letter-spacing:-.01em;margin-bottom:3px;}
+.stage span{font-size:13.5px;color:var(--mute);line-height:1.45;display:block;}
+.stage:hover{background:#F1EADF;}
+.stage.on{background:var(--ink);color:var(--cream);}
+.stage.on span{color:#CDBDAE;}
+.stage[data-v=considering]{border-color:#E9C9BB;}.stage[data-v=bought]{border-color:var(--accent);}.stage[data-v=wearing]{border-color:#7A685B;}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;}
+.f{position:relative;}
+.f label{display:block;font-size:13.5px;font-weight:700;color:var(--ink-2);margin-bottom:6px;}
+.f label i{font-style:normal;font-weight:400;color:var(--mute);}
+.inp{width:100%;border:1px solid var(--line);background:var(--paper);padding:12px 14px;font-size:15.5px;color:var(--ink);outline:none;}
+.inp:focus{border-color:var(--accent);background:#FFF;}
+select.inp{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--mute) 50%),linear-gradient(135deg,var(--mute) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:36px;}
+.sug{position:absolute;left:0;right:0;top:100%;z-index:10;background:#FFF;box-shadow:0 12px 28px rgba(44,24,16,.14);display:none;}
+.sug.on{display:block;}
+.sug button{display:flex;justify-content:space-between;align-items:center;width:100%;border:none;background:none;text-align:left;padding:10px 14px;font-size:15px;color:var(--ink);cursor:pointer;}
+.sug button:hover,.sug button.hl{background:var(--paper);}
+.sug small{font-size:12.5px;color:var(--green);font-weight:700;display:flex;align-items:center;gap:6px;}
+.sug small i{width:7px;height:7px;background:#1D9E75;}
+.sug .new{color:var(--accent);font-weight:500;}
+.hint{font-size:13px;color:var(--mute);margin-top:6px;}
+.hint.good{color:var(--green);}
+
+.dup{display:none;margin-top:14px;background:#FBEFE9;padding:16px 18px;border-left:4px solid var(--accent);}
+.dup.on{display:block;}
+.dup b{display:block;font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;margin-bottom:3px;}
+.dup p{font-size:14.5px;color:var(--ink-2);margin-bottom:10px;}
+.dup .row{display:flex;gap:8px;flex-wrap:wrap;}
+
+.q{margin-top:18px;}
+.q:first-child{margin-top:0;}
+.ql{font-size:13.5px;font-weight:700;color:var(--ink-2);margin-bottom:8px;}
+.ql i{font-style:normal;font-weight:400;color:var(--mute);}
+.opts{display:flex;flex-wrap:wrap;gap:6px;}
+.opts button{border:none;background:var(--paper);padding:9px 14px;font-size:14.5px;font-weight:500;color:var(--ink-2);cursor:pointer;}
+.opts button:hover{background:#F1EADF;}
+.opts button.on{background:var(--ink);color:var(--cream);}
+.opts.big button{padding:12px 18px;font-size:15px;}
+textarea.inp{min-height:120px;resize:vertical;}
+.count{font-size:12.5px;color:var(--mute);text-align:right;margin-top:4px;}
+
+.receipt{display:flex;gap:14px;align-items:center;background:var(--paper);padding:14px 16px;margin-top:18px;}
+.receipt .ic{width:42px;height:42px;background:#FFF;display:grid;place-items:center;flex-shrink:0;}
+.receipt .ic svg{width:20px;height:20px;stroke:var(--ink);fill:none;stroke-width:1.7;}
+.receipt b{display:block;font-size:15px;}
+.receipt span{font-size:13.5px;color:var(--mute);line-height:1.45;display:block;}
+.receipt label.btn{margin-left:auto;flex-shrink:0;}
+.receipt input{display:none;}
+.receipt.done{background:#E1F5EE;}
+.receipt.done span{color:var(--green);}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;padding:11px 18px;font-size:14.5px;font-weight:700;cursor:pointer;text-decoration:none;}
+.btn.p{background:var(--accent);color:#FFF;}
+.btn.p:hover{background:var(--accent-dk);}
+.btn.d{background:var(--ink);color:var(--cream);}
+.btn.g{background:#FFF;color:var(--ink);}
+.btn:disabled{background:#E3C2B6;cursor:default;}
+.post{width:100%;padding:16px;font-size:16px;margin-top:6px;}
+.missing{font-size:13.5px;color:var(--mute);text-align:center;margin-top:10px;}
+.signin-note{font-size:14px;color:var(--mute);text-align:center;margin-top:8px;}
+.signin-note a{color:var(--accent);font-weight:700;}
+
+/* side: what this captures */
+.side{position:sticky;top:calc(var(--nav) + 24px);align-self:start;}
+.card{background:var(--ink);color:var(--cream);padding:22px;}
+.card .k{color:#F0997B;}
+.card h3{font-family:'Space Grotesk',sans-serif;font-size:21px;font-weight:600;letter-spacing:-.02em;line-height:1.2;margin-bottom:6px;}
+.card p{font-size:14px;color:#CDBDAE;line-height:1.55;margin-bottom:16px;}
+.cap{display:flex;flex-direction:column;gap:2px;}
+.cap div{display:grid;grid-template-columns:96px 1fr;gap:10px;padding:9px 0;border-top:1px solid rgba(255,255,255,.1);font-size:14px;}
+.cap span{color:#B3A190;}
+.cap b{font-weight:500;color:var(--cream);}
+.cap b.empty{color:#7A685B;font-weight:400;}
+.trust{background:#FFF;padding:16px 18px;margin-top:12px;font-size:14px;color:var(--ink-2);line-height:1.55;border-left:4px solid #1D9E75;}
+.trust b{color:var(--ink);}
+.src{margin-top:12px;}
+.src button{border:none;background:none;font-size:13.5px;color:var(--mute);cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
+.src pre{display:none;margin-top:8px;background:#1E110B;color:#E8DCCB;font-size:12px;line-height:1.5;padding:12px;overflow-x:auto;font-family:ui-monospace,Menlo,monospace;}
+.src.on pre{display:block;}
+
+.success{display:none;background:#FFF;padding:32px 30px;text-align:left;}
+.success.on{display:block;}
+.success h2{font-family:'Space Grotesk',sans-serif;font-size:30px;font-weight:600;letter-spacing:-.03em;margin:6px 0 8px;}
+.success p{color:var(--ink-2);margin-bottom:18px;}
+.success .row{display:flex;gap:8px;flex-wrap:wrap;}
+
+@media (max-width:980px){.nl{display:none;}.wrap{grid-template-columns:1fr;}.side{position:static;}}
+@media (max-width:640px){
+  .nav{padding:0 16px;}.back{display:none;}
+  .wrap{padding:22px 16px 70px;gap:20px;}
+  h1{font-size:34px;}
+  .step{padding:20px 18px;}
+  .stages{grid-template-columns:1fr;}
+  .grid2{grid-template-columns:1fr;}
+  .receipt{flex-wrap:wrap;}.receipt label.btn{margin-left:0;}
+}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="brand" href="hued_01_landing.html" aria-label="Hued home"><svg id="mark" viewBox="0 0 100 120"></svg><b>Hued</b></a>
+  <div class="nl"><a href="hued2_knowledge_hub.html">Knowledge Hub</a><a class="on" href="hued2_brand_threads.html">Brand Threads</a><a href="hued_03_how_it_works.html">How It Works</a><a href="hued_13_profile.html">Profile</a></div>
+  <div class="nav-r"><a class="back" href="hued2_brand_threads.html">← Back to Brand Threads</a></div>
+</nav>
+
+<div class="wrap">
+  <main>
+    <div class="k">Brand Threads · New Thread</div>
+    <h1>Start a thread.<br><em>Help the next buyer.</em></h1>
+    <p class="lead">Ask before you buy, share what you got, or report back after wearing it. A few quick answers make your thread useful to everyone who finds it.</p>
+
+    <form id="form" autocomplete="off" novalidate>
+      <!-- 1. Stage -->
+      <section class="step ang" id="s1">
+        <div class="step-h"><span class="step-n">01</span><h2>Where are you with it?</h2></div>
+        <div class="step-s">This decides the questions that follow.</div>
+        <div class="stages">
+          <button type="button" class="stage ang-s" data-v="considering"><b>Thinking about it</b><span>You haven't bought it yet and want to ask first.</span></button>
+          <button type="button" class="stage ang-s" data-v="bought"><b>I bought it</b><span>It arrived. Share fit, value and first impressions.</span></button>
+          <button type="button" class="stage ang-s" data-v="wearing"><b>Wearing update</b><span>You've had it a while. How is it holding up?</span></button>
+        </div>
+      </section>
+
+      <!-- 2. Product -->
+      <section class="step ang off" id="s2">
+        <div class="step-h"><span class="step-n">02</span><h2>Which piece?</h2></div>
+        <div class="step-s">Pick an existing brand so every conversation about it stays in one place.</div>
+        <div class="grid2">
+          <div class="f"><label for="brand">Brand</label><input class="inp" id="brand" placeholder="Start typing a brand"><div class="sug" id="brandSug"></div><div class="hint" id="brandHint"></div></div>
+          <div class="f"><label for="cat">Category</label><select class="inp" id="cat"><option value="">Choose one</option><option>Bottoms</option><option>Outerwear</option><option>Footwear</option><option>Knitwear</option><option>Tops</option></select></div>
+          <div class="f" style="grid-column:1/-1"><label for="product">Product name</label><input class="inp" id="product" placeholder="e.g. Pleated wide trouser"><div class="sug" id="prodSug"></div></div>
+          <div class="f" style="grid-column:1/-1"><label for="link">Product link <i>(optional)</i></label><input class="inp" id="link" placeholder="Paste the product page so others can find it"></div>
+        </div>
+        <div class="dup" id="dup">
+          <b>There's already a thread for this piece.</b>
+          <p id="dupText"></p>
+          <div class="row"><a class="btn d ang-s" id="dupGo" href="hued2_brand_threads.html">Add to That Thread</a><button type="button" class="btn g ang-s" id="dupNew">It's a Different Piece</button></div>
+        </div>
+      </section>
+
+      <!-- 3. Stage questions -->
+      <section class="step ang off" id="s3">
+        <div class="step-h"><span class="step-n">03</span><h2 id="s3h">A few quick answers</h2></div>
+        <div class="step-s" id="s3s">Tap what applies. These are what make a thread easy to read at a glance.</div>
+        <div id="qs"></div>
+      </section>
+
+      <!-- 4. In your words -->
+      <section class="step ang off" id="s4">
+        <div class="step-h"><span class="step-n">04</span><h2>In your words</h2></div>
+        <div class="step-s" id="s4s">Anything the next person should know.</div>
+        <textarea class="inp" id="body" maxlength="1200"></textarea>
+        <div class="count"><span id="cnt">0</span> / 1200</div>
+        <div class="receipt ang-s" id="receipt" hidden>
+          <div class="ic ang-s"><svg viewBox="0 0 24 24"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2z"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></div>
+          <div><b>Add your receipt <i style="font-style:normal;font-weight:400;color:var(--mute)">(optional)</i></b><span id="rText">Kept private. Our team uses it to confirm the purchase. Your thread posts either way.</span></div>
+          <label class="btn g ang-s" for="rFile">Upload</label><input type="file" id="rFile" accept="image/*,application/pdf">
+        </div>
+      </section>
+
+      <button type="submit" class="btn p post ang" id="post" disabled>Post Thread</button>
+      <div class="missing" id="missing">Choose where you are with it to begin.</div>
+      <div class="signin-note">You'll be asked to <a href="hued_04_signin.html?return=hued2_start_thread.html">sign in</a> before your thread goes live.</div>
+    </form>
+
+    <section class="success ang" id="success">
+      <div class="k">Thread Posted</div>
+      <h2 id="okH">Your thread is live.</h2>
+      <p id="okP"></p>
+      <div class="row"><a class="btn p ang-s" href="hued2_brand_threads.html">View in Brand Threads</a><button type="button" class="btn g ang-s" onclick="location.reload()">Start Another</button></div>
+    </section>
+  </main>
+
+  <aside class="side">
+    <div class="card ang">
+      <div class="k">Your thread at a glance</div>
+      <h3>This is what the next buyer sees first.</h3>
+      <p>Your answers become the summary on the thread card. Your name and words stay in the thread.</p>
+      <div class="cap" id="cap"></div>
+    </div>
+    <div class="trust ang-s"><b>What brands can see:</b> answers like these, grouped and anonymous across everyone who posts. Brands can reply in threads, but they can never remove, hide or rank posts.</div>
+    <div class="src" id="src"><button type="button" onclick="this.parentElement.classList.toggle('on')">Show what gets saved</button><pre id="payload"></pre></div>
+  </aside>
+</div>
+
+<script>
+/* ---------- logo ---------- */
+const LOGO=[[0,0,'#65E57E'],[0,1,'#5ACCB6'],[-2,1,'#C47EA8'],[-2,2,'#F27A5D'],[-1,2,'#A586D1'],[-3,3,'#F9AA31'],[-1,3,'#6AB0E5'],[-3,4,'#F5E322']];
+(function(){const P=26,RH=P*Math.sqrt(3)/2,W=24,H=W*2/Math.sqrt(3);const pts=LOGO.map(([q,r])=>({x:P*(q+r/2),y:RH*r}));const mx=Math.min(...pts.map(p=>p.x)),my=Math.min(...pts.map(p=>p.y));const m=document.getElementById('mark');
+  m.setAttribute('viewBox',`${-W/2-1} ${-H/2-1} ${Math.max(...pts.map(p=>p.x))-mx+W+2} ${Math.max(...pts.map(p=>p.y))-my+H+2}`);
+  m.innerHTML=LOGO.map(([q,r,c],i)=>{const x=pts[i].x-mx,y=pts[i].y-my;return `<polygon points="${[[0,-H/2],[W/2,-H/4],[W/2,H/4],[0,H/2],[-W/2,H/4],[-W/2,-H/4]].map(([a,b])=>`${(x+a).toFixed(1)},${(y+b).toFixed(1)}`).join(' ')}" fill="${c}"/>`;}).join('');})();
+
+/* ---------- data (live: select from brands / brand_threads) ---------- */
+const BRANDS=[{id:'b1',name:'Atelier Okoro',claimed:true},{id:'b2',name:'Nori Knit Co.',claimed:true},{id:'b3',name:'Slow Hem',claimed:true},{id:'b4',name:'Fieldline',claimed:false},{id:'b5',name:'Maison Ebi',claimed:false}];
+const THREADS=[
+ {id:'t01',brand:'b1',product:'Pleated wide trouser',cat:'Bottoms',posts:28},{id:'t02',brand:'b1',product:'Boxy wool overshirt',cat:'Outerwear',posts:23},{id:'t03',brand:'b1',product:'Linen camp shirt',cat:'Tops',posts:13},
+ {id:'t04',brand:'b2',product:'Merino crew neck',cat:'Knitwear',posts:20},{id:'t05',brand:'b2',product:'Chunky cardigan',cat:'Knitwear',posts:15},
+ {id:'t06',brand:'b4',product:'Leather loafer mule',cat:'Footwear',posts:14},{id:'t07',brand:'b4',product:'Canvas court sneaker',cat:'Footwear',posts:11},
+ {id:'t08',brand:'b3',product:'Straight leg denim',cat:'Bottoms',posts:24},{id:'t09',brand:'b3',product:'Wide leg chino',cat:'Bottoms',posts:9},
+ {id:'t10',brand:'b5',product:'Cropped trench',cat:'Outerwear',posts:17}];
+const norm=s=>s.toLowerCase().replace(/[^a-z0-9]/g,'');
+
+/* ---------- state ---------- */
+const S={stage:null,brand:null,brandNew:null,cat:'',product:'',link:'',dupDismissed:false,
+  concerns:[],size:'',height:'',fit:null,fitDetails:[],value:null,kept:null,wear:null,holding:null,body:'',receipt:null};
+const $=id=>document.getElementById(id);
+
+/* ---------- step 1 ---------- */
+document.querySelectorAll('.stage').forEach(b=>b.onclick=()=>{
+  S.stage=b.dataset.v;document.querySelectorAll('.stage').forEach(x=>x.classList.toggle('on',x===b));
+  ['s2','s3','s4'].forEach(id=>$(id).classList.remove('off'));
+  S.concerns=[];S.fit=null;S.fitDetails=[];S.value=null;S.kept=null;S.wear=null;S.holding=null;
+  renderQs();update();
+});
+
+/* ---------- step 2: brand autocomplete ---------- */
+const brandIn=$('brand'),brandSug=$('brandSug');
+brandIn.addEventListener('input',()=>{
+  const v=brandIn.value.trim();S.brand=null;S.brandNew=null;
+  if(!v){brandSug.classList.remove('on');$('brandHint').textContent='';update();return;}
+  const hits=BRANDS.filter(b=>norm(b.name).includes(norm(v)));
+  const exact=hits.find(b=>norm(b.name)===norm(v));
+  brandSug.innerHTML=hits.map(b=>`<button type="button" data-id="${b.id}">${b.name}${b.claimed?'<small><i></i>Listening</small>':''}</button>`).join('')+
+    (exact?'':`<button type="button" data-new="1" class="new">Add “${v.replace(/[<>"]/g,'')}” as a new brand</button>`);
+  brandSug.classList.add('on');
+  if(exact)pickBrand(exact,false);
+  update();
+});
+brandSug.addEventListener('mousedown',e=>{e.preventDefault();const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.new){S.brandNew=brandIn.value.trim();S.brand=null;$('brandHint').className='hint';$('brandHint').textContent="New brand. It'll appear in Brand Threads once you post.";brandSug.classList.remove('on');}
+  else pickBrand(BRANDS.find(x=>x.id===b.dataset.id),true);
+  checkDup();update();});
+brandIn.addEventListener('blur',()=>setTimeout(()=>brandSug.classList.remove('on'),120));
+function pickBrand(b,close){S.brand=b;S.brandNew=null;brandIn.value=b.name;if(close)brandSug.classList.remove('on');
+  $('brandHint').className='hint'+(b.claimed?' good':'');$('brandHint').textContent=b.claimed?`${b.name} is listening on Hued and may reply to your thread.`:`${b.name} hasn't joined Hued yet.`;}
+$('cat').onchange=e=>{S.cat=e.target.value;update();};
+$('link').oninput=e=>{S.link=e.target.value.trim();update();};
+
+/* product: suggest existing threads for this brand, and catch duplicates */
+const prodIn=$('product'),prodSug=$('prodSug');
+prodIn.addEventListener('input',()=>{S.product=prodIn.value.trim();S.dupDismissed=false;
+  const list=S.brand?THREADS.filter(t=>t.brand===S.brand.id&&norm(t.product).includes(norm(S.product))&&S.product):[];
+  prodSug.innerHTML=list.map(t=>`<button type="button" data-t="${t.id}">${t.product}<small style="color:var(--mute)">${t.posts} posts</small></button>`).join('');
+  prodSug.classList.toggle('on',list.length>0);checkDup();update();});
+prodSug.addEventListener('mousedown',e=>{e.preventDefault();const b=e.target.closest('button');if(!b)return;const t=THREADS.find(x=>x.id===b.dataset.t);prodIn.value=t.product;S.product=t.product;prodSug.classList.remove('on');checkDup();update();});
+prodIn.addEventListener('blur',()=>setTimeout(()=>prodSug.classList.remove('on'),120));
+function checkDup(){
+  const t=S.brand&&S.product&&!S.dupDismissed?THREADS.find(x=>x.brand===S.brand.id&&norm(x.product)===norm(S.product)):null;
+  $('dup').classList.toggle('on',!!t);
+  if(t){$('dupText').textContent=`“${t.product}” from ${S.brand.name} has ${t.posts} posts. Adding to it keeps every answer about this piece together.`;$('dupGo').href=`hued2_brand_threads.html?thread=${t.id}&stage=${S.stage||''}`;if(!S.cat){S.cat=t.cat;$('cat').value=t.cat;}}
+  return t;
+}
+$('dupNew').onclick=()=>{S.dupDismissed=true;$('dup').classList.remove('on');update();};
+
+/* ---------- step 3: stage questions ---------- */
+function opts(key,list,{multi=false,big=false}={}){return `<div class="opts ${big?'big':''}" data-k="${key}" ${multi?'data-multi="1"':''}>${list.map(v=>`<button type="button" class="ang-s" data-v="${v}">${v}</button>`).join('')}</div>`;}
+function renderQs(){
+  const q=$('qs');
+  if(S.stage==='considering'){
+    $('s3h').textContent="What's holding you back?";$('s3s').textContent='Pick all that apply. This is the question brands most want answered.';
+    q.innerHTML=`<div class="q">${opts('concerns',['Fit','Quality','Value','Utility'],{multi:true,big:true})}</div>
+      <div class="q"><div class="ql">Your usual size <i>(optional, helps people answer)</i></div><div class="grid2"><input class="inp" id="size" placeholder="e.g. M"><input class="inp" id="height" placeholder="Height, e.g. 5'6"></div></div>`;
+    $('s4s').textContent='Ask your question. The more specific, the better the answers.';$('body').placeholder="e.g. I'm between sizes and usually struggle with wide legs on my frame. Which way did people go?";
+  }
+  if(S.stage==='bought'){
+    $('s3h').textContent='How did it turn out?';$('s3s').textContent='Tap what applies. These become the summary on the thread card.';
+    q.innerHTML=`<div class="q"><div class="ql">Size you bought, and your height <i>(height optional)</i></div><div class="grid2"><input class="inp" id="size" placeholder="e.g. S"><input class="inp" id="height" placeholder="e.g. 5'4"></div></div>
+      <div class="q"><div class="ql">Overall fit</div>${opts('fit',['Runs small','True to size','Runs large','Runs long'])}</div>
+      <div class="q"><div class="ql">Fit details <i>(optional, pick any)</i></div>${opts('fitDetails',['Size up','Size down','Inseam long','Inseam short','Waist big','Waist small','Fabric good','Fabric thin'],{multi:true})}</div>
+      <div class="q"><div class="ql">Worth the price?</div>${opts('value',['Worth it','Worth it on sale','Not worth full price'])}</div>
+      <div class="q"><div class="ql">Did you keep it?</div>${opts('kept',['Kept it','Returned it'])}</div>`;
+    $('s4s').textContent='First impressions. How does it fit, feel and look in person?';$('body').placeholder='e.g. Runs slightly long in the leg, had to hem mine. Fabric feels solid for the price.';
+  }
+  if(S.stage==='wearing'){
+    $('s3h').textContent='How is it holding up?';$('s3s').textContent='The answers only you can give after real wear.';
+    q.innerHTML=`<div class="q"><div class="ql">Size you bought <i>(optional)</i></div><div class="grid2"><input class="inp" id="size" placeholder="e.g. S"><input class="inp" id="height" placeholder="Height, e.g. 5'4"></div></div>
+      <div class="q"><div class="ql">Times worn</div>${opts('wear',['1 to 5','5 to 15','15+'])}</div>
+      <div class="q"><div class="ql">Condition</div>${opts('holding',['Holding up','Showing wear','Better with time'])}</div>
+      <div class="q"><div class="ql">Still worth it?</div>${opts('value',['Worth it','Worth it on sale','Not worth full price'])}</div>`;
+    $('s4s').textContent='How has it worn, washed and aged?';$('body').placeholder='e.g. Washed it ten times, no pilling yet. Softer now than when it arrived.';
+  }
+  $('size').oninput=e=>{S.size=e.target.value.trim();update();};$('height').oninput=e=>{S.height=e.target.value.trim();update();};
+  $('receipt').hidden=S.stage==='considering';
+}
+$('qs').addEventListener('click',e=>{const b=e.target.closest('.opts button');if(!b)return;const g=b.parentElement,k=g.dataset.k,v=b.dataset.v;
+  if(g.dataset.multi){b.classList.toggle('on');S[k]=[...g.querySelectorAll('.on')].map(x=>x.dataset.v);}
+  else{const on=!b.classList.contains('on');g.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b&&on));S[k]=on?v:null;}
+  update();});
+
+/* ---------- step 4 ---------- */
+$('body').oninput=e=>{S.body=e.target.value;$('cnt').textContent=S.body.length;update();};
+$('rFile').onchange=e=>{const f=e.target.files[0];if(!f)return;S.receipt=f.name;$('receipt').classList.add('done');$('rText').textContent=`${f.name} added. Our team will review it privately.`;update();};
+
+/* ---------- validation + side summary ---------- */
+function missing(){
+  const m=[];
+  if(!S.stage)return ['where you are with it'];
+  if(!S.brand&&!S.brandNew)m.push('a brand');
+  if(!S.cat)m.push('a category');
+  if(!S.product)m.push('the product name');
+  if(S.stage==='considering'&&!S.concerns.length)m.push("what's holding you back");
+  if(S.stage==='bought'){if(!S.size)m.push('the size you bought');if(!S.fit)m.push('overall fit');if(!S.kept)m.push('whether you kept it');}
+  if(S.stage==='wearing'){if(!S.wear)m.push('times worn');if(!S.holding)m.push('condition');}
+  if(S.body.trim().length<20)m.push('a few words (20+ characters)');
+  return m;
+}
+const STAGE_L={considering:'Thinking about it',bought:'Bought it',wearing:'Wearing update'};
+function update(){
+  const m=missing(),dup=checkDup();
+  $('post').disabled=m.length>0||!!dup;
+  $('missing').textContent=dup?'Add to the existing thread, or confirm it\'s a different piece.':m.length?'Still needed: '+m.join(', ')+'.':'Ready to post.';
+  const row=(l,v)=>`<div><span>${l}</span><b class="${v?'':'empty'}">${v||'Not yet'}</b></div>`;
+  let rows=row('Stage',STAGE_L[S.stage])+row('Piece',S.product&&(S.brand||S.brandNew)?`${S.product} · ${S.brand?S.brand.name:S.brandNew}`:'');
+  if(S.stage==='considering')rows+=row('Unsure about',S.concerns.join(', '));
+  if(S.stage==='bought')rows+=row('Size',[S.size,S.height].filter(Boolean).join(' · '))+row('Fit',[S.fit,...S.fitDetails].filter(Boolean).join(', '))+row('Value',S.value)+row('Kept',S.kept);
+  if(S.stage==='wearing')rows+=row('Worn',S.wear?S.wear+' times':'')+row('Condition',S.holding)+row('Value',S.value);
+  $('cap').innerHTML=rows;
+  $('payload').textContent=JSON.stringify(payload(),null,2);
+}
+function payload(){
+  const kept=S.kept==null?null:S.kept==='Kept it';
+  return {
+    brand:S.brand?{id:S.brand.id}:{insert:{name:S.brandNew,is_claimed:false}},
+    brand_threads:{product_name:S.product,category:S.cat,product_url:S.link||null},
+    thread_comments:{stage:S.stage,concerns:S.concerns.map(c=>c.toLowerCase()),size:S.size||null,height:S.height||null,
+      fit:S.fit,fit_details:S.fitDetails,value_feel:S.value,kept,wear_band:S.wear,holding_up:S.holding,comment_text:S.body.trim()},
+    receipts:S.receipt?{file:S.receipt,status:'pending_review'}:null
+  };
+}
+
+/* ---------- submit (live: auth check, then insert brand?/thread/comment/receipt) ---------- */
+$('form').onsubmit=e=>{e.preventDefault();if($('post').disabled)return;
+  $('form').style.display='none';$('success').classList.add('on');
+  const who=S.brand?S.brand.name:S.brandNew;
+  $('okP').textContent=S.stage==='considering'?`People who bought the ${S.product} can now answer you. ${S.brand&&S.brand.claimed?who+' is listening and may reply too.':''}`:
+    `Your answers now show on the ${S.product} thread card for the next buyer.${S.receipt?' Your receipt is with our team for review.':''}`;
+  window.scrollTo({top:0,behavior:'smooth'});};
+update();
+</script>
+</body>
+</html>
