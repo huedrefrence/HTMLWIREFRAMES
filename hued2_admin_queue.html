@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hued — Admin Review Queue</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --bg:#F5F0E8; --ink:#2C1810; --muted:#8C7B6E; --faint:#B09880; --line:#E8E0D5;
+      --accent:#C85C3A; --ok:#1D9E75; --ok-bg:#E1F5EE; --ok-ink:#085041;
+      --warn-bg:#FDF1DC; --warn-ink:#8A5A00; --bad-bg:#FBE9E3; --bad-ink:#9C3B1E; --chip:#EDE8E0;
+    }
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);}
+    button{font-family:inherit;}
+    .back{font-size:11px;color:var(--accent);text-decoration:none;display:inline-block;margin:12px 40px;font-weight:500;}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 40px;background:var(--ink);}
+    .logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--bg);}
+    .badge{font-size:10px;background:var(--accent);color:#FFF;padding:3px 10px;border-radius:100px;margin-left:10px;font-weight:500;}
+    .who{font-size:12px;color:#C9B9A8;display:flex;align-items:center;gap:12px;}
+    .who b{color:var(--bg);font-weight:500;}
+    .lock{font-size:11px;color:#C9B9A8;background:none;border:0.5px solid #6B5446;border-radius:100px;padding:4px 12px;cursor:pointer;}
+    .page{padding:28px 40px 60px;}
+    .h1{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;}
+    .sub{font-size:12px;color:var(--muted);margin-top:4px;font-weight:300;}
+
+    /* change notes */
+    details.notes{margin:16px 0 20px;background:#FFFBF2;border:0.5px dashed #D9C6A8;border-radius:10px;padding:10px 14px;font-size:11.5px;color:var(--muted);}
+    details.notes summary{cursor:pointer;font-weight:500;color:var(--ink);}
+    details.notes ul{margin:8px 0 2px 18px;line-height:1.6;}
+
+    .tabs{display:flex;border-bottom:0.5px solid var(--line);margin-bottom:16px;flex-wrap:wrap;}
+    .tab{padding:10px 18px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;}
+    .tab.on{color:var(--accent);border-bottom-color:var(--accent);}
+    .tab-count{font-size:9px;background:var(--chip);color:var(--muted);padding:1px 6px;border-radius:100px;margin-left:5px;}
+    .tab.on .tab-count{background:var(--accent);color:#FFF;}
+
+    .split{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start;}
+    @media (max-width:900px){.split{grid-template-columns:1fr;} .page{padding:20px;} .nav,.back{margin-left:0;padding-left:20px;padding-right:20px;}}
+
+    /* list */
+    .list{display:flex;flex-direction:column;gap:8px;}
+    .list-head{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px;}
+    .qi{background:#FFF;border-radius:12px;border:0.5px solid var(--line);padding:12px 14px;display:grid;grid-template-columns:52px 1fr;gap:12px;cursor:pointer;text-align:left;width:100%;transition:border-color .15s, box-shadow .15s;}
+    .qi:hover{border-color:#D8CBBB;}
+    .qi.sel{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);}
+    .thumb{width:52px;height:52px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:700;letter-spacing:.08em;color:var(--muted);}
+    .qi-meta{font-size:10px;color:var(--faint);margin-bottom:3px;}
+    .qi-title{font-family:'Playfair Display',serif;font-size:13.5px;font-weight:500;line-height:1.3;margin-bottom:4px;}
+    .qi-foot{font-size:10px;color:var(--muted);display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+    .flag{font-size:9px;padding:2px 7px;border-radius:100px;}
+    .flag.warn{background:var(--warn-bg);color:var(--warn-ink);}
+    .flag.bad{background:var(--bad-bg);color:var(--bad-ink);}
+    .flag.ok{background:var(--ok-bg);color:var(--ok-ink);}
+    .empty{text-align:center;padding:48px 20px;color:var(--faint);font-size:13px;background:#FFF;border-radius:12px;border:0.5px dashed var(--line);}
+
+    /* detail */
+    .detail{background:#FFF;border-radius:14px;border:0.5px solid var(--line);overflow:hidden;}
+    .d-grid{display:grid;grid-template-columns:1fr 300px;}
+    @media (max-width:1150px){.d-grid{grid-template-columns:1fr;}}
+    .d-main{padding:22px 24px;border-right:0.5px solid var(--line);min-width:0;}
+    .d-side{padding:22px 20px;background:#FCFAF6;}
+    @media (min-width:1151px){.d-side-inner{position:sticky;top:16px;}}
+    .crumb{font-size:10.5px;color:var(--faint);margin-bottom:6px;}
+    .d-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;line-height:1.25;margin-bottom:6px;}
+    .d-desc{font-size:12.5px;color:var(--muted);line-height:1.55;margin-bottom:16px;}
+    .section{margin-top:22px;}
+    .s-label{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;font-weight:500;}
+
+    .player{position:relative;aspect-ratio:16/9;background:#1E140F;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+    .player .play{width:58px;height:58px;border-radius:50%;background:rgba(245,240,232,.92);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+    .player .play::after{content:"";border-left:16px solid var(--ink);border-top:10px solid transparent;border-bottom:10px solid transparent;margin-left:4px;}
+    .player.playing .play::after{border:none;width:14px;height:16px;margin:0;background:linear-gradient(90deg,var(--ink) 0 35%,transparent 35% 65%,var(--ink) 65%);}
+    .player .bar{position:absolute;left:12px;right:12px;bottom:12px;height:3px;background:rgba(255,255,255,.2);border-radius:3px;}
+    .player .bar i{display:block;height:100%;width:0;background:var(--accent);border-radius:3px;transition:width .3s linear;}
+    .player .cap{position:absolute;left:14px;top:12px;font-size:10px;color:#C9B9A8;}
+    .facts{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:8px;}
+    .facts b{color:var(--ink);font-weight:500;}
+
+    .link-card{border:0.5px solid var(--line);border-radius:10px;overflow:hidden;display:grid;grid-template-columns:160px 1fr;}
+    @media (max-width:600px){.link-card{grid-template-columns:1fr;}}
+    .link-thumb{min-height:120px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--ink);}
+    .link-body{padding:14px 16px;}
+    .platform{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+    .link-title{font-family:'Playfair Display',serif;font-size:15px;margin:4px 0 6px;}
+    .link-url{font-size:11px;color:var(--muted);word-break:break-all;}
+    .open-link{display:inline-block;margin-top:10px;font-size:11px;color:var(--accent);font-weight:500;text-decoration:none;}
+    .banner{border-radius:10px;padding:10px 12px;font-size:11.5px;line-height:1.45;margin-bottom:10px;}
+    .banner.bad{background:var(--bad-bg);color:var(--bad-ink);}
+    .banner.warn{background:var(--warn-bg);color:var(--warn-ink);}
+    .banner.ok{background:var(--ok-bg);color:var(--ok-ink);}
+
+    .article{font-size:13.5px;line-height:1.75;color:#3B2A20;max-height:420px;overflow:auto;padding:16px 18px;border:0.5px solid var(--line);border-radius:10px;background:#FFFDF9;}
+    .article p{margin-bottom:12px;}
+    .article h4{font-family:'Playfair Display',serif;font-size:15px;margin:6px 0 8px;}
+
+    .kv{display:grid;grid-template-columns:120px 1fr;gap:8px 12px;font-size:12px;}
+    .kv dt{color:var(--faint);}
+    .kv dd{color:var(--ink);}
+    .tag{display:inline-block;font-size:10.5px;background:var(--chip);color:var(--muted);padding:2px 8px;border-radius:100px;margin:0 4px 4px 0;}
+    .submitter{display:flex;align-items:center;gap:12px;}
+    .avatar{width:36px;height:36px;border-radius:50%;background:#EADFD2;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:var(--ink);}
+    .handle{font-size:13px;font-weight:500;}
+    .hist{list-style:none;font-size:11.5px;color:var(--muted);}
+    .hist li{padding:8px 0;border-top:0.5px solid var(--line);display:flex;justify-content:space-between;gap:12px;}
+    .hist li:first-child{border-top:none;}
+    .hist b{color:var(--ink);font-weight:500;}
+
+    /* decision panel */
+    .dp-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;margin-bottom:4px;}
+    .dp-sub{font-size:11px;color:var(--muted);margin-bottom:16px;line-height:1.45;}
+    .check{display:flex;gap:10px;align-items:flex-start;background:#FFF;border:0.5px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;cursor:pointer;}
+    .check input{margin-top:2px;accent-color:var(--ok);width:15px;height:15px;}
+    .check .c-main{font-size:12px;font-weight:500;}
+    .check .c-hint{font-size:10.5px;color:var(--muted);margin-top:2px;line-height:1.4;}
+    .field{margin:14px 0;}
+    .field label{display:block;font-size:10.5px;color:var(--faint);margin-bottom:5px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;}
+    select,textarea{width:100%;font-family:inherit;font-size:12px;border:0.5px solid #D8CBBB;border-radius:8px;padding:8px 10px;background:#FFF;color:var(--ink);}
+    textarea{min-height:64px;resize:vertical;}
+    .changed{font-size:10.5px;color:var(--warn-ink);margin-top:5px;}
+    .btns{display:flex;gap:8px;margin-top:16px;}
+    .btn{flex:1;font-size:12px;font-weight:500;padding:10px 14px;border-radius:100px;cursor:pointer;border:none;}
+    .btn-approve{background:var(--ok);color:#FFF;}
+    .btn-approve:disabled{background:#BFD9CF;cursor:not-allowed;}
+    .btn-reject{background:transparent;color:var(--accent);border:0.5px solid var(--accent);}
+    .btn-dark{background:var(--ink);color:var(--bg);}
+    .btn-ghost{background:transparent;color:var(--muted);border:0.5px solid #D8CBBB;}
+    .why-disabled{font-size:10.5px;color:var(--faint);margin-top:8px;text-align:center;}
+    .reasons{display:flex;flex-direction:column;gap:6px;}
+    .reason{display:flex;gap:8px;align-items:center;font-size:12px;background:#FFF;border:0.5px solid var(--line);border-radius:8px;padding:7px 10px;cursor:pointer;}
+    .reason input{accent-color:var(--accent);}
+    .preview{font-size:11px;color:var(--muted);background:#FFF;border:0.5px dashed #D8CBBB;border-radius:8px;padding:10px;margin-top:10px;line-height:1.5;}
+    .preview b{color:var(--ink);font-weight:500;}
+    .err{font-size:10.5px;color:var(--bad-ink);margin-top:6px;}
+    .status-pill{display:inline-block;font-size:10px;font-weight:500;padding:3px 10px;border-radius:100px;margin-bottom:10px;}
+    .status-pill.pending{background:var(--chip);color:var(--muted);}
+    .status-pill.approved{background:var(--ok-bg);color:var(--ok-ink);}
+    .status-pill.rejected,.status-pill.unpublished{background:var(--bad-bg);color:var(--bad-ink);}
+    .guide{display:block;font-size:10.5px;color:var(--accent);margin-top:14px;text-decoration:none;}
+
+    .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);font-size:12px;padding:10px 18px;border-radius:100px;opacity:0;transition:all .25s;pointer-events:none;}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  </style>
+</head>
+<body>
+  <a class="back" href="index.html">← All Pages</a>
+  <div class="nav">
+    <div style="display:flex;align-items:center;"><span class="logo">Hued</span><span class="badge">ADMIN</span></div>
+    <div class="who">Reviewing as <b id="reviewerName">Luw</b><button class="lock" onclick="toast('Session locked. Returning to the passcode screen.')">Lock</button></div>
+  </div>
+
+  <div class="page">
+    <div class="h1">Content Review Queue</div>
+    <div class="sub">Open a submission, check the full content, then make the call. Every decision is logged and the creator is emailed.</div>
+
+    <details class="notes">
+      <summary>What Changed From v1</summary>
+      <ul>
+        <li>Approve and Reject moved off the cards. Decisions happen in the detail view, after seeing the actual content.</li>
+        <li>Detail view shows the full submission per format: video player, social link preview with link health, full article text.</li>
+        <li>The two checks are reviewer checkboxes. Approve stays disabled until both are checked.</li>
+        <li>Reviewers can fix the category before approving. The original category is kept and shown.</li>
+        <li>Reject requires a reason (note required for “Other”) and previews what the creator will see.</li>
+        <li>New Unpublished tab and an Unpublish action on approved items, for takedown and DMCA requests.</li>
+        <li>Tab counts come from one source, so they always match. Stats row removed.</li>
+        <li>Shows rights confirmation, submitter history, and an audit log of who decided what.</li>
+        <li>Reviewer name is set at unlock and shown in the header (replaces hard-coded name).</li>
+      </ul>
+    </details>
+
+    <div class="tabs" role="tablist" id="tabs"></div>
+
+    <div class="split">
+      <div>
+        <div class="list-head" id="listHead"></div>
+        <div class="list" id="list"></div>
+      </div>
+      <div id="detailWrap"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ---------- Mock data (mirrors the submission record in the spec) ----------
+    const NOW = new Date('2026-11-16T11:40:00');
+    const REVIEWER = 'Luw';
+    const CATEGORIES = ['Styling','Fit & Sizing','Sustainability','Wardrobe','Body Positivity','Occasion','Cultural Awareness'];
+    const CAT_STYLE = {
+      'Styling':['ST','#FAEEDA'], 'Fit & Sizing':['FS','#EEEDFE'], 'Sustainability':['SU','#E1F5EE'],
+      'Wardrobe':['WA','#FAECE7'], 'Body Positivity':['BP','#F3ECE4'], 'Occasion':['OC','#FDEFF3'], 'Cultural Awareness':['CA','#E7F0F8']
+    };
+    const FORMAT_LABEL = {video:'Video', social_link:'Social link', article:'Written article'};
+    const REASONS = [
+      {code:'off_topic', label:'Doesn’t fit the category'},
+      {code:'not_helpful', label:'Not helpful: no clear takeaway'},
+      {code:'promo', label:'Promotional or spam'},
+      {code:'sponsored', label:'Undisclosed sponsorship'},
+      {code:'quality', label:'Low quality (audio, video, broken link)'},
+      {code:'rights', label:'Not the submitter’s content'},
+      {code:'duplicate', label:'Duplicate'},
+      {code:'other', label:'Other'}
+    ];
+    const reasonLabel = c => (REASONS.find(r=>r.code===c)||{}).label || c;
+
+    const items = [
+      {id:'s1', format:'video', status:'pending', title:'How to dress for your frame, not your size',
+       desc:'Sizing labels mean nothing. Here’s how to use proportions to build outfits that actually work for your body.',
+       category:'Styling', tags:['proportions','body shape','outfits'], handle:'mayastyles', stats:{approved:3, rejected:0}, rights:true,
+       submittedAt:'2026-11-16T09:41', video:{duration:'4:12', size:'186 MB', mime:'MP4'}, history:[]},
+      {id:'s2', format:'social_link', status:'pending', title:'The real cost of fast fashion nobody talks about',
+       desc:'What “cost per wear” actually means and why buying better is buying less.',
+       category:'Sustainability', tags:['cost per wear','fast fashion'], handle:'ecothreads', stats:{approved:7, rejected:1}, rights:true,
+       submittedAt:'2026-11-16T06:30', link:{platform:'TikTok', url:'https://www.tiktok.com/@ecothreads/video/7300000000000000000', pulledTitle:'cost per wear is the only number that matters ♻️', status:'ok'}, history:[]},
+      {id:'s3', format:'article', status:'pending', title:'Why your clothes never fit right — and how to fix it',
+       desc:'An honest guide to understanding fit across brands, cuts, and body types.',
+       category:'Fit & Sizing', tags:['fit','tailoring','wardrobe basics'], handle:'fitfirst', stats:{approved:0, rejected:0}, rights:true,
+       submittedAt:'2026-11-15T10:05',
+       article:[
+         ['h','Sizes aren’t a standard'],
+         ['p','A medium at one brand can be a small at another. Brands cut for an imagined “fit model,” and if your proportions differ from theirs, the size on the label tells you very little.'],
+         ['p','Start by learning three measurements: shoulders, waist and inseam. Compare them to each brand’s size chart rather than the letter on the tag.'],
+         ['h','Fix it with a tailor, not a new size'],
+         ['p','Buy for the widest part of your body and tailor the rest. Taking in a waist or hemming trousers usually costs less than replacing the piece, and it’s the fastest way to make cheaper clothes look expensive.'],
+         ['h','Build a fit cheat sheet'],
+         ['p','Keep a note of the brands and sizes that work for you. Over time you’ll spend less on returns and buy fewer pieces that sit unworn in your wardrobe.']
+       ], history:[]},
+      {id:'s4', format:'video', status:'pending', title:'Building a 20-piece capsule that actually works',
+       desc:'A practical approach to wardrobe reduction without sacrificing versatility.',
+       category:'Wardrobe', tags:['capsule','minimalism'], handle:'lessismore_wardrobe', stats:{approved:12, rejected:0}, rights:true,
+       submittedAt:'2026-11-15T08:12', video:{duration:'9:48', size:'412 MB', mime:'MOV'}, history:[]},
+      {id:'s5', format:'social_link', status:'pending', title:'5 outfits for a winter wedding',
+       desc:'',
+       category:'Occasion', tags:[], handle:'stylebyjo', stats:{approved:0, rejected:0}, rights:false,
+       submittedAt:'2026-11-14T19:50', link:{platform:'Instagram', url:'https://www.instagram.com/p/C0ffeeXyz/', pulledTitle:null, status:'broken'}, history:[]},
+      {id:'s6', format:'article', status:'approved', title:'Dressing for your undertone, explained',
+       desc:'Warm, cool or neutral: a simple test, and what to wear for each.',
+       category:'Styling', tags:['color','undertone'], handle:'huedbyana', stats:{approved:5, rejected:0}, rights:true,
+       submittedAt:'2026-11-12T14:00', publishedAt:'2026-11-13T09:15',
+       article:[['p','Look at the veins on your wrist in daylight. Green suggests warm, blue or purple suggests cool, and a mix suggests neutral.'],['p','Warm undertones tend to suit earthy tones like rust and olive; cool undertones suit jewel tones and crisp whites.']],
+       checks:{category:true, helpful:true},
+       history:[{at:'2026-11-12T14:00', who:'@huedbyana', what:'Submitted'},{at:'2026-11-13T09:15', who:'Krish', what:'Approved, creator emailed'}]},
+      {id:'s7', format:'social_link', status:'rejected', title:'USE MY CODE FOR 40% OFF',
+       desc:'Best haul of the year',
+       category:'Styling', tags:['haul'], handle:'dealz4u', stats:{approved:0, rejected:2}, rights:true,
+       submittedAt:'2026-11-11T22:10', link:{platform:'YouTube', url:'https://youtube.com/watch?v=xxxx', pulledTitle:'MASSIVE HAUL + DISCOUNT CODE', status:'ok'},
+       reason:'promo', note:'This reads as an ad for a discount code rather than advice.',
+       history:[{at:'2026-11-11T22:10', who:'@dealz4u', what:'Submitted'},{at:'2026-11-12T10:02', who:'Luw', what:'Rejected: Promotional or spam'}]}
+    ];
+
+    // ---------- State ----------
+    let tab = 'pending';
+    let selectedId = null;
+    let ui = {}; // per-item transient UI: {checks, category, mode, reason, note, error}
+
+    // ---------- Helpers ----------
+    const $ = s => document.querySelector(s);
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    function ago(iso){
+      const m = Math.round((NOW - new Date(iso))/60000);
+      if(m < 60) return m + 'm ago';
+      const h = Math.round(m/60); if(h < 24) return h + 'h ago';
+      return Math.round(h/24) + 'd ago';
+    }
+    function fmt(iso){
+      const d = new Date(iso);
+      return d.toLocaleDateString('en-US',{month:'short', day:'numeric'}) + ', ' + d.toLocaleTimeString('en-US',{hour:'numeric', minute:'2-digit'});
+    }
+    function nowIso(){ return new Date().toISOString(); }
+    function stateFor(it){
+      if(!ui[it.id]) ui[it.id] = {checks:{category:false, helpful:false}, category:it.category, mode:'decide', reason:null, note:'', error:''};
+      return ui[it.id];
+    }
+    function inTab(t){
+      const list = items.filter(i => i.status === t);
+      if(t === 'pending') return list.sort((a,b)=> new Date(a.submittedAt) - new Date(b.submittedAt)); // oldest first
+      return list.sort((a,b)=> new Date(lastAt(b)) - new Date(lastAt(a)));
+    }
+    const lastAt = i => (i.history.at(-1)||{}).at || i.submittedAt;
+
+    // ---------- Render: tabs ----------
+    function renderTabs(){
+      const tabs = [['pending','Pending Review'],['approved','Approved'],['rejected','Rejected'],['unpublished','Unpublished']];
+      $('#tabs').innerHTML = tabs.map(([k,l]) =>
+        `<button class="tab ${tab===k?'on':''}" role="tab" aria-selected="${tab===k}" onclick="setTab('${k}')">${l}<span class="tab-count">${items.filter(i=>i.status===k).length}</span></button>`
+      ).join('');
+    }
+    function setTab(t){ tab = t; const l = inTab(t); selectedId = l.length ? l[0].id : null; render(); }
+
+    // ---------- Render: list ----------
+    function renderList(){
+      const list = inTab(tab);
+      $('#listHead').textContent = tab === 'pending' ? 'Oldest first' : 'Most recent decision first';
+      if(!list.length){
+        const msg = {pending:'No pending submissions. You’re all caught up.', approved:'Nothing approved yet.', rejected:'Nothing rejected.', unpublished:'Nothing has been unpublished.'}[tab];
+        $('#list').innerHTML = `<div class="empty">${msg}</div>`;
+        return;
+      }
+      $('#list').innerHTML = list.map(it => {
+        const [icon,bg] = CAT_STYLE[it.category] || ['•','#EEE'];
+        const flags = [];
+        if(it.format==='social_link' && it.link.status==='broken') flags.push('<span class="flag bad">Broken link</span>');
+        if(!it.rights) flags.push('<span class="flag warn">Rights not confirmed</span>');
+        if(it.stats.approved + it.stats.rejected === 0) flags.push('<span class="flag ok">First submission</span>');
+        const platform = it.format==='social_link' ? ` (${it.link.platform})` : '';
+        return `<button class="qi ${it.id===selectedId?'sel':''}" onclick="select('${it.id}')" aria-label="Open ${esc(it.title)}">
+          <div class="thumb" style="background:${bg}">${{video:'VIDEO', social_link:'LINK', article:'TEXT'}[it.format]}</div>
+          <div>
+            <div class="qi-meta">${esc(it.category)} · ${FORMAT_LABEL[it.format]}${platform}</div>
+            <div class="qi-title">${esc(it.title)}</div>
+            <div class="qi-foot"><span>@${esc(it.handle)}</span><span title="${fmt(it.submittedAt)}">· ${ago(it.submittedAt)}</span>${flags.join('')}</div>
+          </div>
+        </button>`;
+      }).join('');
+    }
+    function select(id){ selectedId = id; render(); if(window.innerWidth < 900) $('#detailWrap').scrollIntoView({behavior:'smooth'}); }
+
+    // ---------- Render: content by format ----------
+    function renderContent(it){
+      if(it.format === 'video'){
+        return `<div class="player" id="player">
+            <span class="cap">Preview · streamed from private storage (signed URL)</span>
+            <button class="play" aria-label="Play video" onclick="togglePlay()"></button>
+            <div class="bar"><i id="prog"></i></div>
+          </div>
+          <div class="facts"><span>Length <b>${it.video.duration}</b></span><span>Size <b>${it.video.size}</b></span><span>Format <b>${it.video.mime}</b></span></div>`;
+      }
+      if(it.format === 'social_link'){
+        const L = it.link;
+        const [icon,bg] = CAT_STYLE[it.category] || ['•','#EEE'];
+        const banner = L.status === 'broken'
+          ? `<div class="banner bad"><b>Broken link.</b> We couldn’t load this page when it was submitted (404 or private). The title and thumbnail couldn’t be pulled. Open it yourself to confirm before deciding.</div>`
+          : `<div class="banner ok">Link checked and loads publicly. Title and thumbnail pulled from ${esc(L.platform)}.</div>`;
+        return `${banner}<div class="link-card">
+            <div class="link-thumb" style="background:${L.status==='broken'?'#EFE9E1':bg}">${L.status==='broken'?'<span style="color:var(--bad-ink);font-weight:500;letter-spacing:0">Unavailable</span>':esc(L.platform).toUpperCase()}</div>
+            <div class="link-body">
+              <div class="platform">${esc(L.platform)}</div>
+              <div class="link-title">${L.pulledTitle ? esc(L.pulledTitle) : '<span style="color:var(--faint)">No title could be pulled</span>'}</div>
+              <div class="link-url">${esc(L.url)}</div>
+              <a class="open-link" href="${esc(L.url)}" target="_blank" rel="noopener noreferrer">Open on ${esc(L.platform)} ↗</a>
+            </div>
+          </div>
+          <div class="facts"><span>Embed shown here when the platform supports it (TikTok, YouTube, Instagram)</span></div>`;
+      }
+      // article
+      const chars = it.article.reduce((n,[,t]) => n + t.length, 0);
+      return `<div class="article">${it.article.map(([k,t]) => k==='h' ? `<h4>${esc(t)}</h4>` : `<p>${esc(t)}</p>`).join('')}</div>
+        <div class="facts"><span>Length <b>${chars.toLocaleString()} characters</b></span><span>About <b>${Math.max(1, Math.round(chars/1100))} min</b> read</span></div>`;
+    }
+
+    // ---------- Render: decision panel ----------
+    function renderPanel(it){
+      const s = stateFor(it);
+      const pill = `<span class="status-pill ${it.status}">${it.status[0].toUpperCase()+it.status.slice(1)}</span>`;
+
+      if(it.status === 'pending'){
+        if(s.mode === 'reject') return pill + rejectForm(it, s, 'reject');
+        const both = s.checks.category && s.checks.helpful;
+        const changed = s.category !== it.category;
+        return `${pill}
+          <div class="dp-title">Your Decision</div>
+          <div class="dp-sub">Check both boxes after reviewing the content. The creator is emailed either way.</div>
+          <label class="check"><input type="checkbox" ${s.checks.category?'checked':''} onchange="setCheck('category', this.checked)">
+            <div><div class="c-main">Fits its category</div><div class="c-hint">The main topic matches the category below. Fix the category instead of rejecting if it’s only mislabeled.</div></div></label>
+          <label class="check"><input type="checkbox" ${s.checks.helpful?'checked':''} onchange="setCheck('helpful', this.checked)">
+            <div><div class="c-main">Helpful, not promotional</div><div class="c-hint">Has a clear takeaway someone can use. No ads, discount codes or undisclosed sponsorship.</div></div></label>
+          <div class="field"><label for="cat">Category</label>
+            <select id="cat" onchange="setCategory(this.value)">${CATEGORIES.map(c=>`<option ${c===s.category?'selected':''}>${c}</option>`).join('')}</select>
+            ${changed ? `<div class="changed">Changed from ${esc(it.category)}. The creator will see the new category.</div>` : ''}
+          </div>
+          <div class="btns">
+            <button class="btn btn-reject" onclick="setMode('reject')">Reject…</button>
+            <button class="btn btn-approve" ${both?'':'disabled'} onclick="approve()">Approve</button>
+          </div>
+          ${both ? '' : '<div class="why-disabled">Approve unlocks when both boxes are checked</div>'}
+          <a class="guide" href="hued2_reviewer_guidelines.html" target="_blank" rel="noopener">Reviewer Guidelines ↗</a>`;
+      }
+
+      if(it.status === 'approved'){
+        if(s.mode === 'unpublish') return pill + rejectForm(it, s, 'unpublish');
+        return `${pill}
+          <div class="dp-title">Live on the Knowledge Hub</div>
+          <div class="dp-sub">Published ${fmt(it.publishedAt)} under <b>${esc(it.category)}</b>.</div>
+          <div class="kv" style="font-size:11.5px;margin-bottom:6px;"><dt>Category check</dt><dd>✓ Passed</dd><dt>Helpfulness</dt><dd>✓ Passed</dd>${it.originalCategory?`<dt>Original</dt><dd>${esc(it.originalCategory)}</dd>`:''}</div>
+          <div class="btns"><button class="btn btn-ghost" onclick="setMode('unpublish')">Unpublish…</button></div>
+          <div class="why-disabled">Use for takedown requests or content that shouldn’t be live</div>`;
+      }
+
+      // rejected / unpublished: read only
+      return `${pill}
+        <div class="dp-title">${it.status==='rejected'?'Rejected':'Unpublished'}</div>
+        <div class="dp-sub">Reason sent to the creator:</div>
+        <div class="preview"><b>${esc(reasonLabel(it.reason))}</b>${it.note?`<br>“${esc(it.note)}”`:''}</div>
+        <div class="why-disabled" style="text-align:left;margin-top:12px;">No resubmission flow in the MVP.</div>`;
+    }
+
+    function rejectForm(it, s, kind){
+      const verb = kind === 'reject' ? 'Reject' : 'Unpublish';
+      const needNote = s.reason === 'other';
+      const intro = kind === 'reject'
+        ? 'Pick the main reason. The creator sees it in their email.'
+        : 'This removes the piece from the Knowledge Hub and emails the creator.';
+      return `<div class="dp-title">${verb} This Submission</div>
+        <div class="dp-sub">${intro}</div>
+        <div class="reasons" role="radiogroup">
+          ${REASONS.map(r => `<label class="reason"><input type="radio" name="reason" ${s.reason===r.code?'checked':''} onchange="setReason('${r.code}')"> ${r.label}${r.code==='other'?' <span style="color:var(--faint)">(note required)</span>':''}</label>`).join('')}
+        </div>
+        <div class="field"><label for="note">Note to creator ${needNote?'(required)':'(optional)'}</label>
+          <textarea id="note" placeholder="e.g. Great topic. Add one concrete tip and resubmit." oninput="setNote(this.value)">${esc(s.note)}</textarea></div>
+        ${s.reason ? `<div class="preview">The creator will see:<br><b>${esc(reasonLabel(s.reason))}</b>${s.note?`<br>“${esc(s.note)}”`:''}</div>` : ''}
+        ${s.error ? `<div class="err">${esc(s.error)}</div>` : ''}
+        <div class="btns">
+          <button class="btn btn-ghost" onclick="setMode('decide')">Cancel</button>
+          <button class="btn ${kind==='reject'?'btn-reject':'btn-dark'}" onclick="${kind==='reject'?'reject()':'unpublish()'}">Confirm ${verb}</button>
+        </div>`;
+    }
+
+    // ---------- Render: detail ----------
+    function renderDetail(){
+      const it = items.find(i => i.id === selectedId && i.status === tab);
+      if(!it){ $('#detailWrap').innerHTML = `<div class="empty">Select a submission to review it.</div>`; return; }
+      const initials = it.handle.slice(0,2).toUpperCase();
+      const total = it.stats.approved + it.stats.rejected;
+      const platform = it.format==='social_link' ? ` (${it.link.platform})` : '';
+      const history = [{at:it.submittedAt, who:'@'+it.handle, what:'Submitted'}, ...it.history.filter(h=>h.what!=='Submitted')];
+      $('#detailWrap').innerHTML = `<div class="detail"><div class="d-grid">
+        <div class="d-main">
+          <div class="crumb">${esc(it.category)} · ${FORMAT_LABEL[it.format]}${platform} · Submitted ${fmt(it.submittedAt)}</div>
+          <div class="d-title">${esc(it.title)}</div>
+          <div class="d-desc">${it.desc ? esc(it.desc) : '<span style="color:var(--faint)">No description provided.</span>'}</div>
+
+          <div class="section"><div class="s-label">Content</div>${renderContent(it)}</div>
+
+          <div class="section"><div class="s-label">Details</div>
+            <dl class="kv">
+              <dt>Category</dt><dd>${esc(it.category)}${it.originalCategory?` <span style="color:var(--warn-ink);font-size:11px">(changed from ${esc(it.originalCategory)})</span>`:''}</dd>
+              <dt>Tags</dt><dd>${it.tags.length ? it.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('') : '<span style="color:var(--faint)">None</span>'}</dd>
+              <dt>Format</dt><dd>${FORMAT_LABEL[it.format]}${platform}</dd>
+              <dt>Submitted</dt><dd>${fmt(it.submittedAt)} (${ago(it.submittedAt)})</dd>
+            </dl>
+          </div>
+
+          <div class="section"><div class="s-label">Submitter</div>
+            <div class="submitter"><div class="avatar">${initials}</div>
+              <div><div class="handle">@${esc(it.handle)}</div>
+              <div style="font-size:11px;color:var(--muted)">${total ? `${it.stats.approved} approved · ${it.stats.rejected} rejected before` : 'First submission'}</div></div>
+            </div>
+            <div class="banner ${it.rights?'ok':'warn'}" style="margin-top:12px;margin-bottom:0">${it.rights
+              ? '✓ Confirmed they created this or have permission to share it.'
+              : '<b>Rights not confirmed.</b> This was submitted before the rights checkbox existed, or it was left unchecked. Check that the content is theirs.'}</div>
+          </div>
+
+          <div class="section"><div class="s-label">History</div>
+            <ul class="hist">${history.map(h=>`<li><span><b>${esc(h.who)}</b> · ${esc(h.what)}</span><span>${fmt(h.at)}</span></li>`).join('')}</ul>
+          </div>
+        </div>
+        <aside class="d-side"><div class="d-side-inner">${renderPanel(it)}</div></aside>
+      </div></div>`;
+    }
+
+    // ---------- Actions ----------
+    const cur = () => items.find(i => i.id === selectedId);
+    function setCheck(k,v){ stateFor(cur()).checks[k] = v; renderDetail(); }
+    function setCategory(v){ stateFor(cur()).category = v; renderDetail(); }
+    function setMode(m){ const s = stateFor(cur()); s.mode = m; s.error=''; renderDetail(); }
+    function setReason(c){ const s = stateFor(cur()); s.reason = c; s.error=''; renderDetail(); }
+    function setNote(v){
+      const s = stateFor(cur()); s.note = v;
+      const p = document.querySelector('.preview');
+      if(p && s.reason) p.innerHTML = `The creator will see:<br><b>${esc(reasonLabel(s.reason))}</b>${v?`<br>“${esc(v)}”`:''}`;
+    }
+
+    function approve(){
+      const it = cur(), s = stateFor(it);
+      if(!(s.checks.category && s.checks.helpful)) return;
+      if(s.category !== it.category){ it.originalCategory = it.category; it.category = s.category; }
+      it.status = 'approved'; it.publishedAt = nowIso(); it.checks = {...s.checks};
+      it.history.push({at:nowIso(), who:REVIEWER, what: it.originalCategory ? `Approved as ${it.category}, creator emailed` : 'Approved, creator emailed'});
+      finish('Approved · live on the Knowledge Hub · creator emailed');
+    }
+    function validateReason(s){
+      if(!s.reason){ s.error = 'Pick a reason first.'; return false; }
+      if(s.reason === 'other' && !s.note.trim()){ s.error = 'Add a note. "Other" needs an explanation for the creator.'; return false; }
+      return true;
+    }
+    function reject(){
+      const it = cur(), s = stateFor(it);
+      if(!validateReason(s)) return renderDetail();
+      it.status = 'rejected'; it.reason = s.reason; it.note = s.note.trim();
+      it.history.push({at:nowIso(), who:REVIEWER, what:`Rejected: ${reasonLabel(s.reason)}`});
+      finish('Rejected · creator emailed with the reason');
+    }
+    function unpublish(){
+      const it = cur(), s = stateFor(it);
+      if(!validateReason(s)) return renderDetail();
+      it.status = 'unpublished'; it.reason = s.reason; it.note = s.note.trim();
+      it.history.push({at:nowIso(), who:REVIEWER, what:`Unpublished: ${reasonLabel(s.reason)}`});
+      finish('Unpublished · removed from the Knowledge Hub · creator emailed');
+    }
+    function finish(msg){
+      delete ui[selectedId];
+      toast(msg);
+      // jump to the next item in the same tab (oldest pending first)
+      const next = inTab(tab)[0];
+      selectedId = next ? next.id : null;
+      render();
+    }
+
+    let playTimer = null;
+    function togglePlay(){
+      const p = $('#player'), bar = $('#prog');
+      if(!p) return;
+      if(p.classList.toggle('playing')){
+        let w = parseFloat(bar.style.width) || 0;
+        playTimer = setInterval(()=>{ w = Math.min(100, w + 2); bar.style.width = w + '%'; if(w>=100){ clearInterval(playTimer); p.classList.remove('playing'); } }, 300);
+      } else clearInterval(playTimer);
+    }
+
+    let toastTimer = null;
+    function toast(msg){
+      const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+      clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove('show'), 2600);
+    }
+
+    function render(){ clearInterval(playTimer); renderTabs(); renderList(); renderDetail(); }
+    setTab('pending');
+  </script>
+</body>
+</html>

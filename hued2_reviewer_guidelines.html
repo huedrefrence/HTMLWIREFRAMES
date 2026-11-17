@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hued — Reviewer Guidelines</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --bg:#F5F0E8; --ink:#2C1810; --muted:#8C7B6E; --faint:#B09880; --line:#E8E0D5;
+      --accent:#C85C3A; --ok-bg:#E1F5EE; --ok-ink:#085041;
+      --warn-bg:#FDF1DC; --warn-ink:#8A5A00; --bad-bg:#FBE9E3; --bad-ink:#9C3B1E; --chip:#EDE8E0;
+    }
+    html{scroll-behavior:smooth;}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);}
+    a{color:var(--accent);}
+    .back{font-size:11px;color:var(--accent);text-decoration:none;display:inline-block;margin:12px 40px;font-weight:500;}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 40px;background:var(--ink);}
+    .logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--bg);}
+    .badge{font-size:10px;background:var(--accent);color:#FFF;padding:3px 10px;border-radius:100px;margin-left:10px;font-weight:500;}
+    .nav a{font-size:12px;color:#C9B9A8;text-decoration:none;}
+    .nav a:hover{color:var(--bg);}
+
+    .wrap{display:grid;grid-template-columns:220px 1fr;gap:40px;max-width:1100px;margin:0 auto;padding:32px 40px 80px;}
+    @media (max-width:860px){.wrap{grid-template-columns:1fr;padding:20px;} .toc{position:static!important;} .nav{padding-left:20px;padding-right:20px;} .back{margin-left:20px;}}
+    .toc{position:sticky;top:20px;align-self:start;font-size:12px;}
+    .toc .t-label{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;font-weight:500;}
+    .toc a{display:block;color:var(--muted);text-decoration:none;padding:6px 0 6px 12px;border-left:2px solid var(--line);}
+    .toc a:hover,.toc a.on{color:var(--accent);border-left-color:var(--accent);}
+
+    .h1{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;line-height:1.15;}
+    .lead{font-size:14px;color:var(--muted);margin-top:8px;line-height:1.6;max-width:640px;}
+    .meta{font-size:11px;color:var(--faint);margin-top:10px;}
+
+    section{margin-top:44px;scroll-margin-top:20px;}
+    section:first-of-type{margin-top:36px;}
+    h2{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:8px;}
+    p{font-size:13.5px;line-height:1.7;color:#3B2A20;margin-bottom:10px;max-width:720px;}
+    ul.plain{margin:6px 0 12px 18px;font-size:13.5px;line-height:1.75;color:#3B2A20;max-width:720px;}
+
+    .steps{counter-reset:s;list-style:none;margin-top:12px;}
+    .steps li{counter-increment:s;position:relative;padding:12px 14px 12px 52px;background:#FFF;border:0.5px solid var(--line);border-radius:10px;margin-bottom:8px;font-size:13px;line-height:1.55;}
+    .steps li::before{content:counter(s);position:absolute;left:14px;top:12px;width:24px;height:24px;border-radius:50%;background:var(--chip);color:var(--ink);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;}
+    .steps b{font-weight:500;}
+
+    .yesno{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+    @media (max-width:640px){.yesno{grid-template-columns:1fr;}}
+    .yn{border-radius:12px;padding:14px 16px;font-size:12.5px;line-height:1.6;}
+    .yn.yes{background:var(--ok-bg);color:var(--ok-ink);}
+    .yn.no{background:var(--bad-bg);color:var(--bad-ink);}
+    .yn .yn-h{font-weight:700;font-size:11px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px;}
+    .yn ul{margin-left:16px;}
+
+    table{width:100%;border-collapse:separate;border-spacing:0;background:#FFF;border:0.5px solid var(--line);border-radius:12px;overflow:hidden;font-size:12.5px;margin:12px 0;}
+    th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--faint);font-weight:500;padding:10px 14px;background:#FCFAF6;border-bottom:0.5px solid var(--line);}
+    td{padding:11px 14px;border-bottom:0.5px solid var(--line);vertical-align:top;line-height:1.55;color:#3B2A20;}
+    tr:last-child td{border-bottom:none;}
+    td:first-child{font-weight:500;color:var(--ink);white-space:nowrap;}
+    @media (max-width:640px){td:first-child{white-space:normal;}}
+    .note-ex{font-style:italic;color:var(--muted);}
+
+    .case{background:#FFF;border:0.5px solid var(--line);border-radius:12px;margin:8px 0;overflow:hidden;}
+    .case summary{cursor:pointer;padding:13px 16px;font-size:13px;font-weight:500;list-style:none;display:flex;justify-content:space-between;gap:12px;}
+    .case summary::-webkit-details-marker{display:none;}
+    .case summary::after{content:"+";color:var(--faint);font-size:16px;line-height:1;}
+    .case[open] summary::after{content:"\2212";}
+    .case .c-body{padding:0 16px 14px;font-size:12.5px;line-height:1.65;color:#3B2A20;}
+    .verdict{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;margin-right:8px;letter-spacing:.03em;}
+    .verdict.approve{background:var(--ok-bg);color:var(--ok-ink);}
+    .verdict.reject{background:var(--bad-bg);color:var(--bad-ink);}
+    .verdict.fix{background:var(--warn-bg);color:var(--warn-ink);}
+
+    .callout{background:var(--warn-bg);color:var(--warn-ink);border-radius:10px;padding:12px 14px;font-size:12.5px;line-height:1.6;margin:12px 0;max-width:720px;}
+    .draft{background:#FFFBF2;border:0.5px dashed #D9C6A8;border-radius:10px;padding:10px 14px;font-size:11.5px;color:var(--muted);margin-top:16px;max-width:720px;}
+  </style>
+</head>
+<body>
+  <a class="back" href="index.html">← All Pages</a>
+  <div class="nav">
+    <div style="display:flex;align-items:center;"><span class="logo">Hued</span><span class="badge">ADMIN</span></div>
+    <a href="hued2_admin_queue.html">← Back to Review Queue</a>
+  </div>
+
+  <div class="wrap">
+    <nav class="toc" aria-label="On this page">
+      <div class="t-label">On This Page</div>
+      <a href="#how">How to Review</a>
+      <a href="#category">Check 1: Category Fit</a>
+      <a href="#helpful">Check 2: Helpfulness</a>
+      <a href="#promo">Promotion and Sponsorship</a>
+      <a href="#rights">Rights and Ownership</a>
+      <a href="#format">Checks by Format</a>
+      <a href="#reasons">Rejection Reasons</a>
+      <a href="#notes">Writing the Note</a>
+      <a href="#cases">Tricky Cases</a>
+      <a href="#unpublish">Unpublishing</a>
+    </nav>
+
+    <main>
+      <div class="h1">Reviewer Guidelines</div>
+      <div class="lead">How to decide what goes live on the Hued Knowledge Hub. Read it before your first review, and come back to it when a submission is hard to call.</div>
+      <div class="meta">Draft v1 · Applies to Knowledge Hub submissions: video, social link and written article</div>
+
+      <section id="how">
+        <h2>How to Review</h2>
+        <p>Plan on about three minutes per submission. You can skim long videos, but always watch the first minute and at least one section from the middle.</p>
+        <ol class="steps">
+          <li><b>Open the full submission.</b> Don’t decide from the card. Watch the video, read the article or open the link.</li>
+          <li><b>Look at the flags first.</b> A broken link or missing rights confirmation can settle the decision on its own.</li>
+          <li><b>Check 1: Does it fit its category?</b> If it belongs in a different category, change the category. Don’t reject it for a wrong label.</li>
+          <li><b>Check 2: Is it helpful and not promotional?</b> Look for at least one concrete takeaway.</li>
+          <li><b>Decide.</b> If both checks pass, approve. If not, reject with the closest reason and add a note whenever it would help the creator improve.</li>
+        </ol>
+        <div class="callout"><b>Not sure?</b> Leave it in the queue and raise it in the team channel. A late decision is better than a wrong one, but nothing should wait more than 48 hours.</div>
+      </section>
+
+      <section id="category">
+        <h2>Check 1: Category Fit</h2>
+        <p>The main topic has to match the category. Most pieces touch more than one area, so go with what a viewer would say the piece is mostly about.</p>
+        <table>
+          <thead><tr><th>Category</th><th>Covers</th><th>Often Confused With</th></tr></thead>
+          <tbody>
+            <tr><td>Styling</td><td>Putting outfits together: proportions, color, combining pieces, dressing for your shape.</td><td>Occasion, when the outfit is for a specific event</td></tr>
+            <tr><td>Fit &amp; Sizing</td><td>How clothes should fit, size charts, measurements, tailoring and alterations, sizing differences between brands.</td><td>Wardrobe, when it’s about what to own rather than how it fits</td></tr>
+            <tr><td>Sustainability</td><td>Environmental and ethical impact, buying less or secondhand, cost per wear, care that makes clothes last.</td><td>Wardrobe, for capsules built for sustainability reasons</td></tr>
+            <tr><td>Wardrobe</td><td>What to own: capsules, essentials, building or editing a closet, organizing.</td><td>Styling, Sustainability</td></tr>
+            <tr><td>Body Positivity</td><td>Confidence, representation, dressing without body-shaming rules, adaptive clothing.</td><td>Styling, when it’s mostly outfit tips</td></tr>
+            <tr><td>Occasion</td><td>Dressing for a specific event or setting: weddings, interviews, travel, seasons, work.</td><td>Styling</td></tr>
+            <tr><td>Cultural Awareness</td><td>The history and meaning of garments and styles, traditional dress, appreciation versus appropriation.</td><td>Occasion, for cultural events</td></tr>
+          </tbody>
+        </table>
+        <p><b>Belongs in a different category?</b> Change the category in the decision panel and approve. The creator will see the new category.</p>
+        <p><b>Doesn’t fit any category?</b> If it’s about makeup, fitness or general lifestyle, for example, reject it as <i>Doesn’t fit the category</i> and tell the creator what Hued covers.</p>
+      </section>
+
+      <section id="helpful">
+        <h2>Check 2: Helpfulness</h2>
+        <p>A piece is helpful when it has at least one concrete takeaway: something the viewer can do, check or understand differently afterward.</p>
+        <div class="yesno">
+          <div class="yn yes"><div class="yn-h">Passes</div><ul>
+            <li>Explains why, not only what</li>
+            <li>Gives a step, a test, a rule of thumb or an example</li>
+            <li>Shares a personal experience with a lesson in it</li>
+            <li>Is short but makes the tip clear</li>
+          </ul></div>
+          <div class="yn no"><div class="yn-h">Doesn’t Pass</div><ul>
+            <li>A haul or outfit of the day with no advice</li>
+            <li>General encouragement with nothing to act on</li>
+            <li>A title the content doesn’t deliver on</li>
+            <li>Advice that’s factually wrong, such as care instructions that damage fabric</li>
+          </ul></div>
+        </div>
+        <p>Production quality only matters when it gets in the way: the audio can’t be understood, the video can’t be watched, or the article is hard to follow. A phone video with good advice passes.</p>
+      </section>
+
+      <section id="promo">
+        <h2>Promotion and Sponsorship</h2>
+        <p>Creators can mention brands and products. They can’t turn a piece into an ad, and they must disclose any paid or gifted relationship.</p>
+        <div class="yesno">
+          <div class="yn yes"><div class="yn-h">Allowed</div><ul>
+            <li>Naming the brands they’re wearing</li>
+            <li>Honest product comparisons</li>
+            <li>Sponsored content that’s clearly disclosed and still has a real takeaway</li>
+            <li>Linking to their own blog or channel</li>
+          </ul></div>
+          <div class="yn no"><div class="yn-h">Reject</div><ul>
+            <li>A discount code or affiliate link as the main point: <i>Promotional or spam</i></li>
+            <li>Selling their own product or service as the main point: <i>Promotional or spam</i></li>
+            <li>Clearly paid or gifted with no #ad, “sponsored” or “gifted” label: <i>Undisclosed sponsorship</i></li>
+          </ul></div>
+        </div>
+        <div class="callout">Hued works with brands, so readers need to trust that what they see isn’t paid for. If you suspect a brand relationship but can’t confirm it, reject as <i>Undisclosed sponsorship</i> and ask the creator to add a disclosure and resubmit.</div>
+      </section>
+
+      <section id="rights">
+        <h2>Rights and Ownership</h2>
+        <p>Creators confirm that they made the content or have permission to share it. When they didn’t, the queue shows a yellow <b>Rights not confirmed</b> flag.</p>
+        <ul class="plain">
+          <li><b>Social links:</b> The handle in the URL or on the post should match the submitter or clearly belong to them. If it’s someone else’s post, reject as <i>Not the submitter’s content</i>.</li>
+          <li><b>Videos and articles:</b> Watch for re-uploads that carry another creator’s watermark, and for text copied from elsewhere. If a paragraph reads like a magazine, search one of its sentences.</li>
+          <li><b>Rights not confirmed, nothing suspicious:</b> Approve if the handle matches. If you can’t tell, reject as <i>Not the submitter’s content</i> and ask them to confirm.</li>
+        </ul>
+      </section>
+
+      <section id="format">
+        <h2>Checks by Format</h2>
+        <table>
+          <thead><tr><th>Format</th><th>What to Check</th></tr></thead>
+          <tbody>
+            <tr><td>Video</td><td>Watch the first minute and skim the rest. The audio is clear, there’s no watermark from another platform or creator, and nothing unsafe or explicit is in frame.</td></tr>
+            <tr><td>Social Link</td><td>The link opens publicly and isn’t private or deleted. The handle matches the submitter. The post itself is the content, not a link to a shop or a link-in-bio page. If the link is broken, reject as <i>Low quality</i> and ask them to fix it and resubmit.</td></tr>
+            <tr><td>Written Article</td><td>Read it in full if it’s under about 1,000 words. For longer pieces, skim the headings and read two sections. It isn’t copied from elsewhere and reads clearly without heavy editing.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="reasons">
+        <h2>Rejection Reasons</h2>
+        <p>Pick the reason that best describes what the creator would need to change. They see the reason and your note in their email.</p>
+        <table>
+          <thead><tr><th>Reason</th><th>Use When</th><th>Example Note</th></tr></thead>
+          <tbody>
+            <tr><td>Doesn’t fit the category</td><td>It’s outside what Hued covers. If it only belongs in a different category, change the category instead.</td><td class="note-ex">“Hued focuses on clothing and fit. This piece is mostly about skincare, so it isn’t a fit for the Knowledge Hub.”</td></tr>
+            <tr><td>Not helpful: no clear takeaway</td><td>It’s on topic, but there’s nothing a viewer could act on.</td><td class="note-ex">“Love the looks. Add a tip on why these combinations work and resubmit.”</td></tr>
+            <tr><td>Promotional or spam</td><td>The main point is selling, such as a code, an affiliate link or their own shop. Also for repeated or junk submissions.</td><td class="note-ex">“This centers on a discount code rather than advice, and Hued doesn’t publish ads.”</td></tr>
+            <tr><td>Undisclosed sponsorship</td><td>It looks paid or gifted, with no clear disclosure.</td><td class="note-ex">“If this was gifted or paid, add ‘gifted’ or #ad to the post and resubmit.”</td></tr>
+            <tr><td>Low quality</td><td>It can’t be watched or read properly: poor audio, a broken link or unreadable text.</td><td class="note-ex">“The link opens as private. Make the post public and resubmit.”</td></tr>
+            <tr><td>Not the submitter’s content</td><td>It’s someone else’s post, a re-upload or copied text.</td><td class="note-ex">“This post is from a different account. Please only submit content you created.”</td></tr>
+            <tr><td>Duplicate</td><td>The same piece was already submitted or is already live.</td><td class="note-ex">“This piece is already live on Hued. Thank you for sharing it.”</td></tr>
+            <tr><td>Other</td><td>None of the reasons above fit. A note is required.</td><td class="note-ex">Explain the reason in one or two sentences.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="notes">
+        <h2>Writing the Note</h2>
+        <p>Many creators are submitting for the first time. A good note brings them back with a stronger piece. A curt one usually means they don’t come back.</p>
+        <ul class="plain">
+          <li><b>Keep it to one or two sentences.</b> Say what to change, not everything that’s wrong.</li>
+          <li><b>Open with something genuine</b> when you can, such as “Great topic” or “Love the styling.”</li>
+          <li><b>Make it actionable.</b> “Add one tip on why it works” helps more than “Not helpful enough.”</li>
+          <li><b>Never comment on the creator’s body, appearance, voice or identity.</b></li>
+          <li><b>Write as Hued, not as yourself.</b> Leave out inside jokes and internal shorthand.</li>
+        </ul>
+      </section>
+
+      <section id="cases">
+        <h2>Tricky Cases</h2>
+        <details class="case"><summary>A capsule wardrobe video submitted under Sustainability</summary>
+          <div class="c-body"><span class="verdict fix">Fix Category</span>If it’s mostly about which pieces to own, change the category to Wardrobe and approve. If it’s mostly about buying less for environmental reasons, keep it in Sustainability.</div></details>
+        <details class="case"><summary>A strong styling tip, but the creator says “use my code” at the end</summary>
+          <div class="c-body"><span class="verdict approve">Usually Approve</span>If the code is a brief mention and the advice stands on its own, approve. If the code is the point of the video, reject as <i>Promotional or spam</i>.</div></details>
+        <details class="case"><summary>Every item in the video is from one brand, and there’s no disclosure</summary>
+          <div class="c-body"><span class="verdict reject">Reject</span>This suggests a brand relationship. Reject as <i>Undisclosed sponsorship</i> and ask them to add a disclosure if it was gifted or paid. If it wasn’t, they can say so and resubmit.</div></details>
+        <details class="case"><summary>Advice you personally disagree with, such as “never wear horizontal stripes”</summary>
+          <div class="c-body"><span class="verdict approve">Approve</span>Taste isn’t a reason to reject. Only reject advice that’s factually wrong, like care tips that damage clothes, or that shames bodies.</div></details>
+        <details class="case"><summary>Body-shaming framing, such as “hide your problem areas” or “look 10 pounds lighter”</summary>
+          <div class="c-body"><span class="verdict reject">Reject</span>Hued doesn’t publish content that treats bodies as problems to fix. Reject as <i>Other</i> and suggest reframing the piece around proportions or what the creator likes to wear.</div></details>
+        <details class="case"><summary>A link to a post that’s only a photo and a caption</summary>
+          <div class="c-body"><span class="verdict fix">Depends</span>Approve if the caption carries a real tip. Otherwise, reject as <i>Not helpful: no clear takeaway</i>.</div></details>
+        <details class="case"><summary>The same creator submitted the same topic twice in one week</summary>
+          <div class="c-body"><span class="verdict fix">Approve One</span>Approve the stronger piece and reject the other as <i>Duplicate</i>, unless the two take clearly different angles.</div></details>
+      </section>
+
+      <section id="unpublish">
+        <h2>Unpublishing</h2>
+        <p>Use <b>Unpublish</b> on an approved piece when:</p>
+        <ul class="plain">
+          <li>Hued receives a takedown or DMCA notice. Follow the <a href="hued_21_dmca.html">DMCA Policy</a>.</li>
+          <li>You learn it was sponsored without disclosure, or that it isn’t the submitter’s content.</li>
+          <li>The creator asks for it to be removed.</li>
+          <li>A linked post has been deleted or made private, so the page shows nothing.</li>
+        </ul>
+        <p>Pick a reason and add a note, and the creator is emailed. For any legal notice, also tell the team in the channel.</p>
+        <div class="draft"><b>Draft for team review.</b> These rules are a starting point based on the admin queue MVP spec. Update anything that doesn’t match how Hued wants to moderate, including the three-minute and 48-hour targets, and change the version number at the top when you do.</div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Highlight the section currently at the top of the screen in the table of contents
+    const links = [...document.querySelectorAll('.toc a')];
+    const sections = [...document.querySelectorAll('main section[id]')];
+    function markCurrent(){
+      const line = window.innerHeight * 0.3;
+      let current = sections[0];
+      sections.forEach(sec => { if(sec.getBoundingClientRect().top <= line) current = sec; });
+      links.forEach(l => l.classList.toggle('on', l.getAttribute('href') === '#' + current.id));
+    }
+    window.addEventListener('scroll', markCurrent, {passive:true});
+    markCurrent();
+  </script>
+</body>
+</html>
